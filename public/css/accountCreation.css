@@ -1,0 +1,58 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  
+  .logo-container {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .logo {
+    width: 100%;
+    max-width: 200px;
+    margin-bottom: 20px;
+  }
+  
+  .form-container {
+    flex: 1;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .form-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column; 
+    margin-bottom: 10px;
+  }
+  
+  .form-group label {
+    margin-bottom: 5px; /* Add some margin between label and input */
+  }
+  .form-group input {
+    margin-bottom: 5px; /* Add some margin between label and input */
+  }
+  
+  .form-container button {
+    margin-top: 10px;
+  }
+
+  .create-account-btn {
+    font-size: 18px; /* Set desired font size */
+    width: 200px; /* Set desired padding */
+    /* Add any other desired styles for the button */
+  }
+  
+
+
+  
