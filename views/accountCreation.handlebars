@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Account Creation</title>
+  <link rel="stylesheet" href="accountCreation.css">
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <img src="/public/images/logo.jpg" alt="Logo" class="logo">
+    </div>
+    <div class="form-container">
+      <h1>Create an Account</h1>
+      <form action="/account/create" method="post">
+        <div class="form-row">
+          <div class="form-group form-group-inline">
+            <label for="firstName">First Name:</label>
+            <br>
+            <input type="text" id="firstName" name="firstName" placeholder="Jon" required>
+          </div>
+          <div class="form-group form-group-inline">
+            <label for="lastName">Last Name:</label>
+            <br>
+            <input type="text" id="lastName" name="lastName" placeholder="Snow" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <br>
+          <input type="text" id="username" name="username" placeholder="jon.snow" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <br>
+          <input type="email" id="email" name="email" placeholder="jon.snow@gmail.com"required>
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth:</label>
+          <br>
+          <input type="date" id="dob" name="dob" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <br>
+          <input type="password" id="password" name="password" placeholder="*********" required>
+        </div>
+        <button type="submit" class="create-account-btn">Create Account</button>
+      </form>
+      <p>Already have an account? <a href="/account/login">Login</a></p>
+    </div>
+  </div>
+</body>
+</html>
