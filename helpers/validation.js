@@ -15,10 +15,9 @@ const checkAge = (DOB) => {
     const formattedDate = `${month}/${day}/${year}`;
     month = parseInt(month)
     //get the DOB we were given
-    DOB = "04/10/2023"
     const deconstructedDOB = DOB.split("/")
 
-    
+
     console.log(deconstructedDOB)
     console.log(formattedDate)
 
@@ -41,10 +40,12 @@ const checkAge = (DOB) => {
         throw `Error: You must be 18 or older to use this site.`
     }
     //if you're born in the same month and the current day is after your birthday then you're too young
-    if ((yearDifference==18 && month==dobMonth && day>dobDay)) {
+    if ((yearDifference==18) && (month==dobMonth && day>dobDay)) {
         throw `Error: You must be 18 or older to use this site.`
     }
-    
+    else {
+    return DOB
+    }
 
 }
 
