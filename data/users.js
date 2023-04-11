@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
+import { checkAge } from "../helpers/validation.js";
 import userData from "./users.js";
 
 
@@ -59,6 +60,7 @@ const exportedMethods = {
         if (username == "") {
         throw `Error: The name cannot consist of just empty space`;
         }
+        checkAge(dateOfBirth)
         const usersCollection = await users();
 
         let newUser = {
