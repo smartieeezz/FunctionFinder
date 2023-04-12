@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Event Info</title>
+    <link rel="stylesheet" href="../public/css/main-styles.css">
+  </head>
+  <body>
+    <h1>Event Information:</h1>
+    <ul>
+      <li><strong>Party ID:</strong> {{event._id}}</li>
+      <li><strong>Party Host:</strong> {{event.partyHost}}</li>
+      <li><strong>Name:</strong> {{event.name}}</li>
+      <li><strong>Date:</strong> {{event.date}}</li>
+      <li><strong>Has Occured:</strong> {{event.hasOccured}}</li>
+      <li><strong>Guests Attending:</strong> {{event.guestsAttending}}</li>
+      <li><strong>Maximum Capacity:</strong> {{event.maximumCapacity}}</li>
+      <li><strong>Category:</strong> {{event.category}}</li>
+      <li><strong>Description:</strong> {{event.description}}</li>
+      <li><strong>Minimum Age:</strong> {{event.minimumAge}}</li>
+      <li><strong>Location:</strong> {{event.location}}</li>
+      <li><strong>Price:</strong> {{event.price}}</li>
+      <li><strong>Music Type:</strong> {{event.musicType}}</li>
+      <li><strong>Function Comments:</strong> {{event.functionComments}}</li>
+    </ul>
+    <button id="register-button">Register</button>
+    <script src="../../public/js/buttonRegister.js"></script>
+    <button class="favorite-button unselected" data-event-id="{{this._id}}">Favorite</button>
+    <script src="../../public/js/buttonFavorite.js"></script>
+  </body>
+</html>

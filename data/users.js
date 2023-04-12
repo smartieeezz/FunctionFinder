@@ -91,6 +91,7 @@ const exportedMethods = {
         user._id = user._id.toString();
         return await user;
     },
+
     async get (id) {
         //check if the id exists
     if (!id) {
@@ -119,6 +120,7 @@ const exportedMethods = {
     
     return thisUser;
     },
+
     async getByEmail(email) {
         if (!email) {
             throw `Error: The email was not given.`
@@ -130,7 +132,56 @@ const exportedMethods = {
         if (typeof thisUser!=='undefined' || thisUser!==null) {
             throw `Error: The email was used already.`
         }
+    },
+
+    async updateRegisteredEvents(userId, eventId) {
+        const usersCollection = await users();
+        const user = await this.get(userId);
+        user.registeredEvents.push(eventId);
+        const updatedUser = await usersCollection.updateOne(
+          { _id: new ObjectId(userId) },
+          { $set: { registeredEvents: user.registeredEvents } }
+        );
+        if (updatedUser.modifiedCount === 0) {
+          throw "Error: Could not update user's registered events.";
+        }
+        return await this.get(userId);
+    },
+
+    async update(id, updatedUser) {
+        if (!id) throw "You must provide an ID";
+        if (!updatedUser) throw "You must provide an updated user object";
+        const usersCollection = await users();
+        const updatedUserData = {
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName,
+            username: updatedUser.username,
+            email: updatedUser.email,
+            dateOfBirth: updatedUser.dateOfBirth,
+            password: updatedUser.password,
+            favoritedEvents: updatedUser.favoritedEvents,
+            registeredEvents: updatedUser.registeredEvents,
+            pastEventsAttended: updatedUser.pastEventsAttended,
+            favoriteCategories: updatedUser.favoriteCategories,
+            userComments: updatedUser.userComments,
+            currentlyHostingEvents: updatedUser.currentlyHostingEvents,
+            previouslyHostedEvents: updatedUser.previouslyHostedEvents
+        };
+    
+    const updateInfo = await usersCollection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: updatedUserData }
+    );
+
+    if (updateInfo.modifiedCount === 0) {
+        throw `Could not update user with ID of ${id}`;
     }
+
+    return await this.get(id);
+    }
+
+    // add more functions
+
 };
 
 export default exportedMethods;

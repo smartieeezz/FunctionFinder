@@ -29,6 +29,7 @@ app.use(rewriteUnsupportedBrowserMethods);
 
 app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
+app.get('/', (req, res) => { res.render('homepage');});
 
 configRoutes(app);
 
