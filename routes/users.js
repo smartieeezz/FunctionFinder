@@ -29,6 +29,7 @@ router.get('/account/login', async (req, res) => {
     }
 });
 
+
 router.get('/account/create', (req, res) => {
     // Render the EJS template for the create account page
     res.render('accountCreation');
@@ -67,6 +68,15 @@ router.get('/:id/registered-events', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    try {
+        const user = await userData.get(req.params.id);
+        res.render('homepageSignedin', { user: user });
+    } catch (error) {
+        res.status(404).json({ message: error});
+    }
+    
+});
 // add more routes
 
 export default router;

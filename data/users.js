@@ -94,31 +94,31 @@ const exportedMethods = {
 
     async get (id) {
         //check if the id exists
-    if (!id) {
-        throw `Error: The ID must be provided. `
-    }
-    //check if the id is a string
-    if (typeof id!=='string') {
-        throw `Error: The ID must be a string.`
-    }
-    //trim the id to get rid of whitespace at the edges of the string
-    id = id.trim()
-    if (id.length==0 || id=="") {
-        throw `Error: The ID must not be empty spaces.`
-    }
+        if (!id) {
+            throw `Error: The ID must be provided. `
+        }
+        //check if the id is a string
+        if (typeof id!=='string') {
+            throw `Error: The ID must be a string.`
+        }
+        //trim the id to get rid of whitespace at the edges of the string
+        id = id.trim()
+        if (id.length==0 || id=="") {
+            throw `Error: The ID must not be empty spaces.`
+        }
     
-    //if we hve no errors from the ID we can just load the bands database now
-    if (!ObjectId.isValid(id)) {
-        throw 'invalid object ID'
-    }
-    const usersCollection = await users();
-    const thisUser = await usersCollection.findOne({_id: new ObjectId(id)});
-    if (thisUser === null) {
-        throw 'Error: No user with that id';
-    }
-    thisUser._id = thisUser._id.toString();
+        //if we hve no errors from the ID we can just load the bands database now
+        if (!ObjectId.isValid(id)) {
+            throw 'invalid object ID'
+        }
+        const usersCollection = await users();
+        const thisUser = await usersCollection.findOne({_id: new ObjectId(id)});
+        if (thisUser === null) {
+            throw 'Error: No user with that id';
+        }
+        thisUser._id = thisUser._id.toString();
     
-    return thisUser;
+        return thisUser;
     },
 
     async getByEmail(email) {

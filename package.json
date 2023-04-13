@@ -9,7 +9,7 @@
     "test": "npm run seed",
     "start": "node app.js"
   },
-  "author": "Roland John, Stephanie Martinez, Hao , Tanner",
+  "author": "Roland John, Stephanie Martinez, Hao , Tanner Marshall",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.3.5",
