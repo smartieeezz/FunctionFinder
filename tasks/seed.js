@@ -115,6 +115,13 @@ try {
 } catch (error) {
     console.log(error)
 }
+//This will find the user and display the welcome message because it is a valid test
+try {
+    let getuser2 = await users.checkUser("mary.anne@gmail.com", "cs546")
+    console.log(getuser2)
+} catch (error) {
+    console.log(error)
+}
 
 console.log('Done!')
 await closeConnection();

@@ -34,11 +34,6 @@ const checkAge = (DOB) => {
     //get the DOB we were given
     const deconstructedDOB = DOB.split("/")
 
-
-    console.log(deconstructedDOB)
-    console.log(formattedDate)
-
-
     const dobYear = parseInt(deconstructedDOB[2])
     const dobMonth = parseInt(deconstructedDOB[0])
     const dobDay = parseInt(deconstructedDOB[1])
