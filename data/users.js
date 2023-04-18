@@ -1,6 +1,8 @@
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
-import { checkAge } from "../helpers/validation.js";
+import { checkAge, checkEmail,checkPassword } from "../helpers/validation.js";
+import bcrypt from 'bcrypt'
+const saltRounds = 12;
 import userData from "./users.js";
 
 
@@ -44,13 +46,28 @@ const exportedMethods = {
         throw `Error: The name must be a string type value.`;
         }
 
+        //check if we have a valid email address and if we do then convert to lowercase and trim it
+        email = checkEmail(email)
         //If the firstName, lastName or username are empty strings we will throw an error
         firstName = firstName.trim();
         lastName = lastName.trim();
         username = username.trim();
-        email = email.trim()
         dateOfBirth = dateOfBirth.trim()
-        password = password.trim()
+
+        dateOfBirth = checkAge(dateOfBirth)
+        //connect to our database for users
+        const usersCollection = await users();
+        const existingEmail = await usersCollection.findOne({ email: email.toLowerCase() });
+        //if we have that email address in our database already then we will throw an error
+        if (existingEmail) {
+            throw 'Error: A user with that email address already exists.' 
+        }
+        const existingUserName = await usersCollection.findOne({ username: username.toLowerCase() });
+        //if we have that username in our database already then we will throw an error
+        if (existingUserName) {
+            throw 'Error: A user with that username already exists.' 
+        }
+
         if (firstName == "") {
         throw `Error: The name cannot consist of just empty space`;
         }
@@ -61,7 +78,11 @@ const exportedMethods = {
         throw `Error: The name cannot consist of just empty space`;
         }
         checkAge(dateOfBirth)
-        const usersCollection = await users();
+        
+        //use bcrypt to hash the passwords
+
+        //hashed password
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         let newUser = {
         firstName: firstName,
@@ -69,7 +90,7 @@ const exportedMethods = {
         username: username,
         email: email,
         dateOfBirth: dateOfBirth,
-        password: password,
+        password: hashedPassword,
         favoritedEvents: [],
         registeredEvents: [],
         pastEventsAttended:[],
@@ -90,6 +111,35 @@ const exportedMethods = {
         //turn the _id to a string and assign it to the band
         user._id = user._id.toString();
         return await user;
+    },
+
+    async checkUser (emailAddress, password) {
+        //Both emailAddress and password must be supplied or you will throw an error
+        if (!emailAddress) {
+            throw `Error: The emailAddress must be provided.`
+        }
+        if (!password) {
+            throw `Error: The password must be provided.`
+        }
+        //emailAddress should be a valid email address format. example@example.com
+        emailAddress = checkEmail(emailAddress)
+        
+
+        /*Query the db for the emailAddress supplied, if it is not found, throw an error stating 
+        "Either the email address or password is invalid".*/
+        const usersCollections = await users()
+        const existingUser = await usersCollections.findOne({ email: emailAddress.toLowerCase()});
+        if (!existingUser) {
+            throw 'Error: A user with that email address does not exist.' 
+        }
+        /*If the emailAddress supplied is found in the DB, you will then use bcrypt to compare the
+        hashed password in the database with the password input parameter.*/
+        const passwordsMatch = await bcrypt.compare(password, existingUser.password);
+        if (!passwordsMatch) {
+            throw `Either the email address or password is invalid.`
+        }
+        return `Welcome ${existingUser.firstName} ${existingUser.lastName}.`
+
     },
 
     async get (id) {
@@ -139,11 +189,11 @@ const exportedMethods = {
         const user = await this.get(userId);
         user.registeredEvents.push(eventId);
         const updatedUser = await usersCollection.updateOne(
-          { _id: new ObjectId(userId) },
-          { $set: { registeredEvents: user.registeredEvents } }
+            { _id: new ObjectId(userId) },
+            { $set: { registeredEvents: user.registeredEvents } }
         );
         if (updatedUser.modifiedCount === 0) {
-          throw "Error: Could not update user's registered events.";
+            throw "Error: Could not update user's registered events.";
         }
         return await this.get(userId);
     },

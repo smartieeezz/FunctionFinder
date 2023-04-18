@@ -75,5 +75,46 @@ try {
     console.log(error)
 }
 
+
+//the password and email combination here is valid. 
+try {
+    let findJonSnow = await users.checkUser("john.snow@gmail.com", "password")
+    console.log(findJonSnow)
+} catch (error) {
+    console.log(error)
+}
+
+try {
+    // this is a duplicate EMAIL we are trying to create. Thus it should fail
+    let shouldFailOne= await users.create("John", "Snow", "john.snow", "john.snow@gmail.com", "01/01/1900","password");
+    console.log(shouldFailOne)
+} catch (error) {
+    console.log(error)
+}
+
+try {
+    // this is a duplicate USERNAME we are trying to create. Thus it should fail
+    let shouldFailTwo= await users.create("John", "Snow", "john.snow", "john.snow@stevens.edu", "01/01/1900","password");
+    console.log(shouldFailTwo)
+} catch (error) {
+    console.log(error)
+}
+
+//invalid email and password combination thus we throw an error
+try {
+    let shouldFailThree = await users.checkUser("john.snow@gmail.com", "wrongpassword")
+    console.log(findJonSnow)
+} catch (error) {
+    console.log(error)
+}
+
+try {
+    // create user1
+    let user1= await users.create("Roland", "John", "rolandjohn92", "arjay92@msn.com", "08/13/2020","password");
+    console.log(user1)
+} catch (error) {
+    console.log(error)
+}
+
 console.log('Done!')
 await closeConnection();

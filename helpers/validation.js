@@ -1,3 +1,20 @@
+const checkString= (string)  => {
+    //make sure the string exists
+    if (!string) {
+        throw `Error: All variables must exist.`
+    }
+    //make sure the string is not empty
+    string = string.trim()
+    if (string=="") {
+        throw `Error: The variable cannot be empty.`
+    }
+    //check for spaces
+    if (string.includes(' ')) {
+        throw `Error: The variable cannot have a space.`
+    }
+    return string
+}
+
 const checkAge = (DOB) => {
     const today = new Date();
 
@@ -46,7 +63,39 @@ const checkAge = (DOB) => {
     else {
     return DOB
     }
-
 }
 
-export {checkAge}
+const checkEmail = (email) =>{
+    checkString(email)
+    const properAddress = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!properAddress.test(email)) {
+        throw `Error: The email is not a valid email.`
+    }
+    email = email.toLowerCase()
+    email = email.trim()
+    return email;
+}
+
+const checkPassword = (password) => {
+    checkString(password)
+    if (password.length<8) {
+        throw 'Error: Password must be at least 8 characters long.'
+    }
+    if (!/[A-Z]/.test(password)) {
+        throw 'Error: The password must contain at least one uppercase character.'
+    }
+    
+    // Check for at least one number
+    if (!/[0-9]/.test(password)) {
+        throw 'Error: The password must contain at least one number.'
+    }
+    
+    // Check for at least one special character
+    if (!/[!"#$%&'()*+,\-.:;<=>?@[\]/^_`{|}~]/.test(password)) {
+        throw 'Error: The password must contain at least one special character.';
+    }
+    return password
+}
+
+
+export {checkAge, checkEmail, checkPassword}
