@@ -38,7 +38,6 @@ export async function calcDistances(src, dest){
     let geocodeFromURL = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + formattedSrc + '&sensor=false&key=' + apiKey;
 
     let geocodeFrom = await axios.get(geocodeFromURL)
-    console.log(geocodeFrom.data.results[0].geometry.location)
 
 
 
@@ -66,7 +65,7 @@ export async function calcDistances(src, dest){
       return radians * (180/Math.PI);
     }
     
-    return Math.round(miles * 100) / 100 + " miles";
+    return Math.round(miles * 100) / 100;
     
 }
 
