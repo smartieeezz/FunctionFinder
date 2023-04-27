@@ -11,16 +11,16 @@
     </div> --}}
     <div class="right-column">
       <h2>Let's Sign You In!</h2>
-      <form id="loginForm">
+      <form id="loginForm" method="POST" action="/account/login">
         <div class="form-group">
           <label for="emailInput">Email:</label>
           <br>
-          <input type="email" id="emailInput" name="emailInput" placeholder="jon.snow@gmail.com" required>
+          <input type="email" id="emailInput" name="emailInput" placeholder="jon.snow@gmail.com" value="{{data.emailInput}}" required>
         </div>
         <div class="form-group">
           <label for="passwordInput">Password:</label>
           <br>
-          <input type="password" id="passwordInput" name="passwordInput" placeholder="*********" required>
+          <input type="password" id="passwordInput" name="passwordInput" placeholder="*********" value="{{data.passwordInput}}" required>
         </div>
         <div class="form-group">
           <a href="forgot-password.html">Forgot Password?</a>
@@ -33,6 +33,15 @@
           
         </div>
       </form>
+      {{#if hasErrors}}
+      <ul class="error-list">
+      {{#each errors}}
+        <li>
+          {{this}}
+        </li>
+      {{/each}}
+      </ul>
+      {{/if}}
     </div>
   </div>
 </body>

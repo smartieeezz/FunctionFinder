@@ -14,13 +14,13 @@
         	<p id="currentPage">Home</p>
             <a href="**NEED TO IMPLEMENT FAVORITES">Favorites</a>
             <a href="**NEED TO IMPLEMENT POST A PARTY">Post a Party</a>
-            <a href="/{{this._id}}/registered-events">Registered Events</a>
-            <a href="http://localhost:3000/users/{{this._id}}">Account</a>
-            <a href="http://localhost:3000/" class="signOut">Sign Out</a>
+            <a href="/{{user._id}}/registered-events">Registered Events</a>
+            <a href="http://localhost:3000/users/{{user._id}}">Account</a>
+            <a href="http://localhost:3000/" class="signOut" id="signOut" onclick="return confirm('Are you sure?')">Sign Out</a>
         </div>
 
 		
-        <form class="searchForm">
+        <form class="searchForm" method="POST" action="/events">
         	<div class="searchElement">
            		<label for="location">City, State, or Zip Code</label>
           		<input type="text" id="location" name="location">
