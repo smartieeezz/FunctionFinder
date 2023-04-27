@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Post a Party</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+
+  <!-- https://developers.google.com/maps/documentation/javascript/place-autocomplete -->
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBp8oyTMDRIp3XfV5Ti2YZHGhANxiQqKk0&libraries=places&callback=initMap">
+</script>
+  
+  <script>
+    function initAutocomplete() {
+      var input = document.getElementById('partyAddress');
+      var autocomplete = new google.maps.places.Autocomplete(input);
+    }
+  </script>
+
+</head>
+
+
+<body onload="initAutocomplete()">
+
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="#">Home</a>
+    <a href="#">Favorites</a>
+    <a href="#">Post a Party</a>
+    <a href="#">Registered Parties</a>
+    <a href="#">Settings</a>
+  </div>
+  
+
+  <form  action="/postaparty" method="POST" id="postAPartyForm">
+    <label for="partyName">Party Name:</label><br>
+    <input type="text" id="partyName" name="partyName" placeholder="Enter a Party Name" required><br>
+
+    <label for="partyAddress">Party Address:</label><br>
+    <input type="text" id="partyAddress" name="partyAddress" required><br>
+    
+    <label for="genres">
+      Party Musical Genre(s)
+      
+    </label >
+    <select id="genres" name="genres" multiple>
+        <option value="hip-hip">Hip Hop</option>
+        <option value="rock">Rock</option>
+        <option value="edm">EDM</option>
+        <option value="latin">Latin</option>
+        <option value="pop">Pop</option>
+        <option value="kpop">K pop</option>
+        <option value="indie">Indie</option>
+        <option value="country">Country</option>
+        <option value="alternative">Alternative</option>
+        <option value="jazz">Jazz</option>
+        <option value="afrobeats">AfroBeats</option>
+        <option value="throwbacks">throwbacks</option>
+        <option value="caribbean">Caribbean</option>
+        <option value="r&b">R&B</option>
+        <option value="bollywood">Bollywood</option>
+        <option value="asian">Asian</option>
+        <option value="other">Other</option>
+    </select><br>
+
+    <label for="coverPrice">Cover Price:</label><br>
+    <input type="text" id="coverPrice" name="coverPrice" placeholder="Enter a price" required><br>
+
+    <label for="types">
+      Party type(s):
+      
+    </label>
+    <select id="types" name="types" multiple>
+        <option value="bar">Bar</option>
+        <option value="pool">Pool</option>
+        <option value="club">Club</option>
+        <option value="concert">Concert</option>
+        <option value="rooftop">Rooftop</option>
+        <option value="house">House</option>
+        <option value="birthday">Birthday</option>
+        <option value="costume">Costume</option>
+        <option value="other">Other</option>
+    </select><br>
+
+    <label for="Date">Date:</label><br>
+    <input type="datetime-local" id="partyDate" name="partyDate" required><br>
+
+    <label for="partyVenue">Party Venue:</label><br>
+    <input type="text" id="partyVenue" name="partyVenue" placeholder="Enter a venue" required><br>
+
+   
+   <label for="minimumAge">Minimum Age:</label>
+      <select name="minimumAge" id="minimumAge" required>
+          <option value="18+">18+</option>
+          <option value="21+">21+</option>
+          <option value="anyAge">Any age</option>
+      </select><br>
+  
+    <label for="maximumCapacity">Maximum Capacity</label><br>
+    <input type="text" id="maximumCapacity" name="maximumCapacity" placeholder="Enter a capacity" required><br>
+
+    <label for="partyDescription">Party Description:</label><br>
+    <textarea id="partyDescription" name="partyDescription" rows="4" cols="40" placeholder="Enter a description" required></textarea><br>
+
+    <label for="partyCoverPhoto">Party Cover Photo:</label><br>
+    <input type="file" id="fileInput" name="fileInput" required>
+    <br><br>
+        
+    <button type="submit">Submit</button>
+  </form>
+  <script src='../public/js/postAParty.js'></script>
+
+
+</body>
+
+</html>
