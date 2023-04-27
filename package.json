@@ -7,7 +7,8 @@
   "scripts": {
     "seed": "node ./tasks/seed.js",
     "test": "npm run seed",
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "author": "Roland John, Stephanie Martinez, Hao , Tanner Marshall",
   "license": "ISC",

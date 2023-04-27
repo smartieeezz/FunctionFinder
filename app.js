@@ -5,6 +5,8 @@ import configRoutes from './routes/index.js';
 import {fileURLToPath} from 'url';
 import {dirname} from 'path';
 import exphbs from 'express-handlebars';
+import { closeConnection, dbConnection } from './config/mongoConnection.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -52,6 +54,9 @@ app.use(rewriteUnsupportedBrowserMethods);
 app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 app.get('/', (req, res) => { res.render('homepage');});
+
+const db = await dbConnection();
+
 
 configRoutes(app);
 
