@@ -77,7 +77,7 @@ const exportedMethods = {
         if (username == "") {
         throw `Error: The name cannot consist of just empty space`;
         }
-        checkAge(dateOfBirth)
+        dateOfBirth = checkAge(dateOfBirth)
         
         //use bcrypt to hash the passwords
 
