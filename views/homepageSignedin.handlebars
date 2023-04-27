@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Homepage</title>
+</head>
+<body class="bg">
+    <div>
+        <div class="logoHeader">
+        	<img src="../public/images/logoCropped.jpg" alt="Function Finder Logo">
+        </div>
+        <div class="header">PARTY WITHOUT LIMITATION</div>
+
+        <div class="sideNav">
+        	<p id="currentPage">Home</p>
+            <a href="**NEED TO IMPLEMENT FAVORITES">Favorites</a>
+            <a href="**NEED TO IMPLEMENT POST A PARTY">Post a Party</a>
+            <a href="/{{this._id}}/registered-events">Registered Events</a>
+            <a href="http://localhost:3000/users/{{this._id}}">Account</a>
+            <a href="http://localhost:3000/" class="signOut">Sign Out</a>
+        </div>
+
+		
+        <form class="searchForm">
+        	<div class="searchElement">
+           		<label for="location">City, State, or Zip Code</label>
+          		<input type="text" id="location" name="location">
+        	</div>
+        	<div class="searchElement">
+          		<label for="distance">Distance</label>
+          		<select id="distance" name="distance">
+           			<option value="5">5 miles</option>
+           			<option value="10">10 miles</option>
+           			<option value="15">15 miles</option>
+           			<option value="20">20 miles</option>
+           			<option value="25">25 miles</option>
+           			<option value="50">50 miles</option>
+           			<option value="100">100 miles</option>
+          		</select>
+        	</div>
+        	<div class="searchElement">
+           		<label for="startDate">Start Date</label>
+           		<input type="date" id="startDate" name="startDate">
+        	</div>
+        	<div class="searchElement">
+           		<label for="endDate">End Date</label>
+           		<input type="date" id="endDate" name="endDate">
+        	</div>
+        	<div class="searchElement">
+           		<input type="submit" value="Search Now →">
+        	</div>
+        </form>
+		
+
+    </div>
+
+
+
+  <!-- Add links to other pages here -->
+</body>
+</html>
