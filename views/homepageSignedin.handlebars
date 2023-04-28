@@ -2,8 +2,19 @@
 <html>
 <head>
     <title>Homepage</title>
+	<meta name="viewport" content="width=device-width">
+	<!-- https://developers.google.com/maps/documentation/javascript/place-autocomplete -->
+  	<script async
+    	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDE-L7aPvK_KWLBDcu66e9Ju54NKcmzkoA&libraries=places&callback=initMap">
+	</script>
+	<script>
+    function initAutocomplete() {
+      let input = document.getElementById('location');
+      let autocomplete = new google.maps.places.Autocomplete(input);
+    }
+  	</script>
 </head>
-<body class="bg">
+<body class="bg" onload="initAutocomplete()">
     <div>
         <div class="logoHeader">
         	<img src="../public/images/logoCropped.jpg" alt="Function Finder Logo">
@@ -20,7 +31,7 @@
         </div>
 
 		
-        <form class="searchForm" method="POST" action="/events">
+        <form class="searchForm" id="searchForm" method="POST" action="/searchresults">
         	<div class="searchElement">
            		<label for="location">City or Zip Code</label>
           		<input type="text" id="location" name="location">
@@ -52,9 +63,7 @@
 		
 
     </div>
+	<script src='../public/js/partySearch.js'></script>
 
-
-
-  <!-- Add links to other pages here -->
 </body>
 </html>

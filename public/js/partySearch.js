@@ -16,10 +16,29 @@ if(searchForm){
     searchForm.addEventListener('submit', (event) => {
         event.preventDefault();
         locationError.remove();
-        distanceError.remove();
         startDateError.remove();
         endDateError.remove();
 
+        if(!location.value){
+            valid = false;
+            locationError.textContent = 'Error: must supply a location';
+            searchForm.appendChild(locationError);
+        }
         
+        if(!startDate.value){
+            valid = false;
+            startDateError.textContent = 'Error: must supply a start date';
+            searchForm.appendChild(startDateError);
+        }
+
+        if(!endDate.value){
+            valid = false;
+            endDateError.textContent = 'Error: must supply an end date';
+            searchForm.appendChild(endDateError);
+        }
+
+        if(valid){
+            searchForm.submit();
+        }
     })
 }

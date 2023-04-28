@@ -37,16 +37,16 @@ app.use(
   })
 );
 
-app.use('/:id', (req, res, next) => {
-  if(!req.session.user)
-    return res.redirect('/account/login');
-  next();
-});
+// app.use('/:id', (req, res, next) => {
+//   if(!req.session.user)
+//     return res.redirect('/account/login');
+//   next();
+// });
 
-app.use('/', (req, res, next) => {
-  if(req.session.user)
-    res.redirect('')
-});
+// app.use('/', (req, res, next) => {
+//   if(req.session.user)
+//     res.redirect('')
+// });
 
 app.use(express.urlencoded({extended: true}));
 app.use(rewriteUnsupportedBrowserMethods);

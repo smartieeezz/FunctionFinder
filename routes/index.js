@@ -6,9 +6,9 @@ import eventRoutes from './events.js';
 import path from 'path'
 
 const constructorMethod = (app) => {
-    app.use('/', userRoutes);
     app.use('/postaparty', postAPartyRoutes)
     app.use('/searchresults', searchResultsRoutes)
+    app.use('/', userRoutes);
     app.use('/', eventRoutes);
     app.use('*', (req, res) => {
         res.status(404).json({error: 'Route Not found!'});
