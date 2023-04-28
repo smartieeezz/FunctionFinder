@@ -5,6 +5,7 @@ import axios from 'axios';
 import {Router} from 'express';
 import userData  from '../data/users.js';
 import eventData  from '../data/events.js';
+import { checkAge, checkName, checkPassword, checkString } from '../helpers/validation.js';
 //create an instance of the Router() named router
 const router = Router();
 
@@ -55,19 +56,80 @@ router.get('/account/create', (req, res) => {
 
 router.post('/account/create', async (req, res) => {
     const { firstName, lastName, username, email, dob, password } = req.body;
+    let error = [];
     //check to see if we have all the fields
     if (!firstName || !lastName || !username || !email || !dob || !password) {
-        return res.status(400).json({ error: 'All fields are required' });
+        error.push("You have to full in all the fields")
+        res.render('accountCreation',{errors: error, hasErrors: true, accountInfo: req.body});
+        console.log(error)
+        return
     }  
+
+    //check to see if we have a valid age
+    try {
+        let checkDOB = checkAge(dob)
+        console.log(checkDOB)
+    } catch (e) {
+        error.push(e)
+        console.log(error)
+        res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+        return
+    }
+    //check to see we have valid names
+    try {
+        let checkFname  = checkName(firstName)
+        console.log(checkFname)
+    } catch (e) {
+        error.push(e)
+        console.log(error)
+        res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+        return
+    }
+
+    //check to see we have valid names
+    try {
+        let checkLname  = checkName(lastName)
+        console.log(checkLname)
+    } catch (e) {
+        error.push(e)
+        console.log(error)
+        res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+        return
+    }
+
+    //check to see the password is valid
+    try {
+    let validatePassword = checkPassword(password)
+    console.log(validatePassword)
+    } catch (e) {
+        error.push(e)
+        console.log(error)
+        res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+        return 
+    }
+
+    //check if we have a valid username (without spaces)
+    try {
+        let validateUsername = checkString(username)
+        console.log(validateUsername)
+    } catch (e) {
+        error.push('The username must not have spaces.')
+        console.log(error)
+        res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+        return
+    }
     try {
         //create the user
         const result = await userData.create(firstName, lastName, username, email, dob, password);
         const uid = result._id;
         req.session.user = {id: uid, userName: username};
         //show the account has been created and show the user's first name
-        return res.render('accountCreated', {firstName, username})
-    } catch (error) {
-        return res.status(500).json({ error: 'Failed to create account' });
+        res.render('accountCreated', {firstName, username})
+        return
+    } catch (e) {
+        error.push(e)
+        res.render('accountCreation',{errors: error,hasErrors: true, accountInfo: req.body });
+        return
     }
 });
 
