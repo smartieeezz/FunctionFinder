@@ -1,5 +1,6 @@
 import express from 'express';
 const app = express();
+import session from 'express-session';
 import configRoutes from './routes/index.js';
 import {fileURLToPath} from 'url';
 import {dirname} from 'path';
@@ -26,6 +27,27 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
 
 app.use('/public', staticDir);
 app.use(express.json());
+
+app.use(
+  session({
+    name: 'AuthCookie',
+    secret: "Secret",
+    saveUninitialized: false,
+    resave: false,
+  })
+);
+
+app.use('/:id', (req, res, next) => {
+  if(!req.session.user)
+    return res.redirect('/account/login');
+  next();
+});
+
+app.use('/', (req, res, next) => {
+  if(req.session.user)
+    res.redirect('')
+});
+
 app.use(express.urlencoded({extended: true}));
 app.use(rewriteUnsupportedBrowserMethods);
 

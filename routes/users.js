@@ -29,6 +29,24 @@ router.get('/account/login', async (req, res) => {
     }
 });
 
+router.post('/account/login', async (req, res) => {
+    const {emailInput, passwordInput} = req.body;
+    let error = [];
+    let userCheck;
+    try {
+        userCheck = await userData.checkUser(emailInput, passwordInput);
+    } catch (e) {
+        error.push(e);
+    }
+
+    if(error.length > 0){
+        res.render('login', {errors: error, hasErrors: true, loginInfo: req.body});
+        return;
+    }
+
+    const uid = userCheck._id;
+    res.redirect(`/${uid}`);
+});
 
 router.get('/account/create', (req, res) => {
     // Render the EJS template for the create account page
@@ -44,11 +62,13 @@ router.post('/account/create', async (req, res) => {
     try {
         //create the user
         const result = await userData.create(firstName, lastName, username, email, dob, password);
+        const uid = result._id;
+        req.session.user = {id: uid, userName: username};
         //show the account has been created and show the user's first name
         return res.render('accountCreated', {firstName, username})
-        } catch (error) {
+    } catch (error) {
         return res.status(500).json({ error: 'Failed to create account' });
-        }
+    }
 });
 
 // get user's registered events

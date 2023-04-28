@@ -69,8 +69,6 @@ export async function calcDistances(src, dest){
       return radians * (180/Math.PI);
     }
     
-    return Math.round(miles * 100) / 100;
+    return Math.round(miles * 100) / 100;x
     
 }
-
-await calcDistances("44 Park Drive, Woodland Park, NJ, USA", "49 Englewood Road, Clifton, NJ, USA")
