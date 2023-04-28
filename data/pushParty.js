@@ -1,5 +1,9 @@
 import axios from "axios"
 import { functions } from "../config/mongoCollections.js"
+import dotenv from 'dotenv';
+dotenv.config({path: '../.env'})
+
+
 
 export async function addParty(partyName, 
                  partyAddress,
@@ -30,7 +34,7 @@ export async function calcDistances(src, dest){
     //drew inspiration from this code, but still had to write my own as php is different from js 
     //and also google maps api is not the same as it was when this video was made, still had to debug because request response is slightly different now (compared to 2018)
     //stephanie
-    let apiKey = "AIzaSyBp8oyTMDRIp3XfV5Ti2YZHGhANxiQqKk0"
+    let apiKey = process.env.API_KEY
 
     let formattedSrc = src.replace(/ /g, '+');
     let formattedDest = dest.replace(/ /g, '+');
@@ -69,3 +73,4 @@ export async function calcDistances(src, dest){
     
 }
 
+await calcDistances("44 Park Drive, Woodland Park, NJ, USA", "49 Englewood Road, Clifton, NJ, USA")
