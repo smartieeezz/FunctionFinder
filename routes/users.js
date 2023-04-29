@@ -8,6 +8,14 @@ import eventData  from '../data/events.js';
 import { checkAge, checkName, checkPassword, checkString } from '../helpers/validation.js';
 //create an instance of the Router() named router
 const router = Router();
+import dotenv from 'dotenv';
+dotenv.config({path: '.env'})
+const result = dotenv.config();
+
+// Check if there was an error loading the .env file
+
+
+let apiKey = process.env.API_KEY
 
 // gets the user info
 router.get('/users/:id', async (req, res) => {
@@ -180,8 +188,7 @@ router.get('/:id/registered-events', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const user = await userData.get(req.params.id);
-        const userId = req.session.userId
-        res.render('homepageSignedin', { user: user });
+        res.render('homepageSignedin', { user: user , apiRoute : `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`});
     } catch (error) {
         res.status(404).json({ message: error});
     }
