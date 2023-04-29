@@ -36,6 +36,7 @@ router.post('/account/login', async (req, res) => {
     let userCheck;
     try {
         userCheck = await userData.checkUser(emailInput, passwordInput);
+        console.log(req.session.id)
     } catch (e) {
         error.push(e);
     }
@@ -46,6 +47,7 @@ router.post('/account/login', async (req, res) => {
     }
 
     const uid = userCheck._id;
+    req.session.userId = userCheck._id
     res.redirect(`/${uid}`);
 });
 
@@ -55,11 +57,12 @@ router.get('/account/create', (req, res) => {
 });  
 
 router.post('/account/create', async (req, res) => {
-    const { firstName, lastName, username, email, dob, password } = req.body;
+    const { firstName, lastName, username, email, dob, password, confirmPassword } = req.body;
     let error = [];
     //check to see if we have all the fields
-    if (!firstName || !lastName || !username || !email || !dob || !password) {
-        error.push("You have to full in all the fields")
+    if (!firstName || !lastName || !username || !email || !dob || !password, !confirmPassword) {
+        console.log(confirmPassword)
+        error.push("You have to fill in all the fields")
         res.render('accountCreation',{errors: error, hasErrors: true, accountInfo: req.body});
         console.log(error)
         return
@@ -107,6 +110,13 @@ router.post('/account/create', async (req, res) => {
         res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
         return 
     }
+    //make sure the password and confirmPassword varialbes match
+    if (password!==confirmPassword) {
+        error.push("The passwords must match.")
+        console.log(error)
+        res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+        return
+    }
 
     //check if we have a valid username (without spaces)
     try {
@@ -118,14 +128,31 @@ router.post('/account/create', async (req, res) => {
         res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
         return
     }
+
+    //make sure we don't create two identical usernames
+    try {
+        const user = await userData.getUserByUsername(username);
+        if (user) {
+            error.push("Username already exists. Please choose another username.")
+            console.log(error)
+            res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+            
+            return
+        }
+    } catch (e) {
+        // handle database error
+        error.push(e);
+        res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+        return
+    }
     try {
         //create the user
         const result = await userData.create(firstName, lastName, username, email, dob, password);
         const uid = result._id;
         req.session.user = {id: uid, userName: username};
         //show the account has been created and show the user's first name
-        res.render('accountCreated', {firstName, username})
-        return
+        return res.render('accountCreated', {firstName, username})
+        
     } catch (e) {
         error.push(e)
         res.render('accountCreation',{errors: error,hasErrors: true, accountInfo: req.body });
@@ -153,6 +180,7 @@ router.get('/:id/registered-events', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const user = await userData.get(req.params.id);
+        const userId = req.session.userId
         res.render('homepageSignedin', { user: user });
     } catch (error) {
         res.status(404).json({ message: error});
@@ -160,5 +188,43 @@ router.get('/:id', async (req, res) => {
     
 });
 // add more routes
+
+router.get('/account/settings/:id', async (req, res) => {
+    // Render the EJS template for the create account page
+
+    // make sure user is logged in and updating their own settings
+    if (!req.session.userId ) {
+        //the req.session.userId is undefined
+        console.log(req.session.userId)
+        console.log(req.params.id)
+        res.redirect("/login");
+    //if the user is logged in then let's check
+    } else {
+        const user = await userData.get(req.params.id)
+        console.log(user._id)
+        console.log(req.params.id)
+        console.log(user.username)
+        if (!user) {
+            res.redirect("/error");
+        } else {
+            res.render('updateSettings', {user: user})
+    }
+}
+});  
+
+router.post('/account/settings/:id', async (req, res) => {
+    const { firstName, lastName, username, email, dob, password, confirmPassword } = req.body;
+    let error = [];
+    //check to see if we have all the fields
+    if (!firstName || !lastName || !username || !email || !dob || !password, !confirmPassword) {
+        console.log(confirmPassword)
+        error.push("You have to fill in all the fields")
+        res.render('updateSettings',{errors: error, hasErrors: true, accountInfo: req.body});
+        console.log(error)
+        return
+    } 
+    return
+
+});
 
 export default router;

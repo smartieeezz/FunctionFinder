@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Login</title>
-  <link rel="stylesheet" href="main-styles.css">
+  {{!-- <link rel="stylesheet" href="main-styles.css"> --}}
 </head>
 <body>
   <div class="container">
@@ -15,12 +15,12 @@
         <div class="form-group">
           <label for="emailInput">Email:</label>
           <br>
-          <input type="email" id="emailInput" name="emailInput" placeholder="jon.snow@gmail.com" value="{{data.emailInput}}" required>
+          <input type="email" id="emailInput" name="emailInput" placeholder="jon.snow@gmail.com" value="{{data.emailInput}}">
         </div>
         <div class="form-group">
           <label for="passwordInput">Password:</label>
           <br>
-          <input type="password" id="passwordInput" name="passwordInput" placeholder="*********" value="{{data.passwordInput}}" required>
+          <input type="password" id="passwordInput" name="passwordInput" placeholder="*********" value="{{data.passwordInput}}">
         </div>
         <div class="form-group">
           <a href="forgot-password.html">Forgot Password?</a>
