@@ -184,6 +184,12 @@ const exportedMethods = {
         }
     },
 
+    async getUserByUsername(username) {
+        const usersCollections = await users();
+        const thisUser = await usersCollections.findOne({ username });
+        return thisUser;
+    },
+
     async updateRegisteredEvents(userId, eventId) {
         const usersCollection = await users();
         const user = await this.get(userId);

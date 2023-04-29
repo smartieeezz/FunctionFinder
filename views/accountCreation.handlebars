@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Account Creation</title>
-  <link rel="stylesheet" href="public/css/accountCreation.css">
+  {{!-- <link rel="stylesheet" href="public/css/accountCreation.css"> --}}
 </head>
 <body>
   <div class="container">
@@ -16,40 +16,57 @@
           <div class="form-group form-group-inline">
             <label for="firstName">First Name:</label>
             <br>
-            <input type="text" id="firstName" name="firstName" placeholder="Jon" required>
+            <input type="text" id="firstName" name="firstName" placeholder="FirstName" >
           </div>
           <div class="form-group form-group-inline">
             <label for="lastName">Last Name:</label>
             <br>
-            <input type="text" id="lastName" name="lastName" placeholder="Snow" required>
+            <input type="text" id="lastName" name="lastName" placeholder="LastName" >
           </div>
         </div>
 
         <div class="form-group">
           <label for="username">Username:</label>
           <br>
-          <input type="text" id="username" name="username" placeholder="jon.snow" required>
+          <input type="text" id="username" name="username" placeholder="Create Your Username" >
         </div>
         
         <div class="form-group">
           <label for="email">Email:</label>
           <br>
-          <input type="email" id="email" name="email" placeholder="jon.snow@gmail.com"required>
+          <input type="email" id="email" name="email" placeholder="Enter a valid Email Address">
         </div>
         <div class="form-group">
           <label for="dob">Date of Birth:</label>
           <br>
-          <input type="date" id="dob" name="dob" required>
+          <input type="date" id="dob" name="dob" >
         </div>
         <div class="form-group">
           <label for="password">Password:</label>
           <br>
-          <input type="password" id="password" name="password" placeholder="*********" required>
+          <input type="password" id="password" name="password" placeholder="*********" >
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm :</label>
+          <br>
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="*********" >
         </div>
         <button type="submit" class="create-account-btn">Create Account</button>
       </form>
       <p>Already have an account? <a href="/account/login">Login</a></p>
+      {{#if hasErrors}}
+      <ul class="error-list">
+      {{#each errors}}
+        <li>
+          {{this}}
+        </li>
+      {{/each}}
+      </ul>
+      {{/if}}
     </div>
+    
   </div>
+  
+    </div>
 </body>
 </html>
