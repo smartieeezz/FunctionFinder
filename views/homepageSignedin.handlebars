@@ -24,11 +24,11 @@
         <div class="sideNav">
         	<p id="currentPage">Home</p>
             <a href="**NEED TO IMPLEMENT FAVORITES">Favorites</a>
-            <a href="**NEED TO IMPLEMENT POST A PARTY">Post a Party</a>
+            <a href="/postaparty">Post a Party</a>
             <a href="/{{user._id}}/registered-events">Registered Events</a>
-            <a href="http://localhost:3000/users/{{user._id}}">Account</a>
+            {{!-- <a href="http://localhost:3000/users/{{user._id}}">Account</a> --}}
 			<a href="/account/settings/{{user._id}}">Update User Settings</a>
-            <a href="http://localhost:3000/" class="signOut" id="signOut" onclick="return confirm('Are you sure?')">Sign Out</a>
+            <a href="/" class="signOut" id="signOut" onclick="return confirm('Are you sure?')">Sign Out</a>
         </div>
 
 		
