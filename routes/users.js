@@ -91,7 +91,7 @@ router.get('/:id/registered-events', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const user = await userData.get(req.params.id);
-        res.render('homepageSignedin', { user: user });
+        res.render('homepageSignedin', { user: user , apiRoute : `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`});
     } catch (error) {
         res.status(404).json({ message: error});
     }

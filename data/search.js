@@ -1,10 +1,10 @@
 import {ObjectId} from 'mongodb';
 import { calcDistances } from './pushParty.js';
-import { functions } from "../config/mongoCollections.js";
-export async function findNearbyFunctions(src, distance){
+import { events } from "../config/mongoCollections.js";
+export async function findNearbyFunctions(src, distance, startDate, endDate){
     let distanceBetween
     let partiesWithinDistance = []
-    const functionCollection = await functions()
+    const functionCollection = await events()
     let functionList = await functionCollection.find({}).toArray()
     for (const element of functionList) {
         distanceBetween = await calcDistances(src, element.partyAddress)

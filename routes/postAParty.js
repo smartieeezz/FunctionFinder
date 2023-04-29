@@ -6,11 +6,19 @@ import {Router} from 'express';
 import { functions } from "../config/mongoCollections.js"
 import { addParty, calcDistances } from '../data/pushParty.js';
 import userData  from '../data/users.js';
+import dotenv from 'dotenv';
+dotenv.config({path: '.env'})
 //create an instance of the Router() named router
 const router = Router();
+const result = dotenv.config();
+
+// Check if there was an error loading the .env file
+
+
+let apiKey = process.env.API_KEY
 
 router.route('/').get(async (req, res) => {
-    res.render('postAPartyForm')
+    res.render('postAPartyForm', {apiRoute : `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`})
   });
 
 router.route('/').post(async (req,res) => {

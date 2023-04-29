@@ -1,5 +1,5 @@
 import axios from "axios"
-import { functions } from "../config/mongoCollections.js"
+import { events} from "../config/mongoCollections.js"
 import dotenv from 'dotenv';
 dotenv.config({path: '../.env'})
 
@@ -24,7 +24,7 @@ export async function addParty(partyName,
             "maximumCapacity":maximumCapacity,
             "partyDescription":partyDescription
         }
-        let functionsCollection = await functions()
+        let functionsCollection = await events()
         let insertFunction = await functionsCollection.insertOne(party)
         return party
 }
