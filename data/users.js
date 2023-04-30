@@ -175,6 +175,26 @@ const exportedMethods = {
         return thisUser;
     },
 
+    async getName(id) {
+        // check if the id is valid
+        if (!ObjectId.isValid(id)) {
+          throw "Invalid id";
+        }
+      
+        const usersCollection = await users();
+        const user = await usersCollection.findOne(
+          { _id: new ObjectId(id) },
+          { firstName: 1, lastName: 1, username: 1 }
+        );
+      
+        if (!user) {
+          throw "User not found";
+        }
+      
+        user._id = user._id.toString();
+        return user;
+    },      
+
     async getByEmail(email) {
         if (!email) {
             throw `Error: The email was not given.`;
@@ -289,5 +309,18 @@ const exportedMethods = {
 
 export default exportedMethods;
 
+/*
 
+(async () => {
+    try {
+      // Call the update function with valid parameters
+      const userId = "644deb018157ffaa8920aa30";
+      const result = await userData.get(userId);
+      console.log(result.firstName);
+    } catch (error) {
+      console.log(error);
+    }
+  })();
+  
+  // */
 

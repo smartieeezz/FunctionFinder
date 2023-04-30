@@ -2,6 +2,7 @@ import axios from 'axios';
 import {Router} from 'express';
 import userData  from '../data/users.js';
 import eventData  from '../data/events.js';
+import { compareSync } from 'bcrypt';
 
 const router = Router();
 
