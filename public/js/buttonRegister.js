@@ -13,7 +13,7 @@ registerButton.addEventListener("click", function() {
     .then(response => response.json())
     .then(event => {
       if (event.guestsAttending.includes(userId)) {
-        alert("You have already registered for this event.");
+        alert("You already registered for this event.");
       }  
       else {
         event.guestsAttending.push(userId);
