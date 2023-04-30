@@ -51,25 +51,11 @@ const exportedMethods = {
         if (!id) throw "Must provide an ID";
         if (!updatedEvent) throw "Must provide an updated event";
         const eventsCollection = await events();
-        const updatedEventData = {
-            partyHost: updatedEvent.partyHost,
-            name: updatedEvent.name,
-            date: updatedEvent.date,
-            hasOccured: updatedEvent.hasOccured,
-            guestsAttending: updatedEvent.guestsAttending,
-            maximumCapacity: updatedEvent.maximumCapacity,
-            category: updatedEvent.category,
-            description: updatedEvent.description,
-            minimumAge: updatedEvent.minimumAge,
-            location: updatedEvent.location,
-            price: updatedEvent.price,
-            musicType: updatedEvent.musicType,
-            functionComments: updatedEvent.functionComments
-        };
         const updatedInfo = await eventsCollection.updateOne(
             { _id: new ObjectId(id) },
-            { $set: updatedEventData }
+            { $set: updatedEvent }
         );
+        
         if (updatedInfo.modifiedCount === 0) {
             throw `Could not update event with id ${id}`;
         }
@@ -81,3 +67,19 @@ const exportedMethods = {
 };
 
 export default exportedMethods;
+
+/*
+
+(async () => {
+    try {
+      // Call the update function with valid parameters
+      const eventId = "644d6c1a1cf74c00a5dddaf8";
+      const updatedEvent = {date: "2024-01-01" };
+      const result = await eventData.update(eventId, updatedEvent);
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  })();
+  
+  // */

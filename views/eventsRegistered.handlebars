@@ -2,15 +2,15 @@
 <html>
   <head>
     <title>Registered Events List</title>
-    <link rel="stylesheet" href="../public/css/main-styles.css">
+    <link rel="stylesheet" href="/public/css/main-styles.css">
   </head>
   <body>
     <h1>Registered Events:</h1>
     <ul>
         {{#each events}}
         <li>
-            <a href="/events/{{this._id}}/info">{{this.name}}</a>
-            <button class="favorite-button unselected" data-event-id="{{this.id}}">Favorite</button>
+            <a href="/events/{{this._id}}/info?userId={{userId}}">{{this.name}}</a>
+            {{!-- <button class="favorite-button unselected" register-event-id="{{this.id}}">Favorite</button> --}}
         </li>
         {{/each}}
     </ul>

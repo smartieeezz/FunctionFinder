@@ -1,22 +1,22 @@
-const favoriteButton = document.getElementById("favorite-button");
+const unfavoriteButton = document.getElementById("unfavorite-button");
 
-favoriteButton.addEventListener("click", function() {
-  const eventId = this.getAttribute("fav-event-id");
-  const userId = this.getAttribute("fav-user-id");
-  const action = this.getAttribute("fav-action");
+unfavoriteButton.addEventListener("click", function() {
+  const eventId = this.getAttribute("unfav-event-id");
+  const userId = this.getAttribute("unfav-user-id");
+  const action = this.getAttribute("unfav-action");
 
-  if (action !== "favorite") {
+  if (action !== "unfavorite") {
     return;
   }
 
   fetch(`/users/${userId}`)
     .then(response => response.json())
     .then(user => {
-      if (user.favoritedEvents.includes(eventId)) {
-        alert("You already favorited this event.");
+      if (!user.favoritedEvents.includes(eventId)) {
+        alert("You have not favorited this event.");
       } 
       else {
-        user.favoritedEvents.push(eventId);
+        user.favoritedEvents = user.favoritedEvents.filter(id => id !== eventId);
         const options = {
           method: "PUT",
           headers: {
@@ -27,7 +27,7 @@ favoriteButton.addEventListener("click", function() {
         fetch(`/events/${eventId}?userId=${userId}&action=${action}`, options)
           .then(response => response.json())
           .then(updatedEvent => {
-            alert("Event favorited.");
+            alert("Event unfavorited.");
           })
           .catch(error => console.error(error));
       }
