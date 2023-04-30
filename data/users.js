@@ -239,10 +239,7 @@ const exportedMethods = {
           throw `Could not update user with ID of ${id}`;
         }
         return await this.get(id);
-      }
     },
-
-
 
     //we will use this function to update the user details in the settings field
     async updateUser(id, updatedUser) {
