@@ -3,8 +3,36 @@
 <head>
     <title>Update User Settings</title>
 </head>
+<h1>Update User Settings</h1>
 <body>
-    <h1>Update {{user.username}} Settings</h1>
+    <form id = "updateForm" action= "/account/settings/{{id}}" method="post" >
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" value="{{user.firstName}}"><br>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" value="{{user.lastName}}"><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{user.email}}"><br>
+
+        <label for="dateOfBirth">Date of Birth:</label>
+        <input type="date" id="dateOfBirth" name="dateOfBirth" value="{{user.dateOfBirth}}"><br>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{user.username}}"><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br>
+
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword"><br>
+
+        <label for="favoriteCategories">Favorite Genres:</label>
+        <input type="text" id="favoriteCategories" name="favoriteCategories" value="{{user.favoriteCategories}}"><br>
+        
+        <input type="submit" value="Update Settings">
+        <a href="/account">Cancel</a>
+        
     {{#if updated}}
         <p>User settings updated successfully!</p>
     {{/if}}
@@ -15,32 +43,6 @@
         {{/each}}
         </ul>
     {{/if}}
-    <form method="POST" action="/updateSettings/{{user._id}}">
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" value="{{user.firstName}}"><br>
-
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" value="{{user.lastName}}"><br>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="{{user.email}}"><br>
-
-        <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" name="dob" value="{{user.dob}}"><br>
-
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value="{{user.username}}"><br>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"><br>
-
-        <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" name="password"><br>
-
-        <label for="favGenres">Favorite Genres:</label>
-        <input type="text" id="favGenres" name="favGenres" value="{{user.favGenres}}"><br>
-        
-        <input type="submit" value="Update Settings">
     </form>
 </body>
 </html>

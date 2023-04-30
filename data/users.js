@@ -240,10 +240,53 @@ const exportedMethods = {
         }
         return await this.get(id);
       }
-      
+    },
 
-    // add more functions
 
-};
+
+    //we will use this function to update the user details in the settings field
+    async updateUser(id, updatedUser) {
+        const user = await this.get(id);
+        const usersCollection = await users()
+        if (!user) {
+            throw `Error: User: ${id} not found`;
+        }
+        let updatedUserInfo = {};
+        if (updatedUser.firstName) {
+            updatedUserInfo.firstName = updatedUser.firstName;
+        }
+        if (updatedUser.lastName) {
+            updatedUserInfo.lastName = updatedUser.lastName;
+        }
+        if (updatedUser.username) {
+            const existingUser = await this.getUserByUsername(updatedUser.username);
+            if (existingUser && existingUser._id.toString() !== id) {
+                throw "Username already exists. Please choose another username.";
+            }
+        updatedUserInfo.username = updatedUser.username;
+        }
+        if (updatedUser.email) {
+            updatedUserInfo.email = updatedUser.email;
+        }
+        if (updatedUser.dateOfBirth) {
+            updatedUserInfo.dateOfBirth = updatedUser.dateOfBirth;
+        }
+        if (updatedUser.password) {
+            updatedUserInfo.password = await bcrypt.hash(updatedUser.password, saltRounds);
+        }
+        if (updatedUser.favoriteCategories) {
+            updatedUserInfo.favoriteCategories = updatedUser.favoriteCategories;
+        }
+        const updatedInfo = await usersCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedUserInfo });
+        if (updatedInfo.modifiedCount === 0) {
+                throw `Could not update user with id ${id}`;
+        }
+        return this.get(id);
+        }
+
+}      
 
 export default exportedMethods;
+
+
+
