@@ -248,6 +248,7 @@ router.post('/account/settings/:id', async (req, res) => {
     console.log("in the account post settings")
     const {firstName, lastName, username, email, dateOfBirth, password, confirmPassword, favoriteCategories } = req.body;
     const id = req.params.id
+    req.session.userId = req.params.id
     let error = [];
         console.log(id)
         console.log(firstName)
@@ -355,7 +356,9 @@ router.post('/account/settings/:id', async (req, res) => {
             });
         
             console.log(`User ${id} updated successfully: ${updatedUser.username}`);
-            res.render('updateSettings',{updated: true })
+            res.render('accountUpdated', {username: username})
+            return req.session.userId
+            //res.render('updateSettings',{updated: true })
             //res.redirect(`${id}`);
         } catch (e) {
             error.push(e);
