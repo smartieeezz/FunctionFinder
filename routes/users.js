@@ -65,10 +65,10 @@ router.get('/account/create', (req, res) => {
 });  
 
 router.post('/account/create', async (req, res) => {
-    const { firstName, lastName, username, email, dob, password, confirmPassword } = req.body;
+    const { firstName, lastName, username, email, dob, password, confirmPassword, favoriteCategories } = req.body;
     let error = [];
     //check to see if we have all the fields
-    if (!firstName || !lastName || !username || !email || !dob || !password, !confirmPassword) {
+    if (!firstName || !lastName || !username || !email || !dob || !password, !confirmPassword, !favoriteCategories) {
         console.log(confirmPassword)
         error.push("You have to fill in all the fields")
         res.render('accountCreation',{errors: error, hasErrors: true, accountInfo: req.body});
@@ -155,7 +155,7 @@ router.post('/account/create', async (req, res) => {
     }
     try {
         //create the user
-        const result = await userData.create(firstName, lastName, username, email, dob, password);
+        const result = await userData.create(firstName, lastName, username, email, dob, password, favoriteCategories);
         const uid = result._id;
         req.session.user = {id: uid, userName: username};
         //show the account has been created and show the user's first name

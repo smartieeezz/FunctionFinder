@@ -5,54 +5,80 @@
   {{!-- <link rel="stylesheet" href="public/css/accountCreation.css"> --}}
 </head>
 <body>
-  <div class="container">
     {{!-- <div class="logo-container">
       <img src="/public/images/logo.jpg" alt="Logo" class="logo">
     </div> --}}
-    <div class="form-container">
       <h1>Create an Account</h1>
-      <form action="/account/create" method="post">
-        <div class="form-row">
-          <div class="form-group form-group-inline">
+      <form id = "createForm" action="/account/create" method="post">
             <label for="firstName">First Name:</label>
-            <br>
-            <input type="text" id="firstName" name="firstName" placeholder="FirstName" >
-          </div>
-          <div class="form-group form-group-inline">
-            <label for="lastName">Last Name:</label>
-            <br>
-            <input type="text" id="lastName" name="lastName" placeholder="LastName" >
-          </div>
-        </div>
+            <input type="text" id="firstName" name="firstName" placeholder="FirstName"><br>
 
-        <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" placeholder="LastName" ><br>
+
           <label for="username">Username:</label>
-          <br>
-          <input type="text" id="username" name="username" placeholder="Create Your Username" >
-        </div>
-        
-        <div class="form-group">
+          <input type="text" id="username" name="username" placeholder="Create Your Username" ><br>
+
           <label for="email">Email:</label>
-          <br>
-          <input type="email" id="email" name="email" placeholder="Enter a valid Email Address">
-        </div>
-        <div class="form-group">
+          <input type="email" id="email" name="email" placeholder="Enter a valid Email Address"><br>
+
           <label for="dob">Date of Birth:</label>
-          <br>
-          <input type="date" id="dob" name="dob" >
-        </div>
-        <div class="form-group">
+          <input type="date" id="dob" name="dob" ><br>
+
           <label for="password">Password:</label>
-          <br>
-          <input type="password" id="password" name="password" placeholder="*********" >
-        </div>
-        <div class="form-group">
+          <input type="password" id="password" name="password" placeholder="*********" ><br>
+
           <label for="confirmPassword">Confirm :</label>
-          <br>
-          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="*********" >
-        </div>
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="*********" ><br>
+
+        <label for="favoriteCategories">Favorite Genres:</label><br>
+        <input type="checkbox" id="hiphop" name="favoriteCategories" value="hiphop">
+        <label for="hiphop">Hip Hop</label><br>
+
+        <input type="checkbox" id="rnb" name="favoriteCategories" value="rnb">
+        <label for="rnb">RnB</label><br>
+
+        <input type="checkbox" id="latin" name="favoriteCategories" value="latin">
+        <label for="latin">Latin</label><br>
+
+        <input type="checkbox" id="caribbean" name="favoriteCategories" value="caribbean">
+        <label for="caribbean">Caribbean</label><br>
+
+        <input type="checkbox" id="asian" name="favoriteCategories" value="asian">
+        <label for="asian">Asian</label><br>
+
+        <input type="checkbox" id="pop" name="favoriteCategories" value="pop">
+        <label for="pop">Pop</label><br>
+
+        <input type="checkbox" id="kpop" name="favoriteCategories" value="kpop">
+        <label for="kpop">K-Pop</label><br>
+
+        <input type="checkbox" id="jazz" name="favoriteCategories" value="jazz">
+        <label for="jazz">Jazz</label><br>
+
+        <input type="checkbox" id="country" name="favoriteCategories" value="country">
+        <label for="country">Country</label><br>
+
+        <input type="checkbox" id="rock" name="favoriteCategories" value="rock">
+        <label for="rock">Rock</label><br>
+
+        <input type="checkbox" id="edm" name="favoriteCategories" value="edm">
+        <label for="edm">EDM</label><br>
+
+        <input type="checkbox" id="throwbacks" name="favoriteCategories" value="throwbacks">
+        <label for="throwbacks">Throwbacks</label><br>
+
+        <input type="checkbox" id="afrobeats" name="favoriteCategories" value="afrobeats">
+        <label for="afrobeats">Afrobeats</label><br>
+
+        <input type="checkbox" id="indie" name="favoriteCategories" value="indie">
+        <label for="indie">Indie</label><br>
+
+        <input type="checkbox" id="alternative" name="favoriteCategories" value="alternative">
+        <label for="alternative">Alternative</label><br>
         <button type="submit" class="create-account-btn">Create Account</button>
       </form>
+      
       <p>Already have an account? <a href="/account/login">Login</a></p>
       {{#if hasErrors}}
       <ul class="error-list">

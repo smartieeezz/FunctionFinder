@@ -13,7 +13,8 @@ const exportedMethods = {
         username,
         email,
         dateOfBirth,
-        password
+        password, 
+        favoriteCategories
     ) {
         /*check to make sure all fields were provided. If all field was not provided then throw and error
         reminding the user to provide all fields.*/
@@ -34,6 +35,9 @@ const exportedMethods = {
         }
         if (!password) {
             throw `Error: All of the fields must be filled.`
+        }
+        if (!favoriteCategories) {
+            throw  `Error: All of the fields must be filled.`
         }
         //If the firstName, lastName or username are not strings we will throw an error
         if (typeof firstName !== "string") {
@@ -94,7 +98,7 @@ const exportedMethods = {
         favoritedEvents: [],
         registeredEvents: [],
         pastEventsAttended:[],
-        favoriteCategories: [],
+        favoriteCategories: favoriteCategories,
         userComments: [],
         currentlyHostingEvents: [],
         previouslyHostedEvents: []
