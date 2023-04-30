@@ -187,6 +187,25 @@ router.get('/:id/registered-events', async (req, res) => {
     }
 });
 
+// get user's favorited events
+router.get('/:id/favorited-events', async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const user = await userData.get(userId);
+      const favoritedEventIds = user.favoritedEvents;
+      const favoritedEvents = [];
+  
+      for (const eventId of favoritedEventIds) {
+        const event = await eventData.get(eventId);
+        favoritedEvents.push({ ...event, userId });
+      }
+  
+      res.render('eventsFavorited', { events: favoritedEvents, userId });
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+});
+
 router.get('/:id', async (req, res) => {
     try {
         const user = await userData.get(req.params.id);

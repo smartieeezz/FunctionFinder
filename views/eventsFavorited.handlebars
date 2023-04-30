@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Favorited Events List</title>
+    <link rel="stylesheet" href="/public/css/main-styles.css">
+  </head>
+  <body>
+    <h1>Favorited Events:</h1>
+    <ul>
+        {{#each events}}
+        <li>
+            <a href="/events/{{this._id}}/info?userId={{userId}}">{{this.name}}</a>
+        </li>
+        {{/each}}
+    </ul>
+    <script src="../public/js/buttonFavorite.js"></script>
+  </body>
+</html>
