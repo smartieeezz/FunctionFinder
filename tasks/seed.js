@@ -18,7 +18,7 @@ try {
     console.log(user1)
     
     // create user2
-    let user2= await users.create("Mary", "Anne", "mary.anne", "mary.anne@gmail.com", "01/01/2000","cs546");
+    let user2= await users.create("Mary", "Anne", "mary.anne", "mary.anne@gmail.com", "01/01/2000","Password123!");
     console.log(user2)
 
     // create event1

@@ -171,17 +171,19 @@ router.post('/account/create', async (req, res) => {
 // get user's registered events
 router.get('/:id/registered-events', async (req, res) => {
     try {
-        const userId = req.params.id;
-        const user = await userData.get(userId);
-        const registeredEventIds = user.registeredEvents;
-        const registeredEvents = [];
-        for (const eventId of registeredEventIds) {
-            const event = await eventData.get(eventId);
-            registeredEvents.push(event);
-        }
-        res.render('eventsRegistered', { events: registeredEvents });
+      const userId = req.params.id;
+      const user = await userData.get(userId);
+      const registeredEventIds = user.registeredEvents;
+      const registeredEvents = [];
+  
+      for (const eventId of registeredEventIds) {
+        const event = await eventData.get(eventId);
+        registeredEvents.push({ ...event, userId });
+      }
+  
+      res.render('eventsRegistered', { events: registeredEvents, userId });
     } catch (error) {
-        res.status(404).json({ message: error });
+      res.status(404).json({ message: error });
     }
 });
 

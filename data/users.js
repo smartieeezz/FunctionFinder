@@ -190,51 +190,57 @@ const exportedMethods = {
         return thisUser;
     },
 
-    async updateRegisteredEvents(userId, eventId) {
+    async updateRegisteredEvents(userId, eventId, action) {
         const usersCollection = await users();
         const user = await this.get(userId);
-        user.registeredEvents.push(eventId);
-        const updatedUser = await usersCollection.updateOne(
-            { _id: new ObjectId(userId) },
-            { $set: { registeredEvents: user.registeredEvents } }
-        );
-        if (updatedUser.modifiedCount === 0) {
-            throw "Error: Could not update user's registered events.";
+        if (!user) {
+            throw new Error(`User with id ${userId} not found.`);
         }
+      
+        if (action === 'register') {
+            user.registeredEvents.push(eventId);
+            const updatedUser = await usersCollection.updateOne(
+                { _id: new ObjectId(userId) },
+                { $set: { registeredEvents: user.registeredEvents } }
+            );
+            if (updatedUser.modifiedCount === 0) {
+                throw "Error: Could not update user's registered events.";
+            }
+        } 
+        else if (action === 'unregister') {
+            user.registeredEvents = user.registeredEvents.filter(event => event !== eventId);
+            const updatedUser = await usersCollection.updateOne(
+                { _id: new ObjectId(userId) },
+                { $set: { registeredEvents: user.registeredEvents } }
+            );
+            if (updatedUser.modifiedCount === 0) {
+                throw "Error: Could not update user's registered events.";
+            }
+        }
+      
         return await this.get(userId);
-    },
+    },      
 
     async update(id, updatedUser) {
         if (!id) throw "You must provide an ID";
-        if (!updatedUser) throw "You must provide an updated user object";
+        if (!updatedUser) throw "You must provide an updated user";
         const usersCollection = await users();
-        const updatedUserData = {
-            firstName: updatedUser.firstName,
-            lastName: updatedUser.lastName,
-            username: updatedUser.username,
-            email: updatedUser.email,
-            dateOfBirth: updatedUser.dateOfBirth,
-            password: updatedUser.password,
-            favoritedEvents: updatedUser.favoritedEvents,
-            registeredEvents: updatedUser.registeredEvents,
-            pastEventsAttended: updatedUser.pastEventsAttended,
-            favoriteCategories: updatedUser.favoriteCategories,
-            userComments: updatedUser.userComments,
-            currentlyHostingEvents: updatedUser.currentlyHostingEvents,
-            previouslyHostedEvents: updatedUser.previouslyHostedEvents
-        };
-    
-    const updateInfo = await usersCollection.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: updatedUserData }
-    );
-
-    if (updateInfo.modifiedCount === 0) {
-        throw `Could not update user with ID of ${id}`;
-    }
-
-    return await this.get(id);
-    }
+        const updateObj = {};
+        for (let key in updatedUser) {
+          if (key !== '_id') {
+            updateObj[key] = updatedUser[key];
+          }
+        }
+        const updateInfo = await usersCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: updateObj }
+        );
+        if (updateInfo.modifiedCount === 0) {
+          throw `Could not update user with ID of ${id}`;
+        }
+        return await this.get(id);
+      }
+      
 
     // add more functions
 
