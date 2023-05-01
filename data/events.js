@@ -28,10 +28,47 @@ const exportedMethods = {
         return partyHostUsername;
     },
 
-    async create(partyHost, name, date, hasOccured, guestsAttending, maximumCapacity, category, description, minimumAge, location, price, musicType, functionComments) {
-        if (!partyHost || !name || !date || !guestsAttending || !maximumCapacity || !category || !description || !minimumAge || !location || !price || !musicType) {
-            throw "Error: Provide all fields.";
+    async create(partyHost, name, date, hasOccured, guestsAttending, maximumCapacity, category, description, minimumAge, location, price, musicType, functionComments, partyVenue) {
+        if (!partyHost) {
+            throw "Error: partyHost field is required.";
         }
+        if (!name) {
+            throw "Error: name field is required.";
+        }
+        if (!date) {
+            throw "Error: date field is required.";
+        }
+        if (guestsAttending === null) {
+            throw "Error: guestsAttending field is required.";
+        }
+        if (guestsAttending === undefined) {
+            throw "Error: guestsAttending field is required.";
+        }
+        if (!maximumCapacity) {
+            throw "Error: maximumCapacity field is required.";
+        }
+        if (!category) {
+            throw "Error: category field is required.";
+        }
+        if (!description) {
+            throw "Error: description field is required.";
+        }
+        if (!minimumAge) {
+            throw "Error: minimumAge field is required.";
+        }
+        if (!location) {
+            throw "Error: location field is required.";
+        }
+        if (!price) {
+            throw "Error: price field is required.";
+        }
+        if (!musicType) {
+            throw "Error: musicType field is required.";
+        }
+        if (!partyVenue){
+            throw "Error: party venue field is required."
+        }
+
         const eventsCollection = await events();
         const newEvent = {
             _id: new ObjectId(),
@@ -47,15 +84,14 @@ const exportedMethods = {
             location: location,
             price: price,
             musicType: musicType,
-            functionComments: functionComments
+            functionComments: functionComments,
+            partyVenue: partyVenue
         };
         const insertInfo = await eventsCollection.insertOne(newEvent);
         if (insertInfo.insertedCount === 0) {
             throw "Could not add event.";
         }
-        const newId = insertInfo.insertedId;
-        const event = await this.get(newId.toString());
-        return event;
+        return newEvent
     },
 
     async update(id, updatedEvent) {

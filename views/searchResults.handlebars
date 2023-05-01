@@ -34,7 +34,7 @@
     <div id="card-container">
       {{#each searchResults}}
         <div class="card" onclick="window.location.href='/events/{{this._id}}/info'">
-          <h3>{{this.partyName}}</h3>
+          <h3>{{this.name}}</h3>
           <p>{{this.partyVenue}}</p>
         </div>
       {{/each}}
