@@ -13,7 +13,8 @@ const exportedMethods = {
         username,
         email,
         dateOfBirth,
-        password
+        password, 
+        favoriteCategories
     ) {
         /*check to make sure all fields were provided. If all field was not provided then throw and error
         reminding the user to provide all fields.*/
@@ -34,6 +35,9 @@ const exportedMethods = {
         }
         if (!password) {
             throw `Error: All of the fields must be filled.`
+        }
+        if (!favoriteCategories) {
+            throw  `Error: All of the fields must be filled.`
         }
         //If the firstName, lastName or username are not strings we will throw an error
         if (typeof firstName !== "string") {
@@ -94,7 +98,7 @@ const exportedMethods = {
         favoritedEvents: [],
         registeredEvents: [],
         pastEventsAttended:[],
-        favoriteCategories: [],
+        favoriteCategories: favoriteCategories,
         userComments: [],
         currentlyHostingEvents: [],
         previouslyHostedEvents: []
@@ -171,6 +175,26 @@ const exportedMethods = {
         return thisUser;
     },
 
+    async getName(id) {
+        // check if the id is valid
+        if (!ObjectId.isValid(id)) {
+          throw "Invalid id";
+        }
+      
+        const usersCollection = await users();
+        const user = await usersCollection.findOne(
+          { _id: new ObjectId(id) },
+          { firstName: 1, lastName: 1, username: 1 }
+        );
+      
+        if (!user) {
+          throw "User not found";
+        }
+      
+        user._id = user._id.toString();
+        return user;
+    },      
+
     async getByEmail(email) {
         if (!email) {
             throw `Error: The email was not given.`;
@@ -190,54 +214,113 @@ const exportedMethods = {
         return thisUser;
     },
 
-    async updateRegisteredEvents(userId, eventId) {
+    async updateRegisteredEvents(userId, eventId, action) {
         const usersCollection = await users();
         const user = await this.get(userId);
-        user.registeredEvents.push(eventId);
-        const updatedUser = await usersCollection.updateOne(
-            { _id: new ObjectId(userId) },
-            { $set: { registeredEvents: user.registeredEvents } }
-        );
-        if (updatedUser.modifiedCount === 0) {
-            throw "Error: Could not update user's registered events.";
+        if (!user) {
+            throw new Error(`User with id ${userId} not found.`);
         }
+      
+        if (action === 'register') {
+            user.registeredEvents.push(eventId);
+            const updatedUser = await usersCollection.updateOne(
+                { _id: new ObjectId(userId) },
+                { $set: { registeredEvents: user.registeredEvents } }
+            );
+            if (updatedUser.modifiedCount === 0) {
+                throw "Error: Could not update user's registered events.";
+            }
+        } 
+        else if (action === 'unregister') {
+            user.registeredEvents = user.registeredEvents.filter(event => event !== eventId);
+            const updatedUser = await usersCollection.updateOne(
+                { _id: new ObjectId(userId) },
+                { $set: { registeredEvents: user.registeredEvents } }
+            );
+            if (updatedUser.modifiedCount === 0) {
+                throw "Error: Could not update user's registered events.";
+            }
+        }
+      
         return await this.get(userId);
-    },
+    },      
 
     async update(id, updatedUser) {
         if (!id) throw "You must provide an ID";
-        if (!updatedUser) throw "You must provide an updated user object";
+        if (!updatedUser) throw "You must provide an updated user";
         const usersCollection = await users();
-        const updatedUserData = {
-            firstName: updatedUser.firstName,
-            lastName: updatedUser.lastName,
-            username: updatedUser.username,
-            email: updatedUser.email,
-            dateOfBirth: updatedUser.dateOfBirth,
-            password: updatedUser.password,
-            favoritedEvents: updatedUser.favoritedEvents,
-            registeredEvents: updatedUser.registeredEvents,
-            pastEventsAttended: updatedUser.pastEventsAttended,
-            favoriteCategories: updatedUser.favoriteCategories,
-            userComments: updatedUser.userComments,
-            currentlyHostingEvents: updatedUser.currentlyHostingEvents,
-            previouslyHostedEvents: updatedUser.previouslyHostedEvents
-        };
-    
-    const updateInfo = await usersCollection.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: updatedUserData }
-    );
+        const updateObj = {};
+        for (let key in updatedUser) {
+          if (key !== '_id') {
+            updateObj[key] = updatedUser[key];
+          }
+        }
+        const updateInfo = await usersCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: updateObj }
+        );
+        if (updateInfo.modifiedCount === 0) {
+          throw `Could not update user with ID of ${id}`;
+        }
+        return await this.get(id);
+    },
 
-    if (updateInfo.modifiedCount === 0) {
-        throw `Could not update user with ID of ${id}`;
-    }
+    //we will use this function to update the user details in the settings field
+    async updateUser(id, updatedUser) {
+        const user = await this.get(id);
+        const usersCollection = await users()
+        if (!user) {
+            throw `Error: User: ${id} not found`;
+        }
+        let updatedUserInfo = {};
+        if (updatedUser.firstName) {
+            updatedUserInfo.firstName = updatedUser.firstName;
+        }
+        if (updatedUser.lastName) {
+            updatedUserInfo.lastName = updatedUser.lastName;
+        }
+        if (updatedUser.username) {
+            const existingUser = await this.getUserByUsername(updatedUser.username);
+            if (existingUser && existingUser._id.toString() !== id) {
+                throw "Username already exists. Please choose another username.";
+            }
+        updatedUserInfo.username = updatedUser.username;
+        }
+        if (updatedUser.email) {
+            updatedUserInfo.email = updatedUser.email;
+        }
+        if (updatedUser.dateOfBirth) {
+            updatedUserInfo.dateOfBirth = updatedUser.dateOfBirth;
+        }
+        if (updatedUser.password) {
+            updatedUserInfo.password = await bcrypt.hash(updatedUser.password, saltRounds);
+        }
+        if (updatedUser.favoriteCategories) {
+            updatedUserInfo.favoriteCategories = updatedUser.favoriteCategories;
+        }
+        const updatedInfo = await usersCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedUserInfo });
+        if (updatedInfo.modifiedCount === 0) {
+                throw `Could not update user with id ${id}`;
+        }
+        return this.get(id);
+        }
 
-    return await this.get(id);
-    }
-
-    // add more functions
-
-};
+}      
 
 export default exportedMethods;
+
+/*
+
+(async () => {
+    try {
+      // Call the update function with valid parameters
+      const userId = "644deb018157ffaa8920aa30";
+      const result = await userData.get(userId);
+      console.log(result.firstName);
+    } catch (error) {
+      console.log(error);
+    }
+  })();
+  
+  // */
+

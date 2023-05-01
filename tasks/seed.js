@@ -14,11 +14,13 @@ await db.dropDatabase();
 
 try {
     // create user1
-    let user1= await users.create("John", "Snow", "john.snow", "john.snow@gmail.com", "01/01/1900","password");
+    let user1= await users.create("John", "Snow", "john.snow", "john.snow@gmail.com", "01/01/1900","Javascript99!");
     console.log(user1)
     
     // create user2
-    let user2= await users.create("Mary", "Anne", "mary.anne", "mary.anne@gmail.com", "01/01/2000","cs546");
+
+    let user2= await users.create("Mary", "Anne", "mary.anne", "mary.anne@gmail.com", "01/01/2000","Password99!");
+
     console.log(user2)
 
     // create event1

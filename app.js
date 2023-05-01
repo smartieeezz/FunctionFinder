@@ -37,6 +37,22 @@ app.use(
   })
 );
 
+//Middleware to make sure the user can only access their own account settings
+// app.use('/account/settings/:id', (req, res, next) => {
+//   const userId = req.params.id;
+//   const validatedUser = req.session.userId;
+//   console.log(userId)
+//   console.log(validatedUser)
+
+//   if (!validatedUser || validatedUser.id !== userId) {
+//     res.render('error', { message: 'You do not have permission to access this page' });
+//   }
+
+//   next();
+// });
+
+
+
 // app.use('/account/login', (req, res, next) => {
 //   // Check if the user is already authenticated
 //   if (req.session.user) {
