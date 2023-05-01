@@ -2,8 +2,7 @@ h1 {
     font-size: 72px;
     margin-top: 50px;
     margin-bottom: 40px;
-    margin-left: 50px;
-    text-align: left;
+    margin-left: 40px;
     color: white;
     text-shadow: 10px 6px 8px #ffd900;
   }
@@ -14,28 +13,51 @@ h1 {
     padding: 0;
     display: flex;
     flex-direction: column;
-    align-items: left;
-    margin-left: 50px;
+    margin-left: 20px;
   }
-  
+
   li {
     font-size: 20px;
     margin-bottom: 20px;
-    text-align: left;
   }
   
+  .event-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .info-container {
+    max-width: 800px;
+    flex: 1;
+    margin-right: 30px;
+    background-color: rgb(0, 0, 0);
+    padding: 10px;
+    border-radius: 50px;
+    border: 5px solid rgb(193, 117, 194);
+    word-wrap: break-word;
+  }
+
   button {
     margin: 10px;
     padding: 10px;
-    font-size: 18px;
-    border-radius: 5px;
-    margin-left: 50px;
+    font-size: 15px;
+    border-radius: 50px;
     border: none;
     color: #fff;
-    background-color: #4CAF50;
+    background-color: #27b32c;
     cursor: pointer;
   }
   
+  .button-container {
+    max-width: 300px;
+    background-color: #000000;
+    padding: 20px;
+    border-radius: 50px;
+    border: 5px solid rgb(193, 117, 194);
+    flex-shrink: 0;
+  }
+
   p {
     margin-top: 20px;
     text-align: center;
@@ -54,5 +76,11 @@ h1 {
   
   .event-info {
     color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 800px;
+    margin: 0 auto;
   }
   

@@ -303,7 +303,22 @@ const exportedMethods = {
                 throw `Could not update user with id ${id}`;
         }
         return this.get(id);
-        }
+    },
+
+    async getUsername(id) {
+        try {
+            const userCollection = await users();
+            const user = await userCollection.findOne({ _id: new ObjectId(id) });
+            if (user) {
+              return user.username;
+            } else {
+              return null;
+            }
+          } catch (e) {
+            throw new Error(`Error finding username: ${e}`);
+          }
+    }
+      
 
 }      
 
@@ -315,8 +330,8 @@ export default exportedMethods;
     try {
       // Call the update function with valid parameters
       const userId = "644deb018157ffaa8920aa30";
-      const result = await userData.get(userId);
-      console.log(result.firstName);
+      const result = await userData.getUsername(userId);
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
