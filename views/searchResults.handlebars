@@ -1,1 +1,44 @@
-<div></div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Search Results</title>
+    <script src="../public/js/renderMap.js">let location = '{{location}}'</script>
+    <link rel="stylesheet" href="../public/css/resultsCards.css">
+
+  </head>
+  <body class="background">
+    {{!-- https://www.w3schools.com/graphics/google_maps_intro.asp  --}}
+    <div id="googleMap" class="map"></div>
+    <script>
+    
+    function myMap() {
+
+        let longitude = '{{longitude}}'
+        let latitude = '{{latitude}}'
+        let mapProp= {
+            center:new google.maps.LatLng(latitude, longitude),
+            zoom:13,
+            };
+        var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    }
+    </script>
+
+    <div id="backToSearch">
+        <a href="/" class="searchresults">Back to Search</a>
+    </div>
+    <div id="menu">
+        <h2 class="searchresults">Search Results</h2>
+    </div>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key={{apiKey}}&callback=myMap"></script>
+    <div id="card-container">
+      {{#each searchResults}}
+        <div class="card">
+          <h3>{{this.partyName}}</h3>
+          <p>{{this.partyVenue}}</p>
+        </div>
+      {{/each}}
+    </div>
+
+  </body>
+</html>

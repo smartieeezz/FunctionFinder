@@ -1,0 +1,30 @@
+.card {
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-left: 12px;
+    border-radius: 20px; 
+    background-color: white; 
+    width: 56vw;
+  }
+
+.background {
+  background-color: black;
+}
+.searchresults{
+  color: white;
+}
+.menu {
+    height: 200px;
+    width:50%;
+}
+
+.map{ 
+  margin-left: 10px;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 40vw;
+  margin: auto;
+}

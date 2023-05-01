@@ -16,7 +16,8 @@ const result = dotenv.config();
 
 
 let apiKey = process.env.API_KEY
-
+console.log("Api keyh")
+console.log(apiKey)
 // gets the user info
 router.get('/users/:id', async (req, res) => {
     try {
