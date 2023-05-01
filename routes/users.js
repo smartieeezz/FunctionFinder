@@ -27,6 +27,8 @@ router.get('/users/:id', async (req, res) => {
     }
 });
 
+
+
 router.get('/account/login', async (req, res) => {
     try {
     //make the response const equal to all the venues
@@ -357,7 +359,7 @@ router.post('/account/settings/:id', async (req, res) => {
         
             console.log(`User ${id} updated successfully: ${updatedUser.username}`);
             res.render('accountUpdated', {username: username})
-            return req.session.userId
+            req.session.userId = updatedUser._id
             //res.render('updateSettings',{updated: true })
             //res.redirect(`${id}`);
         } catch (e) {
