@@ -8,7 +8,7 @@ export async function findNearbyFunctions(src, distance, startDate, endDate){
     const functionCollection = await events()
     let functionList = await functionCollection.find({}).toArray()
     for (const element of functionList) {
-        distanceBetween = await calcDistances(src, element.partyAddress)
+        distanceBetween = await calcDistances(src, element.location)
         if (distanceBetween <= distance){
             partiesWithinDistance.push(element)
         }
@@ -16,10 +16,11 @@ export async function findNearbyFunctions(src, distance, startDate, endDate){
     for (const element of partiesWithinDistance){
         startDate = new Date(startDate);
         endDate = new Date(endDate);
-        let partyDate = new Date(element.partyDate);
+        let partyDate = new Date(element.date);
         if (partyDate >= startDate && partyDate <= endDate) {
             final.push(element)
         }
     }
+    console.log(final)
     return final
 }

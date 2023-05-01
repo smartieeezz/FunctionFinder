@@ -1,6 +1,8 @@
 import axios from "axios"
 import { events} from "../config/mongoCollections.js"
 import dotenv from 'dotenv';
+import exportedMethods from "./events.js";
+const {create} = exportedMethods
 dotenv.config({path: '../.env'})
 
 
@@ -12,20 +14,44 @@ export async function addParty(partyName,
                  partyVenue,
                  minimumAge,
                  maximumCapacity, 
-                 partyDescription
+                 partyDescription,
+                 categories,
+                 musicType,
+                 partyHost, 
     ){
         let party = {
-            "partyName":partyName,
-            "partyAddress": partyAddress,
-            "coverPrice": coverPrice,
-            "partyDate": partyDate, 
+            "name":partyName,
+            "location": partyAddress,
+            "price": coverPrice,
+            "date": partyDate, 
             "partyVenue": partyVenue,
             "minimumAge": minimumAge,
             "maximumCapacity":maximumCapacity,
-            "partyDescription":partyDescription
+            "description":partyDescription,
+            "category":categories,
+            "musicType":musicType,
+            "hasOccured":false,
+            "guestsAttending":0, 
+            "functionComments":[],
+            "partyHost":partyHost
         }
-        let functionsCollection = await events()
-        let insertFunction = await functionsCollection.insertOne(party)
+        console.log(party)
+        const pushparty = await create(
+          party['partyHost'], 
+          party['name'],
+          party['date'],
+          party['hasOccured'],
+          party['guestsAttending'],
+          party['maximumCapacity'],
+          party['category'],
+          party['description'],
+          party['minimumAge'],
+          party['location'],
+          party['price'],
+          party['musicType'],
+          party['functionComments'],
+          party['partyVenue']
+          )
         return party
 }
 
