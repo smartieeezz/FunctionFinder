@@ -38,6 +38,10 @@ router.route('/').get(async (req, res) => {
     } catch(e){
       res.status(500).json('error');
     }
+    for (const element of nearby){
+      element._id = element._id.toString()
+    }
+    console.log(nearby)
     res.render('searchResults',{searchResults:nearby, 'apiKey': apiKey, 'location':location, 'longitude':longitude, "latitude":latitude})
   });
 

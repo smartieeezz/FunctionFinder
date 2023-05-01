@@ -33,7 +33,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key={{apiKey}}&callback=myMap"></script>
     <div id="card-container">
       {{#each searchResults}}
-        <div class="card">
+        <div class="card" onclick="window.location.href='/events/{{this._id}}/info'">
           <h3>{{this.partyName}}</h3>
           <p>{{this.partyVenue}}</p>
         </div>
