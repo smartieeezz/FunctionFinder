@@ -1,3 +1,22 @@
+
+// function renderCards(parties) {
+//     const cardContainer = document.getElementById('card-container');
+
+//     for (const party of parties) {
+//         const card = document.createElement('div');
+//         card.classList.add('card');
+    
+//         const functionName = document.createElement('h3');
+//         functionName.textContent = party.functionName;
+    
+//         const functionVenue = document.createElement('p');
+//         functionVenue.textContent = party.functionVenue;
+
+//         card.appendChild(functionName);
+//         card.appendChild(functionVenue);
+//         cardContainer.appendChild(card);
+//     }
+//     }
 let searchForm = document.getElementById('searchForm');
 
 if(searchForm){
@@ -37,6 +56,7 @@ if(searchForm){
             searchForm.appendChild(endDateError);
         }
 
+          
         if(valid){
             searchForm.submit();
         }

@@ -128,10 +128,12 @@ if (postPartyForm){
             maxCapError.textContent = "Error: invalid maximum capacity"
             maxCap.parentElement.appendChild(maxCapError)
         }
+
+
         if (dj2valid == true){
             postPartyForm.submit()
         }
-        console.log(musicalGenre.value)
+        
     })
   
     

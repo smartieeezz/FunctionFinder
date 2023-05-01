@@ -134,13 +134,13 @@ const exportedMethods = {
         const usersCollections = await users();
         const existingUser = await usersCollections.findOne({ email: emailAddress.toLowerCase()});
         if (!existingUser) {
-            throw 'Error: A user with that email address does not exist.'; 
+            throw 'Invalid username/password.'; 
         }
         /*If the emailAddress supplied is found in the DB, you will then use bcrypt to compare the
         hashed password in the database with the password input parameter.*/
         const passwordsMatch = await bcrypt.compare(password, existingUser.password);
         if (!passwordsMatch) {
-            throw `Invalid password.`;
+            throw `Invalid username/password.`;
         }
         return existingUser;
 
@@ -303,7 +303,22 @@ const exportedMethods = {
                 throw `Could not update user with id ${id}`;
         }
         return this.get(id);
-        }
+    },
+
+    async getUsername(id) {
+        try {
+            const userCollection = await users();
+            const user = await userCollection.findOne({ _id: new ObjectId(id) });
+            if (user) {
+              return user.username;
+            } else {
+              return null;
+            }
+          } catch (e) {
+            throw new Error(`Error finding username: ${e}`);
+          }
+    }
+      
 
 }      
 
@@ -315,8 +330,8 @@ export default exportedMethods;
     try {
       // Call the update function with valid parameters
       const userId = "644deb018157ffaa8920aa30";
-      const result = await userData.get(userId);
-      console.log(result.firstName);
+      const result = await userData.getUsername(userId);
+      console.log(result);
     } catch (error) {
       console.log(error);
     }

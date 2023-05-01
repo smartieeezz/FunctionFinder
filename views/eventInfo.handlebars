@@ -6,36 +6,32 @@
         <link rel="stylesheet" href="/public/css/eventInfo.css">
     </head>
     <body>
+        <h1>{{event.name}}</h1>
         <div class="event-info">
-            <h1>{{event.name}}</h1>
-            <ul>
-                {{!-- <li><strong>Party ID:</strong> {{event._id}}</li> --}}
-                <li><strong>Party Host:</strong> {{event.partyHost}}</li>
-                <li><strong>{{event.date}}</strong></li>
-                <li>{{event.description}}</li>
-                <li>&#x1f4cd; {{event.location}}</li>
-                <li>&#127926; {{event.musicType}}</li>
-                {{!-- <li><strong>Category:</strong> {{event.category}}</li> --}}
-                <li><strong>Minimum Age:</strong> {{event.minimumAge}}</li>
-                {{!-- <li><strong>Price:</strong> {{event.price}}</li> --}}
-                <li><strong>Function Comments:</strong> {{event.functionComments}}</li>
-            </ul>
-
-            <button id="register-button" reg-event-id="{{event._id}}" reg-user-id="{{userId}}" reg-action="register">Register</button>
-            <script src="/public/js/buttonRegister.js"></script>
-
-            <button id="unregister-button" unreg-event-id="{{event._id}}" unreg-user-id="{{userId}}" unreg-action="unregister">Unregister</button>
-            <script src="/public/js/buttonUnregister.js"></script>
-
-            <p></p>
-
-            <button id="favorite-button" fav-event-id="{{event._id}}" fav-user-id="{{userId}}" fav-action="favorite">Favorite</button>
-            <script src="/public/js/buttonFavorite.js"></script>
-
-            <button id="unfavorite-button" unfav-event-id="{{event._id}}" unfav-user-id="{{userId}}" unfav-action="unfavorite">Unfavorite</button>
-            <script src="/public/js/buttonUnFavorite.js"></script>
-    
+            <div class="info-container">
+                <ul>
+                    <li><strong>Party Host:</strong> {{event.partyHost}}</li>
+                    <li><strong>{{event.date}}</strong></li>
+                    <li><strong>Description:</strong> {{event.description}}</li>
+                    <li>&#x1f4cd; {{event.location}}</li>
+                    <li>&#127926; {{event.musicType}}</li>
+                    <li><strong>Minimum Age:</strong> {{event.minimumAge}}</li>
+                    <li><strong>Price:</strong> {{event.price}}</li>
+                    <li><strong>Max Capacity:</strong> {{event.maximumCapacity}}</li>
+                    {{!-- <li><strong>Function Comments:</strong> {{event.functionComments}}</li> --}}
+                </ul>
+            </div>
+            <div class="button-container">
+                <button id="register-button" reg-event-id="{{event._id}}" reg-user-id="{{userId}}" reg-action="register">Register</button>
+                <script src="/public/js/buttonRegister.js"></script>
+                <button id="unregister-button" unreg-event-id="{{event._id}}" unreg-user-id="{{userId}}" unreg-action="unregister">Unregister</button>
+                <script src="/public/js/buttonUnregister.js"></script>
+                <p></p>
+                <button id="favorite-button" fav-event-id="{{event._id}}" fav-user-id="{{userId}}" fav-action="favorite">Favorite</button>
+                <script src="/public/js/buttonFavorite.js"></script>
+                <button id="unfavorite-button" unfav-event-id="{{event._id}}" unfav-user-id="{{userId}}" unfav-action="unfavorite">Unfavorite</button>
+                <script src="/public/js/buttonUnFavorite.js"></script>
+            </div>
         </div>
     </body>
-        
 </html>

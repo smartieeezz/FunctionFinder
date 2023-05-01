@@ -1,0 +1,38 @@
+body {
+    background-image: url("../images/homepageBackground.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: black;
+  }
+  
+  h1 {
+    font-size: 72px;
+    margin-top: 50px;
+    margin-bottom: 40px;
+    margin-left: 40px;
+    color: white;
+    text-shadow: 2px 2px 2px #c175c2;
+  }
+  
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    margin-top: 50px;
+    margin-left: 20px;
+  }
+  
+  li {
+    font-size: 25px;
+    margin-bottom: 20px;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  a:hover {
+    color: #ff0;
+  }
+  
