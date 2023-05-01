@@ -33,6 +33,8 @@ const checkName = (name) => {
 const checkAge = (DOB) => {
     const today = new Date();
     const givenDOB = new Date(DOB)
+    givenDOB.setHours(0, 0, 0, 0); // Set time to midnight to compare dates only
+    today.setHours(0, 0, 0, 0);
 
     let day = String(today.getDate());
     if (day.length < 2) {

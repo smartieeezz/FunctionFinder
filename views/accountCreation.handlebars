@@ -9,7 +9,8 @@
       <img src="/public/images/logo.jpg" alt="Logo" class="logo">
     </div> --}}
       <h1>Create an Account</h1>
-      <form id = "createForm" action="/account/create" method="post">
+          <div id="errors"></div>
+      <form id = "registrationForm" action="/account/create" method="post">
             <label for="firstName">First Name:</label>
             <input type="text" id="firstName" name="firstName" placeholder="FirstName"><br>
 
@@ -78,7 +79,7 @@
         <label for="alternative">Alternative</label><br>
         <button type="submit" class="create-account-btn">Create Account</button>
       </form>
-      
+
       <p>Already have an account? <a href="/account/login">Login</a></p>
       {{#if hasErrors}}
       <ul class="error-list">
@@ -94,5 +95,6 @@
   </div>
   
     </div>
+      <script type="module" src="/public/js/client-side.js"></script>
 </body>
 </html>
