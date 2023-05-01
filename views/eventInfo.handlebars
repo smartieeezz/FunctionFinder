@@ -19,6 +19,7 @@
                     <li><strong>Price:</strong> {{event.price}}</li>
                     <li><strong>Max Capacity:</strong> {{event.maximumCapacity}}</li>
                     {{!-- <li><strong>Function Comments:</strong> {{event.functionComments}}</li> --}}
+                    <a href="/events/{{event._id}}/comments?userId={{userId}}">View Comments</a>
                 </ul>
             </div>
             <div class="button-container">
