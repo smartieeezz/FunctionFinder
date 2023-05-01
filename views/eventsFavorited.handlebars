@@ -2,14 +2,15 @@
 <html>
   <head>
     <title>Favorited Events List</title>
-    <link rel="stylesheet" href="/public/css/main-styles.css">
+    {{!-- <link rel="stylesheet" href="/public/css/main-styles.css"> --}}
+    <link rel="stylesheet" href="/public/css/eventsListing.css">
   </head>
   <body>
     <h1>Favorited Events:</h1>
     <ul>
         {{#each events}}
         <li>
-            <a href="/events/{{this._id}}/info?userId={{userId}}">{{this.name}}</a>
+            🎉 <a href="/events/{{this._id}}/info?userId={{userId}}">{{this.name}}</a>
         </li>
         {{/each}}
     </ul>
