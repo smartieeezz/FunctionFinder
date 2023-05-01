@@ -134,13 +134,13 @@ const exportedMethods = {
         const usersCollections = await users();
         const existingUser = await usersCollections.findOne({ email: emailAddress.toLowerCase()});
         if (!existingUser) {
-            throw 'Error: A user with that email address does not exist.'; 
+            throw 'Invalid username/password.'; 
         }
         /*If the emailAddress supplied is found in the DB, you will then use bcrypt to compare the
         hashed password in the database with the password input parameter.*/
         const passwordsMatch = await bcrypt.compare(password, existingUser.password);
         if (!passwordsMatch) {
-            throw `Invalid password.`;
+            throw `Invalid username/password.`;
         }
         return existingUser;
 

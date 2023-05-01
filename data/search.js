@@ -4,6 +4,7 @@ import { events } from "../config/mongoCollections.js";
 export async function findNearbyFunctions(src, distance, startDate, endDate){
     let distanceBetween
     let partiesWithinDistance = []
+    let final = []
     const functionCollection = await events()
     let functionList = await functionCollection.find({}).toArray()
     for (const element of functionList) {
@@ -12,5 +13,13 @@ export async function findNearbyFunctions(src, distance, startDate, endDate){
             partiesWithinDistance.push(element)
         }
     }
-    return partiesWithinDistance
+    for (const element of partiesWithinDistance){
+        startDate = new Date(startDate);
+        endDate = new Date(endDate);
+        let partyDate = new Date(element.partyDate);
+        if (partyDate >= startDate && partyDate <= endDate) {
+            final.push(element)
+        }
+    }
+    return final
 }
