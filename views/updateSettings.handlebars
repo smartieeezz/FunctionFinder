@@ -5,6 +5,7 @@
 </head>
 <h1>Update User Settings</h1>
 <body>
+    <div id="errors"></div>
     <form id = "updateForm" action= "/account/settings/{{id}}" method="post" >
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" name="firstName" value="{{user.firstName}}"><br>
@@ -89,6 +90,6 @@
         </ul>
     {{/if}}
     </form>
-    <script type="module" src="../public/js/client-side.js"></script>
+    <script type="module" src="/public/js/client-side.js"></script>
 </body>
 </html>

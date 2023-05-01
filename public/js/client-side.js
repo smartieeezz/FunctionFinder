@@ -2,16 +2,16 @@
 const checkString= (string)  => {
     //make sure the string exists
     if (!string) {
-        throw `Error: All fields must exist.`
+        throw `This field must exist.`
     }
     //make sure the string is not empty
     string = string.trim()
     if (string=="") {
-        throw `Error: The field cannot be empty.`
+        throw `This field cannot be empty.`
     }
     //check for spaces
     if (string.includes(' ')) {
-        throw `Error: The field cannot have a space.`
+        throw `This field cannot have a space.`
     }
     return string
 }
@@ -33,7 +33,7 @@ const checkName = (name) => {
 
 const checkAge = (DOB) => {
     const today = new Date();
-
+    const givenDOB = new Date(DOB)
     let day = String(today.getDate());
     if (day.length < 2) {
         day = "0" + day;
@@ -62,21 +62,21 @@ const checkAge = (DOB) => {
     //check the age just to see if it's working correctly
     console.log(`User age: ${age} years`);
 
-    if (today.getFullYear() < dobYear) {
+    if (givenDOB> dobYear) {
         throw `Error: You can't have a birthyear after today's date. That makes no sense.`;
-    }
-    const yearDifference = today.getFullYear() - dobYear;
-    if (age < 18) {
-        throw `Error: You must be 18 or older to use this site.`;
-    }
-    //if you're born in a month that is before the current date's month then you're too young
-    if (yearDifference == 18 && dobMonth > month) {
-        throw `Error: You must be 18 or older to use this site.`;
-    }
+    
+    // const yearDifference = today.getFullYear() - dobYear;
+    // if (age < 18) {
+    //     throw `Error: You must be 18 or older to use this site.`;
+    // }
+    // //if you're born in a month that is before the current date's month then you're too young
+    // if (yearDifference == 18 && dobMonth > month) {
+    //     throw `Error: You must be 18 or older to use this site.`;
+    // }
 
-    //if you're born in the same month and the current day is after your birthday then you're too young
-    if (yearDifference == 18 && dobMonth == month && dobDay > day) {
-        throw `Error: You must be 18 or older to use this site.`;
+    // //if you're born in the same month and the current day is after your birthday then you're too young
+    // if (yearDifference == 18 && dobMonth == month && dobDay > day) {
+    //     throw `Error: You must be 18 or older to use this site.`;
     } else {
         return DOB;
     }
@@ -115,21 +115,26 @@ const checkPassword = (password) => {
     return password
 }
 
+
+const loginForm = document.getElementById('loginForm');
+const updateForm = document.getElementById('updateForm');
+
 const validateUpdateForm=() =>{
-    const updateForm = document.getElementById('updateForm');
+    if (loginForm) {
+    // const updateForm = document.getElementById('updateForm');
     updateForm.addEventListener('submit', (event) => {
     event.preventDefault();
     //get all the elements in the updateForm and change them to form
     const form = document.querySelector("#updateForm");
-    const firstName = form.elements.firstName;
-    const lastName = form.elements.lastName;
-    const email = form.elements.email;
-    const dateOfBirth = form.elements.dateOfBirth;
-    const username = form.elements.username;
-    const password = form.elements.password;
-    const confirmPassword = form.elements.confirmPassword;
+    const firstName = form.elements.firstName.value;
+    const lastName = form.elements.lastName.value;
+    const email = form.elements.email.value;
+    const dateOfBirth = form.elements.dateOfBirth.value;
+    const username = form.elements.username.value;
+    const password = form.elements.password.value;
+    const confirmPassword = form.elements.confirmPassword.value;
     const favoriteCategories = document.querySelectorAll('input[name="favoriteCategories"]:checked');
-
+    const errorsList = form.elements.errors
 
     let errors = [];
     
@@ -140,65 +145,114 @@ const validateUpdateForm=() =>{
     try {
         const validFirstName = checkName(firstName);
     } catch (error) {
-        errors.push(error);
+        errors.push(`First Name: ${error}`);
     }
     
       //let's validate the lastName
     try {
         const validLastName = checkName(lastName);
     } catch (error) {
-        errors.push(error);
+        errors.push(`Last Name: ${error}`);
     }
 
     //validate the email
     try {
         const validEmail = checkEmail(email);
     } catch (error) {
-        errors.push(error);
+        errors.push(`Email: ${error}`);
     }
 
     //validate the dateofbirth address
     try {
         const validDOB = checkAge(dateOfBirth);
     } catch (error) {
-        errors.push(error);
+        errors.push(`Date of Birth ${error}`);
     }
 
     // Validate username
     try {
         const validUsername = checkString(username);
     } catch (error) {
-        errors.push(error);
+        errors.push(`Username ${error}`);
     }
 
     // Validate password
     try {
         const validPassword = checkPassword(password);
     } catch (error) {
-        errors.push(error);
+        errors.push(`Password: ${error}`);
     }
 
     // Validate confirmPassword
     try {
         const validConfirmPassword = checkPassword(confirmPassword);
     } catch (error) {
-        errors.push(error);
+        errors.push(`Confirm Password: ${error}`);
     }
-    
+
+    if (confirmPassword!==password) {
+        errors.push("Password Error: Password and Confirm Password must match.")
+    }
     //if the favoriteCategories haven't been selected at least once then push an error
     if (favoriteCategories.length === 0) {
         errors.push("At least one favorite category must be selected.")
     }
     // Check if any errors occurred
     if (errors.length > 0) {
+
         displayErrors(errors);
         return false;
     }
-
-    return true;
+    event.target.submit();
     })
-
+    }
 }
+
+const validateLoginForm=()=>{
+    if (loginForm) {
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    //get all the elements in the loginForm and change them to form
+    const form = document.querySelector("#loginForm");
+    const email = form.elements.emailInput.value;
+    const password = form.elements.passwordInput.value;
+    const errorsList = form.elements.errors
+
+    let errors = []
+    if (!email || !password) {
+        errors.push("All fields must be filled out.")
+    }
+    //let's validate the email
+    try {
+        const validEmail = checkEmail(email);
+    } catch (error) {
+        errors.push(`Email: ${error}`);
+    }
+    
+      //let's validate the password
+    try {
+        const validPassword = checkPassword(password);
+    } catch (error) {
+        errors.push(`Password: ${error}`);
+    }
+    //if we have errors then we will have to display them
+    if (errors.length > 0) {
+        displayErrors(errors);
+        return false;
+    }
+    //if we have no errors then we can just submit the form to our database for processing
+    event.target.submit();
+    
+    })
+}
+}
+
+
+validateLoginForm()
+validateUpdateForm()
+
+
 
 function displayErrors(errors) {
     const errorList = document.querySelector("#errors");
@@ -211,7 +265,6 @@ function displayErrors(errors) {
     }
 
 
-validateUpdateForm()
 
 
 

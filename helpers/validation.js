@@ -32,6 +32,7 @@ const checkName = (name) => {
 
 const checkAge = (DOB) => {
     const today = new Date();
+    const givenDOB = new Date(DOB)
 
     let day = String(today.getDate());
     if (day.length < 2) {
@@ -61,21 +62,20 @@ const checkAge = (DOB) => {
     //check the age just to see if it's working correctly
     console.log(`User age: ${age} years`);
 
-    if (today.getFullYear() < dobYear) {
+    if (givenDOB>today) {
         throw `Error: You can't have a birthyear after today's date. That makes no sense.`;
-    }
-    const yearDifference = today.getFullYear() - dobYear;
-    if (age < 18) {
-        throw `Error: You must be 18 or older to use this site.`;
-    }
-    //if you're born in a month that is before the current date's month then you're too young
-    if (yearDifference == 18 && dobMonth > month) {
-        throw `Error: You must be 18 or older to use this site.`;
-    }
+    // const yearDifference = today.getFullYear() - dobYear;
+    // if (age < 18) {
+    //     throw `Error: You must be 18 or older to use this site.`;
+    // }
+    // //if you're born in a month that is before the current date's month then you're too young
+    // if (yearDifference == 18 && dobMonth > month) {
+    //     throw `Error: You must be 18 or older to use this site.`;
+    // }
 
-    //if you're born in the same month and the current day is after your birthday then you're too young
-    if (yearDifference == 18 && dobMonth == month && dobDay > day) {
-        throw `Error: You must be 18 or older to use this site.`;
+    // //if you're born in the same month and the current day is after your birthday then you're too young
+    // if (yearDifference == 18 && dobMonth == month && dobDay > day) {
+    //     throw `Error: You must be 18 or older to use this site.`;
     } else {
         return DOB;
     }
