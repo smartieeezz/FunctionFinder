@@ -23,12 +23,12 @@
 
         <div class="sideNav">
         	<p id="currentPage">Home</p>
-            <a href="/{{user._id}}/favorited-events">Favorites</a>
+            <a href="/favorited-events">Favorites</a>
             <a href="/postaparty">Post a Party</a>
-            <a href="/{{user._id}}/registered-events">Registered Events</a>
+            <a href="/registered-events">Registered Events</a>
             {{!-- <a href="http://localhost:3000/users/{{user._id}}">Account</a> --}}
-			<a href="/account/settings/{{user._id}}">Update User Settings</a>
-            <a href="/" class="signOut" id="signOut" onclick="return confirm('Are you sure?')">Sign Out</a>
+			<a href="/account/settings">Update User Settings</a>
+            <a href="/signout" class="signOut" id="signOut" onclick="return confirm('Are you sure?')">Sign Out</a>
         </div>
 
 		
