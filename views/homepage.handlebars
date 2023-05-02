@@ -29,7 +29,8 @@
             <a class="navLink" href="/registered-events">Registered Events</a>
             {{!-- <a href="http://localhost:3000/users/{{user._id}}">Account</a> --}}
 			<a class="navLink" href="/account/settings/">Update User Settings</a>
-			<a href="/account/login" class="login">Log In</a>			
+			<a href="/account/login" class="login">Log In</a>
+			<a hidden href="/signout" class="signOut" id="signOut" onclick="return confirm('Are you sure?')">Sign Out</a>			
         </div>
 
 		
