@@ -125,7 +125,7 @@ const updateForm = document.getElementById('updateForm');
 const registrationForm = document.getElementById('registrationForm')
 
 const validateUpdateForm=() =>{
-    if (loginForm) {
+    if (updateForm) {
     // const updateForm = document.getElementById('updateForm');
     updateForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -326,7 +326,9 @@ const validateRegistrationForm=()=>{
         if (confirmPassword!==password) {
             errors.push("Password Error: Password and Confirm Password must match.")
         }
-
+        if (!favoriteCategories.length.length) {
+            errors.push('Favorite Categories Error: You must select at least one category.')
+        }
         //check if we have any errors and if we do then render them
         if (errors.length> 0) {
             displayErrors(errors)

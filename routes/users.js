@@ -77,8 +77,7 @@ router.post('/account/create', async (req, res) => {
         res.render('accountCreation',{errors: error, hasErrors: true, accountInfo: req.body});
         console.log(error)
         return
-    }  
-
+    } 
     //check to see if we have a valid age
     try {
         let checkDOB = checkAge(dob)
