@@ -1,7 +1,8 @@
 import { ObjectId } from "mongodb";
+import { users } from "../config/mongoCollections.js";
 import { events } from "../config/mongoCollections.js";
 import eventData from "./events.js";
-import users from './users.js'
+import userData from './users.js'
 
 const exportedMethods = {
     async get(id) {
@@ -18,15 +19,15 @@ const exportedMethods = {
         return allEvents;
     },
 
-    async getHostUsername(id) {
-        const eventsCollection = await events();
-        const event = await eventsCollection.findOne({ _id: new ObjectId(id) });
-        if (!event) throw 'Event not found';
+    // async getHostUsername(id) {
+    //     const eventsCollection = await events();
+    //     const event = await eventsCollection.findOne({ _id: new ObjectId(id) });
+    //     if (!event) throw 'Event not found';
       
-        const partyHostUsername = await users.getUsername(event.partyHost);
+    //     const partyHostUsername = await users.getUsername(event.partyHost);
       
-        return partyHostUsername;
-    },
+    //     return partyHostUsername;
+    // },
 
     async create(partyHost, name, date, hasOccured, guestsAttending, maximumCapacity, category, description, minimumAge, location, price, musicType, functionComments, partyVenue) {
         if (!partyHost) {
@@ -109,6 +110,133 @@ const exportedMethods = {
         return await this.get(id);
     },
 
+    async  getUserComment(eventId, userId) {
+        if (!eventId) throw new Error('Event ID must be provided');
+        if (!userId) throw new Error('User ID must be provided');
+      
+        const eventsCollection = await events();
+        const eventObj = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
+      
+        if (!eventObj) throw "Event not found";
+      
+        const commentIndex = eventObj.functionComments.findIndex(c => c.user.id === userId);
+      
+        // if (commentIndex === -1) throw "User has not commented on this event";
+      
+        const comment = eventObj.functionComments[commentIndex];
+        return comment;
+    },      
+
+    async  createComment(eventId, userId, comment) {
+        // if (!eventId) throw "You must provide an eventId";
+        // if (!userId) throw "You must provide a userId";
+        // if (!comment) throw "You must provide a comment";
+        // if (comment.length > 280) throw "Comment cannot be more than 280 characters";
+      
+        // const eventsCollection = await events();
+        // const eventObj = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
+      
+        // if (!eventObj) throw "Event not found";
+      
+        // const username = await userData.getUsername(userId);
+      
+        // const hasCommented = eventObj.functionComments.some(c => c.user.id === userId);
+      
+        // if (hasCommented) throw "You have already commented on this event";
+      
+        // const newComment = { user: { id: userId, name: username }, comment, timestamp: Date.now() };
+        // eventObj.functionComments.push(newComment);
+      
+        // const updatedInfo = await eventsCollection.updateOne({ _id: new ObjectId(eventId) }, { $set: eventObj });
+        // if (updatedInfo.modifiedCount === 0) throw "Could not add comment";
+      
+        // return newComment;
+        
+        if (!eventId) throw "You must provide an eventId";
+        if (!userId) throw "You must provide a userId";
+        if (!comment) throw "You must provide a comment";
+        if (comment.length > 280) throw "Comment cannot be more than 280 characters";
+
+        const usersCollection = await users();
+        const eventsCollection = await events();
+
+        const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
+        if (!user) throw "User not found";
+
+        const event = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
+        if (!event) throw "Event not found";
+
+        const username = user.username;
+        const hasCommented = event.functionComments.some(c => c.user.id === userId);
+
+        if (hasCommented) throw "You have already commented on this event";
+
+        const newComment = { user: { id: userId, name: username }, comment, timestamp: Date.now() };
+        event.functionComments.push(newComment);
+
+        const updatedEvent = await eventsCollection.updateOne({ _id: new ObjectId(eventId) }, { $set: event });
+        if (updatedEvent.modifiedCount === 0) throw "Could not add comment to event";
+
+        user.userComments.push({ userId, eventId, comment });
+        const updatedUser = await usersCollection.updateOne({ _id: new ObjectId(userId) }, { $set: user });
+        if (updatedUser.modifiedCount === 0) throw "Could not add comment to user";
+
+        return newComment;
+    },
+
+    async deleteComment(eventId, userId) {
+        // if (!eventId) throw "You must provide an eventId";
+        // if (!userId) throw "You must provide a userId";
+      
+        // const eventsCollection = await events();
+        // const eventObj = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
+      
+        // if (!eventObj) throw "Event not found";
+      
+        // const commentIndex = eventObj.functionComments.findIndex(c => c.user.id === userId);
+      
+        // if (commentIndex === -1) throw "User has not commented on this event";
+      
+        // eventObj.functionComments.splice(commentIndex, 1);
+      
+        // const updatedInfo = await eventsCollection.updateOne({ _id: new ObjectId(eventId) }, { $set: eventObj });
+        // if (updatedInfo.modifiedCount === 0) throw "Could not delete comment";
+      
+        // return true;
+        
+        if (!eventId) throw "You must provide an eventId";
+        if (!userId) throw "You must provide a userId";
+    
+        const eventsCollection = await events();
+        const eventObj = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
+    
+        if (!eventObj) throw "Event not found";
+    
+        const commentIndex = eventObj.functionComments.findIndex(c => c.user.id === userId);
+    
+        if (commentIndex === -1) throw "User has not commented on this event";
+    
+        const deletedComment = eventObj.functionComments.splice(commentIndex, 1)[0];
+    
+        const usersCollection = await users();
+        const userObj = await usersCollection.findOne({ _id: new ObjectId(userId) });
+        const userCommentIndex = userObj.userComments.findIndex(c => c.eventId === eventId);
+    
+        if (userCommentIndex === -1) throw "User comment not found";
+    
+        userObj.userComments.splice(userCommentIndex, 1);
+    
+        const updatedUserInfo = await usersCollection.updateOne({ _id: new ObjectId(userId) }, { $set: userObj });
+        if (updatedUserInfo.modifiedCount === 0) throw "Could not delete user comment";
+    
+        const updatedEventInfo = await eventsCollection.updateOne({ _id: new ObjectId(eventId) }, { $set: eventObj });
+        if (updatedEventInfo.modifiedCount === 0) throw "Could not delete comment";
+    
+        return true;
+    }
+      
+      
+      
     // add more functions
     
 };
@@ -121,8 +249,9 @@ export default exportedMethods;
     try {
       // Call the update function with valid parameters
       const eventId = "644deb018157ffaa8920aa33";
-      const updatedEvent = {date: "2024-01-01" };
-      const result = await eventData.getHostUsername(eventId);
+      const userId = "644deb018157ffaa8920aa30";
+      const comment = "ants ants ants ants ants ants ants ants ants ants ants ants ants ants ants ants"
+      const result = await eventData.deleteComment(eventId, userId);
       console.log(result);
     } catch (error) {
       console.log(error);

@@ -317,7 +317,30 @@ const exportedMethods = {
           } catch (e) {
             throw new Error(`Error finding username: ${e}`);
           }
-    }
+    },
+
+    async addComment(eventId, userId, comment) {
+        if (!eventId) throw "You must provide an eventId";
+        if (!userId) throw "You must provide a userId";
+        if (!comment) throw "You must provide a comment";
+        if (comment.length > 280) throw "Comment cannot be more than 280 characters";
+      
+        const usersCollection = await users();
+        const userObj = await usersCollection.findOne({ _id: new ObjectId(userId) });
+      
+        if (!userObj) throw "User not found";
+        
+        const username = await userData.getUsername(userId);
+      
+        const newComment = { user: { id: userId, name: username }, comment, timestamp: Date.now() };
+        userObj.userComments.push(newComment);
+
+        const updatedInfo = await usersCollection.updateOne({ _id: userObj._id }, { $set: userObj });
+        if (updatedInfo.modifiedCount === 0) throw "Could not add comment";
+
+        return newComment;
+      }
+      
       
 
 }      
@@ -329,8 +352,10 @@ export default exportedMethods;
 (async () => {
     try {
       // Call the update function with valid parameters
+      const eventId = "644deb018157ffaa8920aa33";
       const userId = "644deb018157ffaa8920aa30";
-      const result = await userData.getUsername(userId);
+      const comment = "ants ants ants ants ants ants ants ants ants ants ants ants ants ants ants ants"
+      const result = await userData.addComment(eventId, userId, comment);
       console.log(result);
     } catch (error) {
       console.log(error);
