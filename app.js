@@ -38,48 +38,82 @@ app.use(
 );
 
 //Middleware to make sure the user can only access their own account settings
-// app.use('/account/settings/:id', (req, res, next) => {
-//   const userId = req.params.id;
-//   const validatedUser = req.session.userId;
-//   console.log(userId)
-//   console.log(validatedUser)
+app.use('/account/settings/:id', (req, res, next) => {
+  const userId = req.params.id;
+  const validatedUser = req.session.user.id;
+  console.log(userId)
+  console.log(validatedUser)
 
-//   if (!validatedUser || validatedUser.id !== userId) {
-//     res.render('error', { message: 'You do not have permission to access this page' });
-//   }
+  if (!validatedUser || validatedUser !== userId) {
+    res.render('error', { message: 'You do not have permission to access this page' });
+  }
 
-//   next();
-// });
-
-
-
-// app.use('/account/login', (req, res, next) => {
-//   // Check if the user is already authenticated
-//   if (req.session.user) {
-//     // If the user is authenticated and has the role of admin, redirect to the /admin route
-//     if (req.session.user.role === 'admin') {
-//       return res.redirect('/admin');
-//     }
-//     // If the user is authenticated and has the role of user, redirect to the /protected route
-//     if (req.session.user.role === 'user') {
-//       return res.redirect('/protected');
-//     }
-//   }
-//   // If the user is not authenticated, allow them to get through to the GET /login route
-//   next();
-// })
+  next();
+});
 
 
-// app.use('/:id', (req, res, next) => {
-//   if(!req.session.user)
-//     return res.redirect('/account/login');
-//   next();
-// });
 
-// app.use('/', (req, res, next) => {
-//   if(req.session.user)
-//     res.redirect('')
-// });
+app.use('/account/login', (req, res, next) => {
+  // Check if the user is already authenticated
+  if (req.session.user) {
+    return res.redirect('/');
+  }
+  // If the user is not authenticated, allow them to get through to the GET /login route
+  next();
+});
+
+
+app.use('/postaparty', (req, res, next) => {
+  if(!req.session.user)
+    return res.redirect('/account/login');
+  next();
+});
+
+
+app.use('/:id/registered-events', (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/account/login');
+  }
+  const userId = req.params.id;
+  const validatedUser = req.session.user.id;
+  if (!validatedUser || validatedUser !== userId) {
+    res.render('error', { message: 'You do not have permission to access this page' });
+  }
+  next();  
+});
+
+app.use('/:id/favorited-events', (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/account/login');
+  }
+  const userId = req.params.id;
+  const validatedUser = req.session.user.id;
+  if (!validatedUser || validatedUser != userId) {
+    res.render('error', { message: 'You do not have permission to access this page' });
+  }
+  next();  
+});
+
+app.use('/account/settings/:id', (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/account/login');
+  }
+  const userId = req.params.id;
+  const validatedUser = req.session.user.id;
+  if (!validatedUser || validatedUser !== userId) {
+    res.render('error', { message: 'You do not have permission to access this page' });
+  }
+  next();  
+});
+
+app.use('/account/create', (req, res, next) => {
+  if (req.session.user) {
+    return res.redirect('/');
+  }
+  // If the user is not authenticated, allow them to get through to the GET /login route
+  next();
+});
+
 
 app.use(express.urlencoded({extended: true}));
 app.use(rewriteUnsupportedBrowserMethods);
