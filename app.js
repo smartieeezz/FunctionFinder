@@ -7,6 +7,8 @@ import {dirname} from 'path';
 import exphbs from 'express-handlebars';
 import { closeConnection, dbConnection } from './config/mongoConnection.js';
 
+const apiKey = process.env.API_KEY
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -38,16 +40,9 @@ app.use(
 );
 
 //Middleware to make sure the user can only access their own account settings
-app.use('/account/settings/:id', (req, res, next) => {
-  const userId = req.params.id;
-  const validatedUser = req.session.user.id;
-  console.log(userId)
-  console.log(validatedUser)
-
-  if (!validatedUser || validatedUser !== userId) {
-    res.render('error', { message: 'You do not have permission to access this page' });
-  }
-
+app.use('/account/settings', (req, res, next) => {
+  if(!req.session.user)
+    return res.redirect('/account/login');
   next();
 });
 
@@ -70,38 +65,23 @@ app.use('/postaparty', (req, res, next) => {
 });
 
 
-app.use('/:id/registered-events', (req, res, next) => {
+app.use('/registered-events', (req, res, next) => {
   if(!req.session.user){
     return res.redirect('/account/login');
-  }
-  const userId = req.params.id;
-  const validatedUser = req.session.user.id;
-  if (!validatedUser || validatedUser !== userId) {
-    res.render('error', { message: 'You do not have permission to access this page' });
   }
   next();  
 });
 
-app.use('/:id/favorited-events', (req, res, next) => {
+app.use('/favorited-events', (req, res, next) => {
   if(!req.session.user){
     return res.redirect('/account/login');
-  }
-  const userId = req.params.id;
-  const validatedUser = req.session.user.id;
-  if (!validatedUser || validatedUser != userId) {
-    res.render('error', { message: 'You do not have permission to access this page' });
   }
   next();  
 });
 
-app.use('/account/settings/:id', (req, res, next) => {
+app.use('/account/settings', (req, res, next) => {
   if(!req.session.user){
     return res.redirect('/account/login');
-  }
-  const userId = req.params.id;
-  const validatedUser = req.session.user.id;
-  if (!validatedUser || validatedUser !== userId) {
-    res.render('error', { message: 'You do not have permission to access this page' });
   }
   next();  
 });
@@ -120,7 +100,7 @@ app.use(rewriteUnsupportedBrowserMethods);
 
 app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
-app.get('/', (req, res) => { res.render('homepage');});
+app.get('/', (req, res) => { res.render('homepage', {apiRoute : `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`})});
 
 const db = await dbConnection();
 
