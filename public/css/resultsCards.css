@@ -1,6 +1,6 @@
 .card {
     padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     margin-left: 12px;
     border-radius: 20px; 
     background-color: white; 
@@ -14,10 +14,20 @@
   color: white;
 }
 .menu {
-    height: 200px;
+    height: 75px;
     width:50%;
 }
-
+.filter-button{
+  margin-left: 51vw;
+  position: relative;
+  top: -10vh; 
+  width: 70px;
+  height: 30px; 
+}
+.menu{
+  display: inline-block;
+  vertical-align: top;
+}
 .map{ 
   margin-left: 10px;
   height: 100vh;

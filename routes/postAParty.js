@@ -17,7 +17,7 @@ const result = dotenv.config();
 
 
 let apiKey = process.env.API_KEY
-console.log(apiKey)
+
 
 router.route('/').get(async (req, res) => {
     res.render('postAPartyForm', {apiRoute : `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`})
@@ -25,16 +25,38 @@ router.route('/').get(async (req, res) => {
 
 router.route('/').post(async (req,res) => {
     let insertParty
-    console.log(req.body)
-    const {partyName, partyAddress, genres, coverPrice, types, partyDate, partyVenue, minimumAge, maximumCapacity, partyDescription, fileInput} = req.body
+    let content = req.body
+    let partyNameInput = req.body.images.partyName
+    let partyAddressInput = req.body.images.partyAddress
+    let genresInput = req.body.images.genres
+    let coverPriceInput = req.body.images.coverPrice
+    let typesInput = req.body.images.types
+    let partyDateInput = req.body.images.partyDate
+    let partyVenueInput = req.body.images.partyVenue
+    let minimumAgeInput = req.body.images.minimumAge
+    let maximumCapacityInput = req.body.images.maximumCapacity
+    let partyDescriptionInput = req.body.images.partyDescription
+    let partyCoverPhotoInput = req.body.images.partyCoverPhoto
 
-    try{
-      insertParty = await addParty(partyName, partyAddress, coverPrice, partyDate, partyVenue, minimumAge, maximumCapacity, partyDescription, types, genres, req.session.id )
-    } catch (e){
-      console.log(e)
-      return res.status(500).render('error', { error: "500. Internal Server Error"})
-    }
-    res.render("partyPostedConfirmation")
+    // try{
+    //   insertParty = await addParty(
+    //     partyNameInput, 
+    //     partyAddressInput, 
+    //     coverPriceInput, 
+    //     partyDateInput, 
+    //     partyVenueInput, 
+    //     minimumAgeInput, 
+    //     maximumCapacityInput, 
+    //     partyDescriptionInput, 
+    //     typesInput, 
+    //     genresInput, 
+    //     req.session.userId,
+    //     partyCoverPhotoInput )
+    // } catch (e){
+    //   console.log(e)
+    //   return res.status(500).render('error', { error: "500. Internal Server Error"})
+    // }
+    res.render('partyPostedConfirmation')
 })
 
 export default router;

@@ -59,7 +59,6 @@ const checkAge = (DOB) => {
     const age = Math.abs(ageDate.getUTCFullYear() - 1970);
     
     //check the age just to see if it's working correctly
-    console.log(`User age: ${age} years`);
 
     if (today.getFullYear() < dobYear) {
         throw `Error: You can't have a birthyear after today's date. That makes no sense.`;

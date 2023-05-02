@@ -21,6 +21,5 @@ export async function findNearbyFunctions(src, distance, startDate, endDate){
             final.push(element)
         }
     }
-    console.log(final)
     return final
 }

@@ -16,8 +16,7 @@ const result = dotenv.config();
 
 
 let apiKey = process.env.API_KEY
-console.log("Api keyh")
-console.log(apiKey)
+
 // gets the user info
 router.get('/users/:id', async (req, res) => {
     try {
@@ -47,7 +46,6 @@ router.post('/account/login', async (req, res) => {
     let userCheck;
     try {
         userCheck = await userData.checkUser(emailInput, passwordInput);
-        console.log(req.session.id)
     } catch (e) {
         error.push(e);
     }
@@ -75,7 +73,6 @@ router.post('/account/create', async (req, res) => {
         console.log(confirmPassword)
         error.push("You have to fill in all the fields")
         res.render('accountCreation',{errors: error, hasErrors: true, accountInfo: req.body});
-        console.log(error)
         return
     }  
 

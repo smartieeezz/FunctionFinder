@@ -18,7 +18,9 @@ export async function addParty(partyName,
                  categories,
                  musicType,
                  partyHost, 
+                 partyCoverPhoto
     ){
+
         let party = {
             "name":partyName,
             "location": partyAddress,
@@ -33,7 +35,8 @@ export async function addParty(partyName,
             "hasOccured":false,
             "guestsAttending":0, 
             "functionComments":[],
-            "partyHost":partyHost
+            "partyHost":partyHost, 
+            "partyCoverPhoto": partyCoverPhoto
         }
         console.log(party)
         const pushparty = await create(
@@ -50,7 +53,8 @@ export async function addParty(partyName,
           party['price'],
           party['musicType'],
           party['functionComments'],
-          party['partyVenue']
+          party['partyVenue'],
+          party['partyCoverPhoto']
           )
         return party
 }
