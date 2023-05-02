@@ -5,6 +5,11 @@ unregisterButton.addEventListener("click", function() {
   const userId = this.getAttribute("unreg-user-id");
   const action = this.getAttribute("unreg-action");
 
+  if (!userId) {
+      window.location.href = "/account/login";
+    return;
+  }
+
   if (action !== "unregister") {
     return;
   }

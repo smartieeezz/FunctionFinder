@@ -65,6 +65,11 @@ router.get('/events/:id/comments', async (req, res) => {
   try {
     const eventId = req.params.id;
     const userId = req.query.userId;
+
+    if (!userId) {
+      return res.redirect('/account/login');
+    }
+  
     const [event, userComment] = await Promise.all([
       eventData.get(eventId),
       eventData.getUserComment(eventId, userId)
