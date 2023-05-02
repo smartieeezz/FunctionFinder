@@ -9,7 +9,7 @@
 
     <a href="/events/{{event._id}}/info?userId={{userId}}">Back to Event Page</a>
     
-    <p>*Keep in mind you can only comment once!*</p>
+    <h3>*Keep in mind you can only comment once!*</h3>
     <form action="/events/{{event._id}}/comments" method="POST">
         <input type="hidden" name="comm-event-id" value="{{event._id}}">
         <input type="hidden" name="comm-user-id" value="{{userId}}">
@@ -21,17 +21,18 @@
     </form>
     <script src="/public/js/buttonSubmitComment.js"></script>
 
-    <button id="delete-button" del-event-id="{{event._id}}" del-user-id="{{userId}}" del-action="delete">Delete</button>
-    <script src="/public/js/buttonDeleteComment.js"></script>
-   
+    <div class="button-container">
+        <button id="delete-button" del-event-id="{{event._id}}" del-user-id="{{userId}}" del-action="delete">Delete</button>
+        <script src="/public/js/buttonDeleteComment.js"></script>
+    </div>
     <ul>
         <li class="comment-box">
             <p><strong>Your Comment:</strong> {{userComment.comment}}</p>
         </li>
     </ul>
-    
+
     <br>
-    <p>Recent Comments:</p>
+    <h2>Recent Comments:</h2>
 
     {{#if comments}}
         <ul>

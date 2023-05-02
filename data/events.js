@@ -128,29 +128,6 @@ const exportedMethods = {
     },      
 
     async  createComment(eventId, userId, comment) {
-        // if (!eventId) throw "You must provide an eventId";
-        // if (!userId) throw "You must provide a userId";
-        // if (!comment) throw "You must provide a comment";
-        // if (comment.length > 280) throw "Comment cannot be more than 280 characters";
-      
-        // const eventsCollection = await events();
-        // const eventObj = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
-      
-        // if (!eventObj) throw "Event not found";
-      
-        // const username = await userData.getUsername(userId);
-      
-        // const hasCommented = eventObj.functionComments.some(c => c.user.id === userId);
-      
-        // if (hasCommented) throw "You have already commented on this event";
-      
-        // const newComment = { user: { id: userId, name: username }, comment, timestamp: Date.now() };
-        // eventObj.functionComments.push(newComment);
-      
-        // const updatedInfo = await eventsCollection.updateOne({ _id: new ObjectId(eventId) }, { $set: eventObj });
-        // if (updatedInfo.modifiedCount === 0) throw "Could not add comment";
-      
-        // return newComment;
         
         if (!eventId) throw "You must provide an eventId";
         if (!userId) throw "You must provide a userId";
@@ -183,57 +160,38 @@ const exportedMethods = {
 
         return newComment;
     },
-
     async deleteComment(eventId, userId) {
-        // if (!eventId) throw "You must provide an eventId";
-        // if (!userId) throw "You must provide a userId";
-      
-        // const eventsCollection = await events();
-        // const eventObj = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
-      
-        // if (!eventObj) throw "Event not found";
-      
-        // const commentIndex = eventObj.functionComments.findIndex(c => c.user.id === userId);
-      
-        // if (commentIndex === -1) throw "User has not commented on this event";
-      
-        // eventObj.functionComments.splice(commentIndex, 1);
-      
-        // const updatedInfo = await eventsCollection.updateOne({ _id: new ObjectId(eventId) }, { $set: eventObj });
-        // if (updatedInfo.modifiedCount === 0) throw "Could not delete comment";
-      
-        // return true;
         
         if (!eventId) throw "You must provide an eventId";
         if (!userId) throw "You must provide a userId";
-    
+      
         const eventsCollection = await events();
         const eventObj = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
-    
+      
         if (!eventObj) throw "Event not found";
-    
+      
         const commentIndex = eventObj.functionComments.findIndex(c => c.user.id === userId);
-    
+      
         if (commentIndex === -1) throw "User has not commented on this event";
-    
-        const deletedComment = eventObj.functionComments.splice(commentIndex, 1)[0];
-    
+      
         const usersCollection = await users();
         const userObj = await usersCollection.findOne({ _id: new ObjectId(userId) });
-        const userCommentIndex = userObj.userComments.findIndex(c => c.eventId === eventId);
-    
-        if (userCommentIndex === -1) throw "User comment not found";
-    
-        userObj.userComments.splice(userCommentIndex, 1);
-    
+        const userComment = userObj.userComments.find(c => c.eventId === eventId);
+      
+        if (!userComment) throw "User has not commented on this event";
+      
+        eventObj.functionComments.splice(commentIndex, 1);
+        userObj.userComments.splice(userComment, 1);
+      
         const updatedUserInfo = await usersCollection.updateOne({ _id: new ObjectId(userId) }, { $set: userObj });
         if (updatedUserInfo.modifiedCount === 0) throw "Could not delete user comment";
-    
+      
         const updatedEventInfo = await eventsCollection.updateOne({ _id: new ObjectId(eventId) }, { $set: eventObj });
         if (updatedEventInfo.modifiedCount === 0) throw "Could not delete comment";
-    
+      
         return true;
     }
+      
       
       
       
