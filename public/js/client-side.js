@@ -131,11 +131,11 @@ const validateUpdateForm=() =>{
     event.preventDefault();
     //get all the elements in the updateForm and change them to form
     const form = document.querySelector("#updateForm");
-    const firstName = form.elements.firstName.value;
-    const lastName = form.elements.lastName.value;
-    const email = form.elements.email.value;
+    const firstName = form.elements.firstName.value.trim();
+    const lastName = form.elements.lastName.value.trim();
+    const email = form.elements.email.value.trim();
     const dateOfBirth = form.elements.dateOfBirth.value;
-    const username = form.elements.username.value;
+    const username = form.elements.username.value.trim();
     const password = form.elements.password.value;
     const confirmPassword = form.elements.confirmPassword.value;
     const favoriteCategories = document.querySelectorAll('input[name="favoriteCategories"]:checked');
@@ -220,7 +220,8 @@ const validateLoginForm=()=>{
         event.preventDefault();
         //get all the elements in the loginForm and change them to form
         const form = document.querySelector("#loginForm");
-        const email = form.elements.emailInput.value;
+        const email = form.elements.emailInput.value.trim();
+        console.log(email)
         const password = form.elements.passwordInput.value;
         const errorsList = form.elements.errors
 
@@ -228,6 +229,7 @@ const validateLoginForm=()=>{
         if (!email || !password) {
             errors.push("All fields must be filled out.")
         }
+        
         //let's validate the email
         try {
             const validEmail = checkEmail(email);
@@ -259,10 +261,10 @@ const validateRegistrationForm=()=>{
         event.preventDefault();
 
         const form = document.querySelector("#registrationForm");
-        const firstName = form.elements.firstName.value;
-        const lastName = form.elements.lastName.value;
-        const username = form.elements.username.value;
-        const email = form.elements.email.value;
+        const firstName = form.elements.firstName.value.trim();
+        const lastName = form.elements.lastName.value.trim();
+        const username = form.elements.username.value.trim();
+        const email = form.elements.email.value.trim();
         const dob = form.elements.dob.value;
         const password = form.elements.password.value
         const confirmPassword = form.elements.confirmPassword.value
@@ -326,8 +328,8 @@ const validateRegistrationForm=()=>{
         if (confirmPassword!==password) {
             errors.push("Password Error: Password and Confirm Password must match.")
         }
-        if (!favoriteCategories.length.length) {
-            errors.push('Favorite Categories Error: You must select at least one category.')
+        if (!favoriteCategories.length) {
+            errors.push('Favorite Categories: You must select at least one category.')
         }
         //check if we have any errors and if we do then render them
         if (errors.length> 0) {

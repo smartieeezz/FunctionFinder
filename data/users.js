@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
-import { checkAge, checkEmail,checkPassword } from "../helpers/validation.js";
+import { checkAge, checkName, checkEmail,checkPassword, checkString } from "../helpers/validation.js";
 import bcrypt from 'bcrypt'
 const saltRounds = 12;
 import userData from "./users.js";
@@ -127,7 +127,9 @@ const exportedMethods = {
         }
         //emailAddress should be a valid email address format. example@example.com
         emailAddress = checkEmail(emailAddress);
+        password = checkPassword(password)
         
+        // emailAddress = emailAddress.trim()
 
         /*Query the db for the emailAddress supplied, if it is not found, throw an error stating 
         "Either the email address or password is invalid".*/
@@ -274,25 +276,31 @@ const exportedMethods = {
         }
         let updatedUserInfo = {};
         if (updatedUser.firstName) {
+            updatedUserInfo.firstName = checkName(updatedUser.firstName)
             updatedUserInfo.firstName = updatedUser.firstName;
         }
         if (updatedUser.lastName) {
+            updatedUserInfo.lastName = checkName(updatedUser.lastName)
             updatedUserInfo.lastName = updatedUser.lastName;
         }
         if (updatedUser.username) {
+            updatedUserInfo.username = checkString(updatedUser.username)
             const existingUser = await this.getUserByUsername(updatedUser.username);
             if (existingUser && existingUser._id.toString() !== id) {
                 throw "Username already exists. Please choose another username.";
             }
-        updatedUserInfo.username = updatedUser.username;
+        
         }
         if (updatedUser.email) {
+            updatedUserInfo.email = checkEmail(updatedUser.email)
             updatedUserInfo.email = updatedUser.email;
         }
         if (updatedUser.dateOfBirth) {
+            updatedUserInfo.dateOfBirth = checkAge(updatedUser.dateOfBirth)
             updatedUserInfo.dateOfBirth = updatedUser.dateOfBirth;
         }
         if (updatedUser.password) {
+            updatedUserInfo.password= checkPassword(updatedUser.password)
             updatedUserInfo.password = await bcrypt.hash(updatedUser.password, saltRounds);
         }
         if (updatedUser.favoriteCategories) {

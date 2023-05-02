@@ -1,7 +1,10 @@
 const checkString= (string)  => {
-    //make sure the string exists
+    // make sure the string exists
     if (!string) {
         throw `Error: All fields must exist.`
+    }
+    if (typeof string!=='string') {
+        throw `Error: This must be a string.`
     }
     //make sure the string is not empty
     string = string.trim()
@@ -16,7 +19,7 @@ const checkString= (string)  => {
 }
 
 const checkName = (name) => {
-    checkString(name);
+    name = checkString(name);
         if (!/^[a-zA-Z]+$/.test(name)) {
     throw `Error: The name must contain only letters.`;
         }
@@ -26,6 +29,7 @@ const checkName = (name) => {
     if (name.length > 25) {
         throw `Error: The name must be less than 25 characters.`;
     }
+
     return name;
 };
 
@@ -85,8 +89,8 @@ const checkAge = (DOB) => {
 
 
 const checkEmail = (email) =>{
-    checkString(email)
-    const properAddress = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    email = checkString(email)
+    let properAddress = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!properAddress.test(email)) {
         throw `Error: The email is not a valid email.`
     }

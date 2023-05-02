@@ -277,6 +277,7 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(checkFirstName)
     } catch (e) {
         error.push(e)
+        console.log("Error at first name")
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body,id: id})
         return
@@ -287,6 +288,7 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(checkLastName)
     } catch (e) {
         error.push(e)
+        console.log("Error at last name")
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
@@ -298,6 +300,8 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(checkUsername)
     } catch (e) {
         error.push(e)
+        console.log("Error at username name")
+
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
@@ -309,6 +313,7 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(validateEmail)
     } catch (e) {
         error.push(e)
+        console.log("Error at email")
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
@@ -320,6 +325,7 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(checkDOB)
     } catch (e) {
         error.push(e)
+        console.log("Error at age")
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
@@ -331,6 +337,8 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(validatePassword)
     } catch (e) {
         error.push(e)
+        console.log("Error at age")
+
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
@@ -340,6 +348,8 @@ router.post('/account/settings/:id', async (req, res) => {
     if (password!==confirmPassword) {
         error.push("The passwords must match.")
         console.log(error)
+        console.log("Error at age")
+
         res.render('updateSettings', {errors: error,hasErrors: true, updateForm: req.body, id: id })
         return
     }

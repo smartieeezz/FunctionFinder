@@ -23,7 +23,7 @@ try {
 
     console.log(user2)
 
-    let user3= await users.create("Roland", "John", "rolandjohn", "rolandjohn@gmail.com", "08/15/1992","Geoffrey92!", ["RnB", "Indie"]);
+    let user3= await users.create("Roland", "John", "rolandjohn", "rjohn5@stevens.edu", "08/15/1992","Geoffrey92!", ["RnB", "Indie"]);
     console.log(user3)
 
     let user4= await users.create("Tanner", "Marshall", "t.marshall", "tmarsha1@stevens.edu", "01/01/2002","CS546!", ["Alternative", "Indie, "]);
