@@ -58,7 +58,8 @@ router.post('/account/login', async (req, res) => {
     }
 
     const uid = userCheck._id;
-    req.session.userId = userCheck._id
+    const uName = userCheck.username;
+    req.session.user = {id: uid, userName: uName};
     res.redirect(`/${uid}`);
 });
 
@@ -173,17 +174,22 @@ router.post('/account/create', async (req, res) => {
 // get user's registered events
 router.get('/:id/registered-events', async (req, res) => {
     try {
-      const userId = req.params.id;
-      const user = await userData.get(userId);
-      const registeredEventIds = user.registeredEvents;
-      const registeredEvents = [];
+        if(!req.params.id){
+            res.redirect('/account/login');
+        }
+        else {
+        const userId = req.params.id;
+        const user = await userData.get(userId);
+        const registeredEventIds = user.registeredEvents;
+        const registeredEvents = [];
   
-      for (const eventId of registeredEventIds) {
-        const event = await eventData.get(eventId);
-        registeredEvents.push({ ...event, userId });
-      }
+        for (const eventId of registeredEventIds) {
+            const event = await eventData.get(eventId);
+            registeredEvents.push({ ...event, userId });
+        }
   
-      res.render('eventsRegistered', { events: registeredEvents, userId });
+        res.render('eventsRegistered', { events: registeredEvents, userId });
+    }
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -192,19 +198,25 @@ router.get('/:id/registered-events', async (req, res) => {
 // get user's favorited events
 router.get('/:id/favorited-events', async (req, res) => {
     try {
-      const userId = req.params.id;
-      const user = await userData.get(userId);
-      const favoritedEventIds = user.favoritedEvents;
-      const favoritedEvents = [];
+        if(!req.params.id){
+            res.redirect('/account/login');
+        }
+        else
+        {
+            const userId = req.params.id;
+            const user = await userData.get(userId);
+            const favoritedEventIds = user.favoritedEvents;
+            const favoritedEvents = [];
   
-      for (const eventId of favoritedEventIds) {
-        const event = await eventData.get(eventId);
-        favoritedEvents.push({ ...event, userId });
-      }
+            for (const eventId of favoritedEventIds) {
+                const event = await eventData.get(eventId);
+                favoritedEvents.push({ ...event, userId });
+            }
   
-      res.render('eventsFavorited', { events: favoritedEvents, userId });
+            res.render('eventsFavorited', { events: favoritedEvents, userId });
+        }
     } catch (error) {
-      res.status(404).json({ message: error });
+        res.status(404).json({ message: error });
     }
 });
 
@@ -369,6 +381,11 @@ router.post('/account/settings/:id', async (req, res) => {
             res.render('updateSettings', { errors: error, hasErrors: true, updateForm: req.body, id: id});
             return;
         }
+    });
+
+router.get('/signout', async (req, res) => {
+    req.session.destroy();
+    res.redirect("/");
     });
 
 export default router;
