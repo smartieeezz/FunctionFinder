@@ -113,18 +113,19 @@ const exportedMethods = {
     async  getUserComment(eventId, userId) {
         if (!eventId) throw new Error('Event ID must be provided');
         if (!userId) throw new Error('User ID must be provided');
-      
+
         const eventsCollection = await events();
         const eventObj = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
-      
-        if (!eventObj) throw "Event not found";
-      
-        const commentIndex = eventObj.functionComments.findIndex(c => c.user.id === userId);
-      
-        // if (commentIndex === -1) throw "User has not commented on this event";
-      
-        const comment = eventObj.functionComments[commentIndex];
-        return comment;
+
+        if (!eventObj) throw new Error('Event not found');
+
+        const userComment = eventObj.functionComments
+            .sort((a, b) => b.createdAt - a.createdAt)
+            .find((c) => c.user.id === userId);
+
+        if (!userComment) return;
+
+        return userComment;
     },      
 
     async  createComment(eventId, userId, comment) {
@@ -144,9 +145,9 @@ const exportedMethods = {
         if (!event) throw "Event not found";
 
         const username = user.username;
-        const hasCommented = event.functionComments.some(c => c.user.id === userId);
+        // const hasCommented = event.functionComments.some(c => c.user.id === userId);
 
-        if (hasCommented) throw "You have already commented on this event";
+        // if (hasCommented) throw "You have already commented on this event";
 
         const newComment = { user: { id: userId, name: username }, comment, timestamp: Date.now() };
         event.functionComments.push(newComment);
@@ -161,7 +162,7 @@ const exportedMethods = {
         return newComment;
     },
     async deleteComment(eventId, userId) {
-        
+
         if (!eventId) throw "You must provide an eventId";
         if (!userId) throw "You must provide a userId";
       
@@ -206,10 +207,10 @@ export default exportedMethods;
 (async () => {
     try {
       // Call the update function with valid parameters
-      const eventId = "644deb018157ffaa8920aa33";
-      const userId = "644deb018157ffaa8920aa30";
+      const eventId = "644deb018157ffaa8920aa32";
+      const userId = "6451e7ec940dd4aa9dfd7e2a";
       const comment = "ants ants ants ants ants ants ants ants ants ants ants ants ants ants ants ants"
-      const result = await eventData.deleteComment(eventId, userId);
+      const result = await eventData.getUserComment(eventId, userId);
       console.log(result);
     } catch (error) {
       console.log(error);

@@ -1,4 +1,4 @@
-const registerButton = document.getElementById("register-button");
+const registerButton = document.getElementById('register-button');
 
 registerButton.addEventListener("click", function() {
   const eventId = this.getAttribute("reg-event-id");
@@ -18,7 +18,7 @@ registerButton.addEventListener("click", function() {
     .then(response => response.json())
     .then(event => {
       if (event.guestsAttending.includes(userId)) {
-        alert("You already registered for this event.");
+        alert("You already registered for this event!");
       }  
       else {
         event.guestsAttending.push(userId);
@@ -32,7 +32,7 @@ registerButton.addEventListener("click", function() {
         fetch(`/events/${eventId}?userId=${userId}&action=${action}`, options)
           .then(response => response.json())
           .then(updatedEvent => {
-            alert("Event registered.");
+            alert("Registration successful!");
           })
           .catch(error => console.error(error));
       }

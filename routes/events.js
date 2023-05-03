@@ -18,7 +18,7 @@ router.get('/events/:id', async (req, res) => {
 router.put('/events/:id', async (req, res) => {
   try {
     const eventId = req.params.id;
-    const userId = req.query.userId;
+    const userId = req.session.user.id;
     const previousGuestsAttending = (await eventData.get(eventId)).guestsAttending;
 
     if (req.query.action === 'register') {
@@ -64,12 +64,13 @@ router.put('/events/:id', async (req, res) => {
 router.get('/events/:id/comments', async (req, res) => {
   try {
     const eventId = req.params.id;
-    const userId = req.query.userId;
+    const userId = req.session.user.id;
+    // const userId = req.query.userId;
 
-    if (!userId) {
-      return res.redirect('/account/login');
-    }
-  
+  if (!userId) {
+    return res.redirect('/account/login');
+  }
+
     const [event, userComment] = await Promise.all([
       eventData.get(eventId),
       eventData.getUserComment(eventId, userId)
@@ -84,7 +85,8 @@ router.get('/events/:id/comments', async (req, res) => {
 });
 router.post('/events/:id/comments', async (req, res) => {
   const eventId = req.params.id;
-  const userId = req.query.userId;
+  const userId = req.session.user.id;
+  // const userId = req.query.userId;
   const comment = req.body.comment;
 
   try {
@@ -98,7 +100,8 @@ router.post('/events/:id/comments', async (req, res) => {
 });
 router.delete('/events/:id/comments', async (req, res) => {
   const eventId = req.params.id;
-  const userId = req.query.userId;
+    const userId = req.session.user.id;
+    // const userId = req.query.userId;
   try {
     const deletedComment = await eventData.deleteComment(eventId, userId);
     res.status(200).send(deletedComment);
@@ -107,8 +110,6 @@ router.delete('/events/:id/comments', async (req, res) => {
     res.status(500).send(error);
   }
 });
-
-
 
 router.get('/events', async (req, res) => {
     try {
@@ -124,7 +125,8 @@ router.get('/events/:id/info', async (req, res) => {
   try {
     const eventId = req.params.id;
     const event = await eventData.get(eventId);
-    const userId = req.query.userId;
+      const userId = req.session.user.id;
+      // const userId = req.query.userId;
     
     // res.render('eventInfo', { event });
     res.render('eventInfo', { event, userId });

@@ -18,7 +18,7 @@ unregisterButton.addEventListener("click", function() {
     .then(response => response.json())
     .then(event => {
       if (!event.guestsAttending.includes(userId)) {
-        alert("You have not registered for this event.");
+        alert("You have not registered for this event!");
       }  
       else {
         const updatedGuestsAttending = event.guestsAttending.filter(guestId => guestId !== userId);
@@ -32,7 +32,7 @@ unregisterButton.addEventListener("click", function() {
         fetch(`/events/${eventId}?userId=${userId}&action=${action}`, options)
           .then(response => response.json())
           .then(updatedEvent => {
-            alert("Event unregistered.");
+            alert("Event unregistered!");
           })
           .catch(error => console.error(error));
       }

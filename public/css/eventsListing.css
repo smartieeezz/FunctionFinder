@@ -36,3 +36,8 @@ body {
     color: #ff0;
   }
   
+  #home-link {
+    text-decoration: underline;
+    margin-left: 40px;
+    color: red;
+  }

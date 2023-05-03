@@ -9,7 +9,6 @@
 
     <a href="/events/{{event._id}}/info?userId={{userId}}">Back to Event Page</a>
     
-    <h3>*Keep in mind you can only comment once!*</h3>
     <form action="/events/{{event._id}}/comments" method="POST">
         <input type="hidden" name="comm-event-id" value="{{event._id}}">
         <input type="hidden" name="comm-user-id" value="{{userId}}">
@@ -27,24 +26,24 @@
     </div>
     <ul>
         <li class="comment-box">
-            <p><strong>Your Comment:</strong> {{userComment.comment}}</p>
+            <p><strong>Your Oldest Comment:</strong> {{userComment.comment}}</p>
         </li>
     </ul>
-
-    <br>
     <h2>Recent Comments:</h2>
-
-    {{#if comments}}
-        <ul>
-        {{#each comments}}
-        <li class="comment-box">
-            <p><strong>{{this.user.name}}</strong>:</p>
-            <p>{{this.comment}}</p>
-        </li>
-        {{/each}}
+    <ul>
+        {{#if comments}}
+            {{#each comments}}
+            <li class="comment-box">
+                <p><strong>{{this.user.name}}</strong>:</p>
+                <p>{{this.comment}}</p>
+            </li>
+            {{/each}}
+        {{else}}
+            <li class="comment-box">
+                <p>No comments yet.</p>
+            </li>
+        {{/if}}
     </ul>
-    {{else}}
-        <p>No comments yet.</p>
-    {{/if}}
+
   </body>
 </html>
