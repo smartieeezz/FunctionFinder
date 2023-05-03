@@ -21,12 +21,12 @@
     <script src="/public/js/buttonSubmitComment.js"></script>
 
     <div class="button-container">
-        <button id="delete-button" del-event-id="{{event._id}}" del-user-id="{{userId}}" del-action="delete">Delete</button>
+        <button id="delete-button" del-event-id="{{event._id}}" del-user-id="{{userId}}" del-comment="{{comment}}" del-action="delete">Delete Recent Comment</button>
         <script src="/public/js/buttonDeleteComment.js"></script>
     </div>
     <ul>
         <li class="comment-box">
-            <p><strong>Your Oldest Comment:</strong> {{userComment.comment}}</p>
+            <p><strong>Your Most Recent Comment:</strong> {{userComment.comment}}</p>
         </li>
     </ul>
     <h2>Recent Comments:</h2>

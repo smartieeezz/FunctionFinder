@@ -65,7 +65,6 @@ router.get('/events/:id/comments', async (req, res) => {
   try {
     const eventId = req.params.id;
     const userId = req.session.user.id;
-    // const userId = req.query.userId;
 
   if (!userId) {
     return res.redirect('/account/login');
@@ -86,7 +85,6 @@ router.get('/events/:id/comments', async (req, res) => {
 router.post('/events/:id/comments', async (req, res) => {
   const eventId = req.params.id;
   const userId = req.session.user.id;
-  // const userId = req.query.userId;
   const comment = req.body.comment;
 
   try {
@@ -100,10 +98,10 @@ router.post('/events/:id/comments', async (req, res) => {
 });
 router.delete('/events/:id/comments', async (req, res) => {
   const eventId = req.params.id;
-    const userId = req.session.user.id;
-    // const userId = req.query.userId;
+  const userId = req.session.user.id;
+    
   try {
-    const deletedComment = await eventData.deleteComment(eventId, userId);
+    const deletedComment = await eventData.deleteRecentComment(eventId, userId);
     res.status(200).send(deletedComment);
   } catch (error) {
     console.error(error);
