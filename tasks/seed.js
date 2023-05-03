@@ -26,10 +26,10 @@ try {
     let user3= await users.create("Roland", "John", "rolandjohn", "rolandjohn@gmail.com", "08/15/1992","Geoffrey92!", ["RnB", "Indie"]);
     console.log(user3)
 
-    let user4= await users.create("Tanner", "Marshall", "t.marshall", "tmarsha1@stevens.edu", "01/01/2002","CS546!", ["Alternative", "Indie, "]);
+    let user4= await users.create("Tanner", "Marshall", "t.marshall", "tmarsha1@stevens.edu", "01/01/2002","WeLoveCS546!", ["Alternative", "Indie, "]);
     console.log(user4)
 
-    let user5= await users.create("Stephanie", "Martinez", "s.martinez", "smartin7@stevens.edu", "01/01/2002","CS546!", ["caribbean", "pop, "]);
+    let user5= await users.create("Stephanie", "Martinez", "s.martinez", "smartin7@stevens.edu", "01/01/2002","WeLoveCS546!", ["caribbean", "pop, "]);
     console.log(user5)
 
     // create event1
