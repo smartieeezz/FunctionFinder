@@ -29,7 +29,7 @@ router.route('/').post(async (req,res) => {
     const {partyName, partyAddress, genres, coverPrice, types, partyDate, partyVenue, minimumAge, maximumCapacity, partyDescription, fileInput} = req.body
 
     try{
-      insertParty = await addParty(partyName, partyAddress, coverPrice, partyDate, partyVenue, minimumAge, maximumCapacity, partyDescription, types, genres, req.session.id )
+      insertParty = await addParty(partyName, partyAddress, coverPrice, partyDate, partyVenue, minimumAge, maximumCapacity, partyDescription, types, genres, req.session.user.id )
     } catch (e){
       console.log(e)
       return res.status(500).render('error', { error: "500. Internal Server Error"})
