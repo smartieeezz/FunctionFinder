@@ -14,7 +14,7 @@ await db.dropDatabase();
 
 try {
     // create user1
-    let user1= await users.create("John", "Snow", "john.snow", "john.snow@gmail.com", "01/01/1900","Javascript99!", ["Alternative", "Indie"]);
+    let user1= await users.create("John", "Snow", "john.snow", "john.snow@gmail.com", "01/01/1960","Javascript99!", ["Alternative", "Indie"]);
     console.log(user1)
 
     let user2= await users.create("Mary", "Anne", "mary.anne", "mary.anne@gmail.com", "01/01/2000","Password99!", ["Jazz"]);

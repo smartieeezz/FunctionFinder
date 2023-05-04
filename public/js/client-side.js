@@ -67,7 +67,12 @@ const checkAge = (DOB) => {
     //check the age just to see if it's working correctly
     console.log(`User age: ${age} years`);
 
-    
+    if (age<18) {
+        throw `Error: You must be 18 or older to use this app`
+    }
+    if (age>115) {
+        throw `Error: You must enter a legitimate date of birth.`
+    }
     
     // const yearDifference = today.getFullYear() - dobYear;
     // if (age < 18) {
