@@ -31,7 +31,7 @@ export async function addParty(partyName,
             "category":categories,
             "musicType":musicType,
             "hasOccured":false,
-            "guestsAttending":0, 
+            "guestsAttending":[], 
             "functionComments":[],
             "partyHost":partyHost
         }
