@@ -2,7 +2,7 @@ body {
     background-image: url("../images/homepageBackground.png");
     background-repeat: no-repeat;
     background-size: cover;
-    background-color: black;
+    background-color: #99dba4 ;
   }
   
   h1 {
@@ -29,7 +29,7 @@ body {
   
   a {
     text-decoration: none;
-    color: #fff;
+    color: red;
   }
   
   a:hover {

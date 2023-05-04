@@ -123,10 +123,8 @@ router.get('/events/:id/info', async (req, res) => {
   try {
     const eventId = req.params.id;
     const event = await eventData.get(eventId);
-      const userId = req.session.user.id;
-      // const userId = req.query.userId;
+    const userId = req.session.user.id;
     
-    // res.render('eventInfo', { event });
     res.render('eventInfo', { event, userId });
   } catch (error) {
     res.status(404).json({ message: error });

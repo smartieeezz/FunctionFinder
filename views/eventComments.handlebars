@@ -7,6 +7,7 @@
   <body>
     <h1>{{event.name}}</h1>
 
+    <a href="/" id="home-link">Go Back to Home</a><br>
     <a href="/events/{{event._id}}/info?userId={{userId}}">Back to Event Page</a>
     
     <form action="/events/{{event._id}}/comments" method="POST">
