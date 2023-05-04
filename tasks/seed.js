@@ -36,7 +36,7 @@ try {
     console.log(user7)
 
     let user8= await users.create("Neadria", "Hazel", "n.hazel", "neadria.hazel@gmail.com", "04/15/1995","CS546!", ["Caribbean", "Hip Hop","Pop", "Throwbacks", "R&B", "Rock", "Pop"]);
-    console.log(user7)
+    console.log(user8)
 
     // create event1
     let event1 = await eventData.create(
