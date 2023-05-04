@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { users } from "../config/mongoCollections.js";
+import { users, events } from "../config/mongoCollections.js";
 import { checkAge, checkName, checkEmail,checkPassword, checkString } from "../helpers/validation.js";
 import bcrypt from 'bcrypt'
 const saltRounds = 12;
@@ -347,9 +347,36 @@ const exportedMethods = {
         if (updatedInfo.modifiedCount === 0) throw "Could not add comment";
 
         return newComment;
+      },
+
+
+      async findPartiesUserHosts(id) {
+        //get functionCollection
+        const functionCollection = await events()
+        
+        const functionsHosted = await functionCollection.find({ partyHost: id }).toArray();
+        if (functionsHosted.length===0) {
+            return ["Not hosting any parties :("]
+        }
+        return functionsHosted;
+      },
+
+      async findPartiesUserAttending(id) {
+        //get functionCollection
+        const functionCollection = await events()
+        
+        //get all the functions we are attending in the form of an array
+        const functionsAttending = await functionCollection.find({ partyHost: id }).toArray();
+        
+        //return these functions
+        if (functionsAttending.length===0) {
+            return ["Not attending any parties :("]
+        }
+        return functionsAttending;
       }
       
       
+    
 
 }      
 

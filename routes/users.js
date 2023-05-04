@@ -368,6 +368,32 @@ router.post('/account/settings', async (req, res) => {
         }
     });
 
+router.get('/account/parties', async (req, res) => {
+
+    console.log("in the user party stats")
+    //get the user's id that is currently logged in
+    const id = req.session.user.id
+    // make sure user is logged in and updating their own settings
+    if (!id) {
+        res.redirect("/account/login");
+    //if the user is logged in then let's check
+    } else {
+        const user = await userData.get(id)
+        //this is the ID we will search for that is attending/hosting the parties
+        const searchId = user._id
+        const hosted = await userData.findPartiesUserHosts(searchId)
+        const attending = await userData.findPartiesUserAttending(searchId)
+        console.log(hosted)
+        if (!user) {
+            console.log("no user found")
+            res.redirect("/error");
+        } else {
+            res.render('userParties', {eventsHosted:hosted, eventsAttending: attending})
+    }
+}
+console.log("Leaving account party stats get route")
+});  
+
 router.get('/signout', async (req, res) => {
     req.session.destroy();
     res.redirect("/");
