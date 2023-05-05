@@ -86,8 +86,8 @@ const checkAge = (DOB) => {
     // //if you're born in the same month and the current day is after your birthday then you're too young
     // if (yearDifference == 18 && dobMonth == month && dobDay > day) {
     //     throw `Error: You must be 18 or older to use this site.`;
- 
-        return DOB;
+    const formattedDOB = givenDOB.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+    return formattedDOB;
     
 };
 
