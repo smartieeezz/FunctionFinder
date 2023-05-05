@@ -80,6 +80,7 @@ router.post('/account/create', async (req, res) => {
         return
     } 
     //check to see if we have a valid age
+    
     try {
         let checkDOB = checkAge(dob)
         console.log(checkDOB)
@@ -236,7 +237,7 @@ console.log("Leaving account setting get route")
 
 router.post('/account/settings', async (req, res) => {
     console.log("in the account post settings")
-    const {firstName, lastName, username, email, dateOfBirth, password, confirmPassword, favoriteCategories } = req.body;
+    const {firstName, lastName, username, email, dob, password, confirmPassword, favoriteCategories } = req.body;
     const id = req.session.user.id
     let error = [];
         console.log(id)
@@ -244,13 +245,13 @@ router.post('/account/settings', async (req, res) => {
         console.log(lastName)
         console.log(username)
         console.log(email)
-        console.log(dateOfBirth)
+        console.log(dob)
         console.log(password)
         console.log(confirmPassword)
         console.log(favoriteCategories)
     
     //check to see if we have all the fields
-    if (!firstName || !lastName || !username || !email || !dateOfBirth || !password, !confirmPassword, !favoriteCategories) {
+    if (!firstName || !lastName  || !email || !dob || !password, !confirmPassword, !favoriteCategories) {
         
         error.push("You have to fill in all the fields")
         res.render('updateSettings',{errors: error, hasErrors: true, updateForm: req.body,id: id});
@@ -280,19 +281,19 @@ router.post('/account/settings', async (req, res) => {
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
     }
-
+    
     //check to validate username
-    try {
-        const checkUsername = checkString(username)
-        console.log(checkUsername)
-    } catch (e) {
-        error.push(e)
-        console.log("Error at username name")
+    // try {
+    //     const checkUsername = checkString(username)
+    //     console.log(checkUsername)
+    // } catch (e) {
+    //     error.push(e)
+    //     console.log("Error at username name")
 
-        console.log(error)
-        res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
-        return
-    }
+    //     console.log(error)
+    //     res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
+    //     return
+    // }
     console.log("here after username in routes")
     //check to validate email
     try {
@@ -305,10 +306,10 @@ router.post('/account/settings', async (req, res) => {
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
     }
-
+    let checkDOB
     //check to validate dob
     try {
-        const checkDOB = checkAge(dateOfBirth)
+        checkDOB = checkAge(dob)
         console.log(checkDOB)
     } catch (e) {
         error.push(e)
@@ -347,15 +348,14 @@ router.post('/account/settings', async (req, res) => {
             const updatedUser = await userData.updateUser(id, {
                 firstName: firstName,
                 lastName: lastName,
-                username: username,
                 email: email,
-                dateOfBirth: dateOfBirth,
+                dateOfBirth: checkDOB,
                 password: password,
                 favoriteCategories: favoriteCategories
             });
-        
+            // const username = await userData.getUserByUsername(id)
             console.log(`User ${id} updated successfully: ${updatedUser.username}`);
-            res.render('accountUpdated', {username: username})
+            res.render('accountUpdated', {username: updatedUser.username})
             req.session.userId = updatedUser._id
             //res.render('updateSettings',{updated: true })
             //res.redirect(`${id}`);

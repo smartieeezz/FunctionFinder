@@ -283,14 +283,14 @@ const exportedMethods = {
             updatedUserInfo.lastName = checkName(updatedUser.lastName)
             updatedUserInfo.lastName = updatedUser.lastName;
         }
-        if (updatedUser.username) {
-            updatedUserInfo.username = checkString(updatedUser.username)
-            const existingUser = await this.getUserByUsername(updatedUser.username);
-            if (existingUser && existingUser._id.toString() !== id) {
-                throw "Username already exists. Please choose another username.";
-            }
+        // if (updatedUser.username) {
+        //     updatedUserInfo.username = checkString(updatedUser.username)
+        //     const existingUser = await this.getUserByUsername(updatedUser.username);
+        //     if (existingUser && existingUser._id.toString() !== id) {
+        //         throw "Username already exists. Please choose another username.";
+        //     }
         
-        }
+        // }
         if (updatedUser.email) {
             updatedUserInfo.email = checkEmail(updatedUser.email)
             updatedUserInfo.email = updatedUser.email;
