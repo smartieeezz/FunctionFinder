@@ -2,11 +2,11 @@
 <html>
     <head>
         <title>Event Info</title>
-        {{!-- <link rel="stylesheet" href="/public/css/main-styles.css"> --}}
         <link rel="stylesheet" href="/public/css/eventInfo.css">
     </head>
     <body>
         <h1>{{event.name}}</h1>
+        <a href="/" id="home-link">Go Back to Home</a>
         <div class="event-info">
             <div class="info-container">
                 <ul>
@@ -18,7 +18,7 @@
                     <li><strong>Minimum Age:</strong> {{event.minimumAge}}</li>
                     <li><strong>Price:</strong> {{event.price}}</li>
                     <li><strong>Max Capacity:</strong> {{event.maximumCapacity}}</li>
-                    <a href="/events/{{event._id}}/comments?userId={{userId}}">View Comments</a>
+                    <a href="/events/{{event._id}}/comments">View Comments</a>
                 </ul>
             </div>
             <div class="button-container">

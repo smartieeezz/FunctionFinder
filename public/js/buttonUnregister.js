@@ -6,7 +6,7 @@ unregisterButton.addEventListener("click", function() {
   const action = this.getAttribute("unreg-action");
 
   if (!userId) {
-      window.location.href = "/account/login";
+    window.location.href = "/account/login";
     return;
   }
 
@@ -17,10 +17,13 @@ unregisterButton.addEventListener("click", function() {
   fetch(`/events/${eventId}`)
     .then(response => response.json())
     .then(event => {
+      if (event.partyHost === userId) {
+        alert("The host cannot unregister for an event here.");
+        return;
+      }
       if (!event.guestsAttending.includes(userId)) {
-        alert("You have not registered for this event.");
-      }  
-      else {
+        alert("You have not registered for this event!");
+      } else {
         const updatedGuestsAttending = event.guestsAttending.filter(guestId => guestId !== userId);
         const options = {
           method: "PUT",
@@ -32,7 +35,7 @@ unregisterButton.addEventListener("click", function() {
         fetch(`/events/${eventId}?userId=${userId}&action=${action}`, options)
           .then(response => response.json())
           .then(updatedEvent => {
-            alert("Event unregistered.");
+            alert("Event unregistered!");
           })
           .catch(error => console.error(error));
       }

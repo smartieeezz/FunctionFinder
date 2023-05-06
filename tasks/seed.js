@@ -14,23 +14,36 @@ await db.dropDatabase();
 
 try {
     // create user1
-    let user1= await users.create("John", "Snow", "john.snow", "john.snow@gmail.com", "01/01/1900","Javascript99!", ["Alternative", "Indie"]);
+    let user1= await users.create("John", "Snow", "john.snow", "john.snow@gmail.com", "01/01/1960","Javascript99!", ["Alternative", "Indie"]);
     console.log(user1)
-    
-    // create user2
 
     let user2= await users.create("Mary", "Anne", "mary.anne", "mary.anne@gmail.com", "01/01/2000","Password99!", ["Jazz"]);
-
     console.log(user2)
 
-    let user3= await users.create("Roland", "John", "rolandjohn", "rolandjohn@gmail.com", "08/15/1992","Geoffrey92!", ["RnB", "Indie"]);
+    let user3= await users.create("Roland", "John", "arjay", "rjohn5@stevens.edu", "08/15/1992","Geoffrey92!", ["R&B", "Indie"]);
     console.log(user3)
 
+<<<<<<< HEAD
     let user4= await users.create("Tanner", "Marshall", "t.marshall", "tmarsha1@stevens.edu", "01/01/2002","WeLoveCS546!", ["Alternative", "Indie, "]);
     console.log(user4)
 
     let user5= await users.create("Stephanie", "Martinez", "s.martinez", "smartin7@stevens.edu", "01/01/2002","WeLoveCS546!", ["caribbean", "pop, "]);
+=======
+    let user4= await users.create("Tanner", "Marshall", "t.marshall", "tmarsha1@stevens.edu", "01/01/2002","Password123!", ["Alternative", "Indie"]);
+    console.log(user4)
+
+    let user5= await users.create("Stephanie", "Martinez", "s.martinez", "smartin7@stevens.edu", "01/01/2002","Password123!", ["Caribbean", "R&B", "Pop"]);
+>>>>>>> d1d85b7391272d7360abb9f3bccbd3d2f72a942e
     console.log(user5)
+
+    let user6= await users.create("Hao", "Li", "h.li", "hli144@stevens.edu", "01/01/2002","Password123!", ["Caribbean", "Pop", "Throwbacks"]);
+    console.log(user6)
+
+    let user7= await users.create("Hasani", "Edwards", "h.edwards", "hasan.edwards@gmail.com", "05/15/1970","Password123!", ["Caribbean", "Hip Hop","Pop", "Throwbacks", "R&B"]);
+    console.log(user7)
+
+    let user8= await users.create("Neadria", "Hazel", "n.hazel", "neadria.hazel@gmail.com", "04/15/1995","Password123!", ["Caribbean", "Hip Hop","Pop", "Throwbacks", "R&B", "Rock", "Pop"]);
+    console.log(user8)
 
     // create event1
     let event1 = await eventData.create(

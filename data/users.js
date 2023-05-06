@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import { users } from "../config/mongoCollections.js";
-import { checkAge, checkEmail,checkPassword } from "../helpers/validation.js";
+import { users, events } from "../config/mongoCollections.js";
+import { checkAge, checkName, checkEmail,checkPassword, checkString } from "../helpers/validation.js";
 import bcrypt from 'bcrypt'
 const saltRounds = 12;
 import userData from "./users.js";
@@ -127,7 +127,9 @@ const exportedMethods = {
         }
         //emailAddress should be a valid email address format. example@example.com
         emailAddress = checkEmail(emailAddress);
+        password = checkPassword(password)
         
+        // emailAddress = emailAddress.trim()
 
         /*Query the db for the emailAddress supplied, if it is not found, throw an error stating 
         "Either the email address or password is invalid".*/
@@ -265,6 +267,65 @@ const exportedMethods = {
         return await this.get(id);
     },
 
+    async updateCurrentlyHostingEvents(userId, eventId, action) {
+        const user = await this.get(userId);
+        const currentlyHostingEvents = user.currentlyHostingEvents || [];
+        let updatedCurrentlyHostingEvents;
+        if (action === 'add') {
+          updatedCurrentlyHostingEvents = [...currentlyHostingEvents, eventId];
+        } else if (action === 'remove') {
+          updatedCurrentlyHostingEvents = currentlyHostingEvents.filter(event => event !== eventId);
+        } else {
+          throw "Invalid action provided. Must be 'add' or 'remove'.";
+        }
+        const updatedUser = { ...user, currentlyHostingEvents: updatedCurrentlyHostingEvents };
+        return await this.update(userId, updatedUser);
+      },
+      
+      async updatePastEventsAttended(userId, eventId, action) {
+        const user = await this.get(userId);
+        const pastEventsAttended = user.pastEventsAttended || [];
+        let updatedPastEventsAttended;
+        if (action === 'add') {
+          updatedPastEventsAttended = [...pastEventsAttended, eventId];
+        } else if (action === 'remove') {
+          updatedPastEventsAttended = pastEventsAttended.filter(event => event !== eventId);
+        } else {
+          throw "Invalid action provided. Must be 'add' or 'remove'.";
+        }
+        const updatedUser = { ...user, pastEventsAttended: updatedPastEventsAttended };
+        return await this.update(userId, updatedUser);
+      },
+
+    async updatePreviouslyHostedEvents(id, eventId, action) {
+        if (!id) throw "You must provide an ID";
+        if (!eventId) throw "You must provide an event ID";
+        if (!action) throw "You must provide an action (add or remove)";
+        const usersCollection = await users();
+        const updateObj = {};
+        const user = await this.get(id);
+        const events = user.previouslyHostedEvents || [];
+        if (action === 'add') {
+          events.push(eventId);
+        } else if (action === 'remove') {
+          const index = events.indexOf(eventId);
+          if (index > -1) {
+            events.splice(index, 1);
+          }
+        } else {
+          throw "Invalid action. Must be add or remove.";
+        }
+        updateObj.previouslyHostedEvents = events;
+        const updateInfo = await usersCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: updateObj }
+        );
+        if (updateInfo.modifiedCount === 0) {
+          throw `Could not update user with ID of ${id}`;
+        }
+        return await this.get(id);
+      },
+      
     //we will use this function to update the user details in the settings field
     async updateUser(id, updatedUser) {
         const user = await this.get(id);
@@ -274,25 +335,31 @@ const exportedMethods = {
         }
         let updatedUserInfo = {};
         if (updatedUser.firstName) {
+            updatedUserInfo.firstName = checkName(updatedUser.firstName)
             updatedUserInfo.firstName = updatedUser.firstName;
         }
         if (updatedUser.lastName) {
+            updatedUserInfo.lastName = checkName(updatedUser.lastName)
             updatedUserInfo.lastName = updatedUser.lastName;
         }
-        if (updatedUser.username) {
-            const existingUser = await this.getUserByUsername(updatedUser.username);
-            if (existingUser && existingUser._id.toString() !== id) {
-                throw "Username already exists. Please choose another username.";
-            }
-        updatedUserInfo.username = updatedUser.username;
-        }
+        // if (updatedUser.username) {
+        //     updatedUserInfo.username = checkString(updatedUser.username)
+        //     const existingUser = await this.getUserByUsername(updatedUser.username);
+        //     if (existingUser && existingUser._id.toString() !== id) {
+        //         throw "Username already exists. Please choose another username.";
+        //     }
+        
+        // }
         if (updatedUser.email) {
+            updatedUserInfo.email = checkEmail(updatedUser.email)
             updatedUserInfo.email = updatedUser.email;
         }
         if (updatedUser.dateOfBirth) {
+            updatedUserInfo.dateOfBirth = checkAge(updatedUser.dateOfBirth)
             updatedUserInfo.dateOfBirth = updatedUser.dateOfBirth;
         }
         if (updatedUser.password) {
+            updatedUserInfo.password= checkPassword(updatedUser.password)
             updatedUserInfo.password = await bcrypt.hash(updatedUser.password, saltRounds);
         }
         if (updatedUser.favoriteCategories) {
@@ -339,9 +406,36 @@ const exportedMethods = {
         if (updatedInfo.modifiedCount === 0) throw "Could not add comment";
 
         return newComment;
+      },
+
+
+      async findPartiesUserHosts(id) {
+        //get functionCollection
+        const functionCollection = await events()
+        
+        const functionsHosted = await functionCollection.find({ partyHost: id }).toArray();
+        if (functionsHosted.length===0) {
+            return ["Not hosting any parties :("]
+        }
+        return functionsHosted;
+      },
+
+      async findPartiesUserAttending(id) {
+        //get functionCollection
+        const functionCollection = await events()
+        
+        //get all the functions we are attending in the form of an array
+        const functionsAttending = await functionCollection.find({ partyHost: id }).toArray();
+        
+        //return these functions
+        if (functionsAttending.length===0) {
+            return ["Not attending any parties :("]
+        }
+        return functionsAttending;
       }
       
       
+    
 
 }      
 

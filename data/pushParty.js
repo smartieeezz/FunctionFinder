@@ -31,7 +31,7 @@ export async function addParty(partyName,
             "category":categories,
             "musicType":musicType,
             "hasOccured":false,
-            "guestsAttending":0, 
+            "guestsAttending":[], 
             "functionComments":[],
             "partyHost":partyHost
         }
@@ -52,7 +52,8 @@ export async function addParty(partyName,
           party['functionComments'],
           party['partyVenue']
           )
-        return party
+          party.id = pushparty._id; // Hao Dian added this to get the eventId
+          return party
 }
 
 export async function calcDistances(src, dest){

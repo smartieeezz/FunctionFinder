@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Events List</title>
+  </head>
+  <body>
+    <p>Hosting Events:</p>
+    <ul>
+      {{#each eventsHosted}}
+      <li>{{this.name}}</li>
+      {{/each}}
+    </ul>
+    <p>Attending Events:</p>
+    <ul>
+      {{#each eventsAttending}}
+      <li>{{this.name}}</li>
+      {{/each}}
+    </ul>
+  </body>
+</html>

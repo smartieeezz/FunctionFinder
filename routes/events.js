@@ -18,7 +18,7 @@ router.get('/events/:id', async (req, res) => {
 router.put('/events/:id', async (req, res) => {
   try {
     const eventId = req.params.id;
-    const userId = req.query.userId;
+    const userId = req.session.user.id;
     const previousGuestsAttending = (await eventData.get(eventId)).guestsAttending;
 
     if (req.query.action === 'register') {
@@ -33,9 +33,17 @@ router.put('/events/:id', async (req, res) => {
       const updatedFields = {
         guestsAttending: previousGuestsAttending.filter(guestId => guestId !== userId)
       }
-      const updatedEvent = await eventData.update(eventId, updatedFields);
-      const updatedUser = await userData.updateRegisteredEvents(userId, eventId, req.query.action);
-      res.json({ event: updatedEvent, user: updatedUser });
+      
+      const event = await eventData.get(eventId);
+      const partyHostId = event.partyHost;
+      
+      if (userId === partyHostId) {
+        res.status(403).json({ message: 'Host cannot unregister from their own event.' });
+      } else {
+        const updatedEvent = await eventData.update(eventId, updatedFields);
+        const updatedUser = await userData.updateRegisteredEvents(userId, eventId, req.query.action);
+        res.json({ event: updatedEvent, user: updatedUser });
+      }
     }
     else if (req.query.action === 'favorite') {
       const user = await userData.get(userId);
@@ -64,12 +72,12 @@ router.put('/events/:id', async (req, res) => {
 router.get('/events/:id/comments', async (req, res) => {
   try {
     const eventId = req.params.id;
-    const userId = req.query.userId;
+    const userId = req.session.user.id;
 
-    if (!userId) {
-      return res.redirect('/account/login');
-    }
-  
+  if (!userId) {
+    return res.redirect('/account/login');
+  }
+
     const [event, userComment] = await Promise.all([
       eventData.get(eventId),
       eventData.getUserComment(eventId, userId)
@@ -84,7 +92,7 @@ router.get('/events/:id/comments', async (req, res) => {
 });
 router.post('/events/:id/comments', async (req, res) => {
   const eventId = req.params.id;
-  const userId = req.query.userId;
+  const userId = req.session.user.id;
   const comment = req.body.comment;
 
   try {
@@ -98,17 +106,16 @@ router.post('/events/:id/comments', async (req, res) => {
 });
 router.delete('/events/:id/comments', async (req, res) => {
   const eventId = req.params.id;
-  const userId = req.query.userId;
+  const userId = req.session.user.id;
+    
   try {
-    const deletedComment = await eventData.deleteComment(eventId, userId);
+    const deletedComment = await eventData.deleteRecentComment(eventId, userId);
     res.status(200).send(deletedComment);
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
   }
 });
-
-
 
 router.get('/events', async (req, res) => {
     try {
@@ -124,9 +131,8 @@ router.get('/events/:id/info', async (req, res) => {
   try {
     const eventId = req.params.id;
     const event = await eventData.get(eventId);
-    const userId = req.query.userId;
+    const userId = req.session.user.id;
     
-    // res.render('eventInfo', { event });
     res.render('eventInfo', { event, userId });
   } catch (error) {
     res.status(404).json({ message: error });
