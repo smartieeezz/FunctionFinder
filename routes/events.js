@@ -33,9 +33,17 @@ router.put('/events/:id', async (req, res) => {
       const updatedFields = {
         guestsAttending: previousGuestsAttending.filter(guestId => guestId !== userId)
       }
-      const updatedEvent = await eventData.update(eventId, updatedFields);
-      const updatedUser = await userData.updateRegisteredEvents(userId, eventId, req.query.action);
-      res.json({ event: updatedEvent, user: updatedUser });
+      
+      const event = await eventData.get(eventId);
+      const partyHostId = event.partyHost;
+      
+      if (userId === partyHostId) {
+        res.status(403).json({ message: 'Host cannot unregister from their own event.' });
+      } else {
+        const updatedEvent = await eventData.update(eventId, updatedFields);
+        const updatedUser = await userData.updateRegisteredEvents(userId, eventId, req.query.action);
+        res.json({ event: updatedEvent, user: updatedUser });
+      }
     }
     else if (req.query.action === 'favorite') {
       const user = await userData.get(userId);

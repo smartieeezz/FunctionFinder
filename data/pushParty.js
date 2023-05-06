@@ -52,7 +52,8 @@ export async function addParty(partyName,
           party['functionComments'],
           party['partyVenue']
           )
-        return party
+          party.id = pushparty._id; // Hao Dian added this to get the eventId
+          return party
 }
 
 export async function calcDistances(src, dest){

@@ -267,6 +267,65 @@ const exportedMethods = {
         return await this.get(id);
     },
 
+    async updateCurrentlyHostingEvents(userId, eventId, action) {
+        const user = await this.get(userId);
+        const currentlyHostingEvents = user.currentlyHostingEvents || [];
+        let updatedCurrentlyHostingEvents;
+        if (action === 'add') {
+          updatedCurrentlyHostingEvents = [...currentlyHostingEvents, eventId];
+        } else if (action === 'remove') {
+          updatedCurrentlyHostingEvents = currentlyHostingEvents.filter(event => event !== eventId);
+        } else {
+          throw "Invalid action provided. Must be 'add' or 'remove'.";
+        }
+        const updatedUser = { ...user, currentlyHostingEvents: updatedCurrentlyHostingEvents };
+        return await this.update(userId, updatedUser);
+      },
+      
+      async updatePastEventsAttended(userId, eventId, action) {
+        const user = await this.get(userId);
+        const pastEventsAttended = user.pastEventsAttended || [];
+        let updatedPastEventsAttended;
+        if (action === 'add') {
+          updatedPastEventsAttended = [...pastEventsAttended, eventId];
+        } else if (action === 'remove') {
+          updatedPastEventsAttended = pastEventsAttended.filter(event => event !== eventId);
+        } else {
+          throw "Invalid action provided. Must be 'add' or 'remove'.";
+        }
+        const updatedUser = { ...user, pastEventsAttended: updatedPastEventsAttended };
+        return await this.update(userId, updatedUser);
+      },
+
+    async updatePreviouslyHostedEvents(id, eventId, action) {
+        if (!id) throw "You must provide an ID";
+        if (!eventId) throw "You must provide an event ID";
+        if (!action) throw "You must provide an action (add or remove)";
+        const usersCollection = await users();
+        const updateObj = {};
+        const user = await this.get(id);
+        const events = user.previouslyHostedEvents || [];
+        if (action === 'add') {
+          events.push(eventId);
+        } else if (action === 'remove') {
+          const index = events.indexOf(eventId);
+          if (index > -1) {
+            events.splice(index, 1);
+          }
+        } else {
+          throw "Invalid action. Must be add or remove.";
+        }
+        updateObj.previouslyHostedEvents = events;
+        const updateInfo = await usersCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: updateObj }
+        );
+        if (updateInfo.modifiedCount === 0) {
+          throw `Could not update user with ID of ${id}`;
+        }
+        return await this.get(id);
+      },
+      
     //we will use this function to update the user details in the settings field
     async updateUser(id, updatedUser) {
         const user = await this.get(id);
