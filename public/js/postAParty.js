@@ -6,6 +6,24 @@ function checkPartyName(partyName) {
   return /[a-zA-Z]/.test(cleanStr);
 }
 
+// needed a little bit of help with base 64 encoding
+// next time im using s3 goodnight 
+// https://codepen.io/bitbug/pen/wvxqWNa
+function convertImageToBase64(imgUrl, callback) {
+  const image = new Image();
+  image.crossOrigin='anonymous';
+  image.onload = () => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.height = image.naturalHeight;
+    canvas.width = image.naturalWidth;
+    ctx.drawImage(image, 0, 0);
+    const dataUrl = canvas.toDataURL();
+    callback && callback(dataUrl)
+  }
+  image.src = imgUrl;
+}
+
 //for check address, perhaps include google maps dropdown api
 
 function checkNumberInput(coverPrice) {
@@ -48,24 +66,28 @@ function checkPartyDescription(pd) {
   return /[a-zA-Z]/.test(cleanStr);
 }
 
-//how would you check for party photo???
+function checkPhoto(pic){
+  if (pic.files[0].size > 2097152){
+    return false
+  }
+}
 
+//how would you check for party photo???
 let postPartyForm = document.getElementById("postAPartyForm");
 
 if (postPartyForm) {
   let partyName = document.getElementById("partyName");
   let partyAddress = document.getElementById("partyAddress");
-  let musicalGenre = document.getElementById("genres");
+  let musicalGenre = document.getElementById("genres")
   let coverPrice = document.getElementById("coverPrice");
-  let partyType = document.getElementById("types");
+  let partyType = document.getElementById("types")
   let partyDate = document.getElementById("partyDate");
-  console.log(partyAddress)
-  console.log(partyDate)
   let partyVenue = document.getElementById("partyVenue");
   let minAge = document.getElementById("minimumAge");
   let maxCap = document.getElementById("maximumCapacity");
   let partyDescription = document.getElementById("partyDescription");
-  let partyCoverPhoto = document.getElementById("partyCoverPhoto");
+  let partyCoverPhoto = document.getElementById(".local");
+
 
   const partyNameError = document.createElement("div");
   const partyAddressError = document.createElement("div");
@@ -79,9 +101,28 @@ if (postPartyForm) {
   const partyDepError = document.createElement("div");
   const partyPhotoError = document.createElement("div");
 
+  // again going to use s3 in the future bc bruh 
+  // https://codepen.io/bitbug/pen/wvxqWNa
+  const $file = document.querySelector(".local");
+  let srcData
+  $file.addEventListener("change", (event) => {
+    const selectedfile = event.target.files;
+    if (selectedfile.length > 0) {
+      const [imageFile] = selectedfile;
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        srcData = fileReader.result;
+        //console.log('base64:', srcData)
+      };
+      fileReader.readAsDataURL(imageFile);
+    }
+  });
+
   let dj2valid = true;
 
-  postPartyForm.addEventListener("submit", (event) => {
+  console.log("i lobe stephanie")
+  async function submitForm(event) {
+    console.log("this is running")
     event.preventDefault();
     partyNameError.remove();
     partyAddressError.remove();
@@ -94,6 +135,11 @@ if (postPartyForm) {
     maxCapError.remove();
     partyDepError.remove();
     partyPhotoError.remove();
+    // if (checkPhoto(partyCoverPhoto) == false){
+    //   dj2valid = false
+    //   partyPhotoError.textContent = "Error: party cover photo too big. Must be less than 2MB."
+    //   partyCoverPhoto.parentElement.appendChild(partyPhotoError)
+    // }
     if (checkPartyName(partyName.value) == false) {
       dj2valid = false;
       partyNameError.textContent = "Error: invalid party name";
@@ -125,38 +171,35 @@ if (postPartyForm) {
       maxCap.parentElement.appendChild(maxCapError);
     }
 
-
+    console.log(musicalGenre,
+      partyType);
+      console.log("This should be showing up")
+      console.log(partyDate.value)
     if (dj2valid == true) {
-      // postPartyForm.submit()
-
-      const pic = partyCoverPhoto.files[0];
-      const reader = new FileReader();
-
-      reader.addEventListener("load",async () => {
-        const base64DataUrl = btoa(reader.result);
-
-
-        $.ajax('/postaparty', {
-            type: 'POST',  // http method
-            data: { images: { partyName: partyName.value,
-                partyAddress: partyAddress.value, 
-                genres: genres.value, 
-                coverPrice: coverPrice.value,
-                 types: types.value, 
-                 partyDate: partyDate.value, 
-                 partyVenue: partyVenue.value, 
-                 minimumAge: minimumAge.value, 
-                 maximumCapacity: maximumCapacity.value,
-                 partyDescription: partyDescription.value,
-                 partyCoverPhoto: base64DataUrl
-                }}
-                
-        });
-
-
+      let requestConfig = {
+        method: 'POST',
+        url: '/postaparty',
+        data: { 
+          partyName: partyName.value,
+          partyAddress: partyAddress.value, 
+          genres: musicalGenre.value, 
+          coverPrice: coverPrice.value,
+          types: partyType.value, 
+          partyDate: partyDate.value, 
+          partyVenue: partyVenue.value, 
+          minimumAge: minimumAge.value, 
+          maximumCapacity: maximumCapacity.value,
+          partyDescription: partyDescription.value,
+          partyCoverPhoto: srcData
+        } 
+      };      
+      await $.ajax(requestConfig)
+      .then(function(response) {
+        window.location.replace('/postaparty/partypostedconfirmation');  
+      })
+      .catch(function(error) {
+        console.log("An error occurred: " + error);
       });
-
-      reader.readAsDataURL(pic);
     }
-  });
+  };
 }

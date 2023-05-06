@@ -38,3 +38,28 @@
   width: 40vw;
   margin: auto;
 }
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.checkbox-group label {
+  margin-right: 10px;
+}
+
+.text{
+  color: black;
+}
+
+.popup-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 40vw;
+  background-color: #fff;
+  z-index: 9999;
+}

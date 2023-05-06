@@ -1,6 +1,7 @@
 //Import express and express router as shown in lecture code and worked in previous labs
 //You can make your axios calls to the API directly in the routes
 import axios from 'axios';
+import fs from 'fs';
 //imported the router from express
 import {Router} from 'express';
 import { functions } from "../config/mongoCollections.js"
@@ -19,43 +20,52 @@ const result = dotenv.config();
 let apiKey = process.env.API_KEY
 
 
+router.route('/test').post(async(req,res) => {
+  console.log(req.body)
+  res.render('error')
+})
 router.route('/').get(async (req, res) => {
     res.render('postAPartyForm', {apiRoute : `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`})
   });
 
+router.route('/partypostedconfirmation').get(async (req, res) => {
+  res.render('partyPostedConfirmation')
+});
+
 router.route('/').post(async (req,res) => {
     let insertParty
-    let content = req.body
-    let partyNameInput = req.body.images.partyName
-    let partyAddressInput = req.body.images.partyAddress
-    let genresInput = req.body.images.genres
-    let coverPriceInput = req.body.images.coverPrice
-    let typesInput = req.body.images.types
-    let partyDateInput = req.body.images.partyDate
-    let partyVenueInput = req.body.images.partyVenue
-    let minimumAgeInput = req.body.images.minimumAge
-    let maximumCapacityInput = req.body.images.maximumCapacity
-    let partyDescriptionInput = req.body.images.partyDescription
-    let partyCoverPhotoInput = req.body.images.partyCoverPhoto
 
-    // try{
-    //   insertParty = await addParty(
-    //     partyNameInput, 
-    //     partyAddressInput, 
-    //     coverPriceInput, 
-    //     partyDateInput, 
-    //     partyVenueInput, 
-    //     minimumAgeInput, 
-    //     maximumCapacityInput, 
-    //     partyDescriptionInput, 
-    //     typesInput, 
-    //     genresInput, 
-    //     req.session.userId,
-    //     partyCoverPhotoInput )
-    // } catch (e){
-    //   console.log(e)
-    //   return res.status(500).render('error', { error: "500. Internal Server Error"})
-    // }
+    let content = req.body
+    let partyNameInput = req.body.partyName
+    let partyAddressInput = req.body.partyAddress
+    let genresInput = req.body.genres
+    let coverPriceInput = req.body.coverPrice
+    let typesInput = req.body.types
+    let partyDateInput = req.body.partyDate
+    let partyVenueInput = req.body.partyVenue
+    let minimumAgeInput = req.body.minimumAge
+    let maximumCapacityInput = req.body.maximumCapacity
+    let partyDescriptionInput = req.body.partyDescription
+    let partyCoverPhotoInput = req.body.partyCoverPhoto
+    console.log(req.body)
+    try{
+      insertParty = await addParty(
+        partyNameInput, 
+        partyAddressInput, 
+        coverPriceInput, 
+        partyDateInput, 
+        partyVenueInput, 
+        minimumAgeInput, 
+        maximumCapacityInput, 
+        partyDescriptionInput, 
+        typesInput, 
+        genresInput, 
+        req.session.user.id,
+        partyCoverPhotoInput) 
+    } catch (e){
+      console.log(e)
+      return res.status(500).render('error', { error: "500. Internal Server Error"})
+    }
     res.render('partyPostedConfirmation')
 })
 

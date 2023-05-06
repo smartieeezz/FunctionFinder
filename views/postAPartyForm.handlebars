@@ -18,6 +18,7 @@
       let autocomplete = new google.maps.places.Autocomplete(input);
     }
   </script>
+   <script src='../public/js/postAParty.js'></script>
 
 </head>
 
@@ -34,17 +35,13 @@
   </div>
   
 
-  <form  id="postAPartyForm">
+  <form onsubmit="submitForm()" id="postAPartyForm">
     <label for="partyName">Party Name:</label><br>
     <input type="text" id="partyName" name="partyName" placeholder="Enter a Party Name" required><br>
 
     <label for="partyAddress">Party Address:</label><br>
     <input type="text" id="partyAddress" name="partyAddress" required><br>
     
-    <label for="genres">
-      Party Musical Genre(s)
-      
-    </label >
     <select id="genres" name="genres" multiple>
         <option value="hip-hip">Hip Hop</option>
         <option value="rock">Rock</option>
@@ -105,12 +102,13 @@
     <textarea id="partyDescription" name="partyDescription" rows="4" cols="40" placeholder="Enter a description" required></textarea><br>
 
     <label for="partyCoverPhoto">Party Cover Photo:</label><br>
-    <input type="file" id="partyCoverPhoto" name="fileInput" required>
+    <input type="file" accept="image/jpeg, image/png" class="local"/>
     <br><br>
+
         
     <button type="submit">Submit</button>
   </form>
-  <script src='../public/js/postAParty.js'></script>
+ 
 
 
 </body>

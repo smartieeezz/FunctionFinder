@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import exportedMethods from "./events.js";
 const {create} = exportedMethods
 dotenv.config({path: '../.env'})
+import fs from 'fs';
 
 
 
@@ -38,7 +39,6 @@ export async function addParty(partyName,
             "partyHost":partyHost, 
             "partyCoverPhoto": partyCoverPhoto
         }
-        console.log(party)
         const pushparty = await create(
           party['partyHost'], 
           party['name'],

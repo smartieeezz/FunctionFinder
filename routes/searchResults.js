@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+
 //imported the router from express
 import {Router} from 'express';
 import { findNearbyFunctions } from '../data/search.js';
@@ -33,9 +35,11 @@ router.route('/').get(async (req, res) => {
       let latitude = geocodeLocation.data.results[0].geometry.location.lat
       let longitude =geocodeLocation.data.results[0].geometry.location.lng
 
+      console.log("here")
     try{
       nearby = await findNearbyFunctions(location, distance, startDate, endDate)
     } catch(e){
+      console.log(e)
       res.status(500).json('error');
     }
 
