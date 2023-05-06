@@ -5,6 +5,11 @@ registerButton.addEventListener("click", function() {
   const userId = this.getAttribute("reg-user-id");
   const action = this.getAttribute("reg-action");
 
+  if (!userId) {
+      window.location.href = "/account/login";
+    return;
+  }
+
   if (action !== "register") {
     return;
   }

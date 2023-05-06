@@ -56,8 +56,9 @@ router.post('/account/login', async (req, res) => {
     }
 
     const uid = userCheck._id;
-    req.session.userId = userCheck._id
-    res.redirect(`/${uid}`);
+    const uName = userCheck.username;
+    req.session.user = {id: uid, userName: uName};
+    res.redirect('/');
 });
 
 router.get('/account/create', (req, res) => {
@@ -74,8 +75,7 @@ router.post('/account/create', async (req, res) => {
         error.push("You have to fill in all the fields")
         res.render('accountCreation',{errors: error, hasErrors: true, accountInfo: req.body});
         return
-    }  
-
+    } 
     //check to see if we have a valid age
     try {
         let checkDOB = checkAge(dob)
@@ -169,69 +169,56 @@ router.post('/account/create', async (req, res) => {
 });
 
 // get user's registered events
-router.get('/:id/registered-events', async (req, res) => {
+router.get('/registered-events', async (req, res) => {
     try {
-      const userId = req.params.id;
-      const user = await userData.get(userId);
-      const registeredEventIds = user.registeredEvents;
-      const registeredEvents = [];
+        const userId = req.session.user.id;
+        const user = await userData.get(userId);
+        const registeredEventIds = user.registeredEvents;
+        const registeredEvents = [];
   
-      for (const eventId of registeredEventIds) {
-        const event = await eventData.get(eventId);
-        registeredEvents.push({ ...event, userId });
-      }
+        for (const eventId of registeredEventIds) {
+            const event = await eventData.get(eventId);
+            registeredEvents.push({ ...event, userId });
+        }
   
-      res.render('eventsRegistered', { events: registeredEvents, userId });
+        res.render('eventsRegistered', { events: registeredEvents, userId });
     } catch (error) {
       res.status(404).json({ message: error });
     }
 });
 
 // get user's favorited events
-router.get('/:id/favorited-events', async (req, res) => {
+router.get('/favorited-events', async (req, res) => {
     try {
-      const userId = req.params.id;
-      const user = await userData.get(userId);
-      const favoritedEventIds = user.favoritedEvents;
-      const favoritedEvents = [];
+        const userId = req.session.user.id;
+        const user = await userData.get(userId);
+        const favoritedEventIds = user.favoritedEvents;
+        const favoritedEvents = [];
   
-      for (const eventId of favoritedEventIds) {
-        const event = await eventData.get(eventId);
-        favoritedEvents.push({ ...event, userId });
-      }
+        for (const eventId of favoritedEventIds) {
+            const event = await eventData.get(eventId);
+            favoritedEvents.push({ ...event, userId });
+        }
   
-      res.render('eventsFavorited', { events: favoritedEvents, userId });
+        res.render('eventsFavorited', { events: favoritedEvents, userId });
     } catch (error) {
-      res.status(404).json({ message: error });
+        res.status(404).json({ message: error });
     }
 });
 
-router.get('/:id', async (req, res) => {
-    try {
-        const user = await userData.get(req.params.id);
-        res.render('homepageSignedin', { user: user , apiRoute : `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`});
-    } catch (error) {
-        res.status(404).json({ message: error});
-    }
-    
-});
-// add more routes
 
-router.get('/account/settings/:id', async (req, res) => {
+router.get('/account/settings', async (req, res) => {
     
     console.log("in the account settings")
-    const id = req.params.id
+    const id = req.session.user.id
     // make sure user is logged in and updating their own settings
-    if (!req.session.userId ) {
-        //the req.session.userId is undefined
-        console.log(req.session.userId)
-        console.log(req.params.id)
-        res.redirect("/login");
+    if (!id) {
+        res.redirect("/account/login");
     //if the user is logged in then let's check
     } else {
-        const user = await userData.get(req.params.id)
+        const user = await userData.get(id)
         console.log(`User ID: ${user._id}`)
-        console.log(`Params ID: ${req.params.id}`)
+        console.log(`Params ID: ${id}`)
         console.log(`Username: ${user.username}`)
         if (!user) {
             console.log("no user found")
@@ -244,11 +231,10 @@ router.get('/account/settings/:id', async (req, res) => {
 console.log("Leaving account setting get route")
 });  
 
-router.post('/account/settings/:id', async (req, res) => {
+router.post('/account/settings', async (req, res) => {
     console.log("in the account post settings")
     const {firstName, lastName, username, email, dateOfBirth, password, confirmPassword, favoriteCategories } = req.body;
-    const id = req.params.id
-    req.session.userId = req.params.id
+    const id = req.session.user.id
     let error = [];
         console.log(id)
         console.log(firstName)
@@ -275,6 +261,7 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(checkFirstName)
     } catch (e) {
         error.push(e)
+        console.log("Error at first name")
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body,id: id})
         return
@@ -285,6 +272,7 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(checkLastName)
     } catch (e) {
         error.push(e)
+        console.log("Error at last name")
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
@@ -296,6 +284,8 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(checkUsername)
     } catch (e) {
         error.push(e)
+        console.log("Error at username name")
+
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
@@ -307,6 +297,7 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(validateEmail)
     } catch (e) {
         error.push(e)
+        console.log("Error at email")
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
@@ -318,6 +309,7 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(checkDOB)
     } catch (e) {
         error.push(e)
+        console.log("Error at age")
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
@@ -329,6 +321,8 @@ router.post('/account/settings/:id', async (req, res) => {
         console.log(validatePassword)
     } catch (e) {
         error.push(e)
+        console.log("Error at age")
+
         console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
@@ -338,6 +332,8 @@ router.post('/account/settings/:id', async (req, res) => {
     if (password!==confirmPassword) {
         error.push("The passwords must match.")
         console.log(error)
+        console.log("Error at age")
+
         res.render('updateSettings', {errors: error,hasErrors: true, updateForm: req.body, id: id })
         return
     }
@@ -368,5 +364,20 @@ router.post('/account/settings/:id', async (req, res) => {
             return;
         }
     });
+
+router.get('/signout', async (req, res) => {
+    req.session.destroy();
+    res.redirect("/");
+    });
+
+// router.get('/:id', async (req, res) => {
+//         try {
+//             const user = await userData.get(req.params.id);
+//             res.render('homepageSignedin', { user: user , apiRoute : `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`});
+//         } catch (error) {
+//             res.status(404).json({ message: error});
+//         }
+        
+//     });
 
 export default router;

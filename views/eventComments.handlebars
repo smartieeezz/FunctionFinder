@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Event Comments</title>
+    <link rel="stylesheet" href="/public/css/eventComments.css">
+  </head>
+  <body>
+    <h1>{{event.name}}</h1>
+
+    <a href="/events/{{event._id}}/info?userId={{userId}}">Back to Event Page</a>
+    
+    <h3>*Keep in mind you can only comment once!*</h3>
+    <form action="/events/{{event._id}}/comments" method="POST">
+        <input type="hidden" name="comm-event-id" value="{{event._id}}">
+        <input type="hidden" name="comm-user-id" value="{{userId}}">
+        <div class="comment-container">
+            <label for="comment"></label>
+            <textarea name="comment" id="comment" rows="10" maxlength="280"></textarea>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+    <script src="/public/js/buttonSubmitComment.js"></script>
+
+    <div class="button-container">
+        <button id="delete-button" del-event-id="{{event._id}}" del-user-id="{{userId}}" del-action="delete">Delete</button>
+        <script src="/public/js/buttonDeleteComment.js"></script>
+    </div>
+    <ul>
+        <li class="comment-box">
+            <p><strong>Your Comment:</strong> {{userComment.comment}}</p>
+        </li>
+    </ul>
+
+    <br>
+    <h2>Recent Comments:</h2>
+
+    {{#if comments}}
+        <ul>
+        {{#each comments}}
+        <li class="comment-box">
+            <p><strong>{{this.user.name}}</strong>:</p>
+            <p>{{this.comment}}</p>
+        </li>
+        {{/each}}
+    </ul>
+    {{else}}
+        <p>No comments yet.</p>
+    {{/if}}
+  </body>
+</html>

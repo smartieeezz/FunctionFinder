@@ -61,6 +61,55 @@ router.put('/events/:id', async (req, res) => {
   }
 });
 
+router.get('/events/:id/comments', async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const userId = req.query.userId;
+
+    if (!userId) {
+      return res.redirect('/account/login');
+    }
+  
+    const [event, userComment] = await Promise.all([
+      eventData.get(eventId),
+      eventData.getUserComment(eventId, userId)
+    ]);
+    const username = await userData.getUsername(userId);;
+    const comments = event.functionComments;
+    
+    res.render('eventComments', { event, userId, comments, username, userComment });
+  } catch (error) {
+    res.status(404).json({ message: error });
+  }
+});
+router.post('/events/:id/comments', async (req, res) => {
+  const eventId = req.params.id;
+  const userId = req.query.userId;
+  const comment = req.body.comment;
+
+  try {
+    const newEventComment = await eventData.createComment(eventId, userId, comment);
+    res.status(201).send(newEventComment); 
+    // res.redirect(`/events/${eventId}/comments?userId=${userId}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+router.delete('/events/:id/comments', async (req, res) => {
+  const eventId = req.params.id;
+  const userId = req.query.userId;
+  try {
+    const deletedComment = await eventData.deleteComment(eventId, userId);
+    res.status(200).send(deletedComment);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
+
+
 router.get('/events', async (req, res) => {
     try {
         const allEvents = await eventData.getAll();

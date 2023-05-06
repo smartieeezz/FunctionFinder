@@ -5,6 +5,11 @@ unfavoriteButton.addEventListener("click", function() {
   const userId = this.getAttribute("unfav-user-id");
   const action = this.getAttribute("unfav-action");
 
+  if (!userId) {
+      window.location.href = "/account/login";
+    return;
+  }
+
   if (action !== "unfavorite") {
     return;
   }

@@ -109,7 +109,7 @@ form {
 	padding-top: 20px;
   }
 
-  .sideNav a {
+  .navLink {
 	padding: 8px 8px 8px 32px;
 	text-decoration: none;
 	font-size: 25px;
@@ -130,6 +130,10 @@ form {
   }
 
   .login, .signOut {
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	font-size: 25px;
+	color: white;
 	position: fixed;
 	bottom: 40px;
   }

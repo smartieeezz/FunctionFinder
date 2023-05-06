@@ -5,6 +5,11 @@ favoriteButton.addEventListener("click", function() {
   const userId = this.getAttribute("fav-user-id");
   const action = this.getAttribute("fav-action");
 
+  if (!userId) {
+      window.location.href = "/account/login";
+    return;
+  }
+
   if (action !== "favorite") {
     return;
   }

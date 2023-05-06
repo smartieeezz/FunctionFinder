@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
-import { checkAge, checkEmail,checkPassword } from "../helpers/validation.js";
+import { checkAge, checkName, checkEmail,checkPassword, checkString } from "../helpers/validation.js";
 import bcrypt from 'bcrypt'
 const saltRounds = 12;
 import userData from "./users.js";
@@ -127,7 +127,9 @@ const exportedMethods = {
         }
         //emailAddress should be a valid email address format. example@example.com
         emailAddress = checkEmail(emailAddress);
+        password = checkPassword(password)
         
+        // emailAddress = emailAddress.trim()
 
         /*Query the db for the emailAddress supplied, if it is not found, throw an error stating 
         "Either the email address or password is invalid".*/
@@ -274,25 +276,31 @@ const exportedMethods = {
         }
         let updatedUserInfo = {};
         if (updatedUser.firstName) {
+            updatedUserInfo.firstName = checkName(updatedUser.firstName)
             updatedUserInfo.firstName = updatedUser.firstName;
         }
         if (updatedUser.lastName) {
+            updatedUserInfo.lastName = checkName(updatedUser.lastName)
             updatedUserInfo.lastName = updatedUser.lastName;
         }
         if (updatedUser.username) {
+            updatedUserInfo.username = checkString(updatedUser.username)
             const existingUser = await this.getUserByUsername(updatedUser.username);
             if (existingUser && existingUser._id.toString() !== id) {
                 throw "Username already exists. Please choose another username.";
             }
-        updatedUserInfo.username = updatedUser.username;
+        
         }
         if (updatedUser.email) {
+            updatedUserInfo.email = checkEmail(updatedUser.email)
             updatedUserInfo.email = updatedUser.email;
         }
         if (updatedUser.dateOfBirth) {
+            updatedUserInfo.dateOfBirth = checkAge(updatedUser.dateOfBirth)
             updatedUserInfo.dateOfBirth = updatedUser.dateOfBirth;
         }
         if (updatedUser.password) {
+            updatedUserInfo.password= checkPassword(updatedUser.password)
             updatedUserInfo.password = await bcrypt.hash(updatedUser.password, saltRounds);
         }
         if (updatedUser.favoriteCategories) {
@@ -317,7 +325,30 @@ const exportedMethods = {
           } catch (e) {
             throw new Error(`Error finding username: ${e}`);
           }
-    }
+    },
+
+    async addComment(eventId, userId, comment) {
+        if (!eventId) throw "You must provide an eventId";
+        if (!userId) throw "You must provide a userId";
+        if (!comment) throw "You must provide a comment";
+        if (comment.length > 280) throw "Comment cannot be more than 280 characters";
+      
+        const usersCollection = await users();
+        const userObj = await usersCollection.findOne({ _id: new ObjectId(userId) });
+      
+        if (!userObj) throw "User not found";
+        
+        const username = await userData.getUsername(userId);
+      
+        const newComment = { user: { id: userId, name: username }, comment, timestamp: Date.now() };
+        userObj.userComments.push(newComment);
+
+        const updatedInfo = await usersCollection.updateOne({ _id: userObj._id }, { $set: userObj });
+        if (updatedInfo.modifiedCount === 0) throw "Could not add comment";
+
+        return newComment;
+      }
+      
       
 
 }      
@@ -329,8 +360,10 @@ export default exportedMethods;
 (async () => {
     try {
       // Call the update function with valid parameters
+      const eventId = "644deb018157ffaa8920aa33";
       const userId = "644deb018157ffaa8920aa30";
-      const result = await userData.getUsername(userId);
+      const comment = "ants ants ants ants ants ants ants ants ants ants ants ants ants ants ants ants"
+      const result = await userData.addComment(eventId, userId, comment);
       console.log(result);
     } catch (error) {
       console.log(error);

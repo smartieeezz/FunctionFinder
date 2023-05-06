@@ -10,15 +10,15 @@
         <div class="event-info">
             <div class="info-container">
                 <ul>
-                    <li><strong>Party Host:</strong> {{event.partyHost}}</li>
-                    <li><strong>{{event.date}}</strong></li>
-                    <li><strong>Description:</strong> {{event.description}}</li>
+                    <li class="venue"><strong>{{event.partyVenue}}</strong></li>
+                    <li class="date"><strong>{{event.date}}</strong></li>
+                    <li>{{event.description}}</li>
                     <li>&#x1f4cd; {{event.location}}</li>
                     <li>&#127926; {{event.musicType}}</li>
                     <li><strong>Minimum Age:</strong> {{event.minimumAge}}</li>
                     <li><strong>Price:</strong> {{event.price}}</li>
                     <li><strong>Max Capacity:</strong> {{event.maximumCapacity}}</li>
-                    {{!-- <li><strong>Function Comments:</strong> {{event.functionComments}}</li> --}}
+                    <a href="/events/{{event._id}}/comments?userId={{userId}}">View Comments</a>
                 </ul>
             </div>
             <div class="button-container">

@@ -1,7 +1,10 @@
 const checkString= (string)  => {
-    //make sure the string exists
+    // make sure the string exists
     if (!string) {
         throw `Error: All fields must exist.`
+    }
+    if (typeof string!=='string') {
+        throw `Error: This must be a string.`
     }
     //make sure the string is not empty
     string = string.trim()
@@ -16,7 +19,7 @@ const checkString= (string)  => {
 }
 
 const checkName = (name) => {
-    checkString(name);
+    name = checkString(name);
         if (!/^[a-zA-Z]+$/.test(name)) {
     throw `Error: The name must contain only letters.`;
         }
@@ -26,12 +29,16 @@ const checkName = (name) => {
     if (name.length > 25) {
         throw `Error: The name must be less than 25 characters.`;
     }
+
     return name;
 };
 
 
 const checkAge = (DOB) => {
     const today = new Date();
+    const givenDOB = new Date(DOB)
+    givenDOB.setHours(0, 0, 0, 0); // Set time to midnight to compare dates only
+    today.setHours(0, 0, 0, 0);
 
     let day = String(today.getDate());
     if (day.length < 2) {
@@ -60,21 +67,20 @@ const checkAge = (DOB) => {
     
     //check the age just to see if it's working correctly
 
-    if (today.getFullYear() < dobYear) {
+    if (givenDOB>today) {
         throw `Error: You can't have a birthyear after today's date. That makes no sense.`;
-    }
-    const yearDifference = today.getFullYear() - dobYear;
-    if (age < 18) {
-        throw `Error: You must be 18 or older to use this site.`;
-    }
-    //if you're born in a month that is before the current date's month then you're too young
-    if (yearDifference == 18 && dobMonth > month) {
-        throw `Error: You must be 18 or older to use this site.`;
-    }
+    // const yearDifference = today.getFullYear() - dobYear;
+    // if (age < 18) {
+    //     throw `Error: You must be 18 or older to use this site.`;
+    // }
+    // //if you're born in a month that is before the current date's month then you're too young
+    // if (yearDifference == 18 && dobMonth > month) {
+    //     throw `Error: You must be 18 or older to use this site.`;
+    // }
 
-    //if you're born in the same month and the current day is after your birthday then you're too young
-    if (yearDifference == 18 && dobMonth == month && dobDay > day) {
-        throw `Error: You must be 18 or older to use this site.`;
+    // //if you're born in the same month and the current day is after your birthday then you're too young
+    // if (yearDifference == 18 && dobMonth == month && dobDay > day) {
+    //     throw `Error: You must be 18 or older to use this site.`;
     } else {
         return DOB;
     }
@@ -82,8 +88,8 @@ const checkAge = (DOB) => {
 
 
 const checkEmail = (email) =>{
-    checkString(email)
-    const properAddress = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    email = checkString(email)
+    let properAddress = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!properAddress.test(email)) {
         throw `Error: The email is not a valid email.`
     }
