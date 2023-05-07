@@ -206,7 +206,7 @@ const exportedMethods = {
         const thisUser = await usersCollection.find({email});
 
         if (typeof thisUser!=='undefined' || thisUser!==null) {
-            throw `Error: The email was used already.`;
+            throw `Error: The email ${email} was used already.`;
         }
     },
 
@@ -352,6 +352,10 @@ const exportedMethods = {
         // }
         if (updatedUser.email) {
             updatedUserInfo.email = checkEmail(updatedUser.email)
+            const existingUser = await this.getByEmail(updatedUser.email)
+            if (existingUser && existingUser._id.toString()!==id) {
+                throw `Email:${updatedUser.email} already exists. Please choose another email.`
+            }
             updatedUserInfo.email = updatedUser.email;
         }
         if (updatedUser.dateOfBirth) {

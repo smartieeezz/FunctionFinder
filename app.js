@@ -94,6 +94,14 @@ app.use('/account/create', (req, res, next) => {
   next();
 });
 
+// app.use('/searchresults', (req, res, next) => {
+//   if(!req.session.user){
+//     let loggedIn = false;
+//     return res.redirect('/account/login');
+//   }
+//   next(); 
+// });
+
 
 app.use(express.urlencoded({extended: true}));
 app.use(rewriteUnsupportedBrowserMethods);
