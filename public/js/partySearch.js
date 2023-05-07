@@ -55,7 +55,28 @@ if(searchForm){
             endDateError.textContent = 'Error: must supply an end date';
             searchForm.appendChild(endDateError);
         }
+        
+        const start = new Date(startDate.value);
+        const end = new Date(endDate.value); 
+        const date = new Date();
 
+        if(date > start){
+            valid = false;
+            startDateError.textContent = 'Error: startDate must be either today or in the future';
+            searchForm.appendChild(startDateError);
+        }
+
+        if(date > end){
+            valid = false;
+            endDateError.textContent = 'Error: endDate must be either today or in the future';
+            searchForm.appendChild(endDateError);
+        }
+
+        if(end < start){
+            valid = false;
+            endDateError.textContent = 'Error: endDate must be after startDate';
+            searchForm.appendChild(endDateError);
+        }
           
         if(valid){
             searchForm.submit();
