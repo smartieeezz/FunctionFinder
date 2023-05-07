@@ -23,10 +23,17 @@ try {
     let user3= await users.create("Roland", "John", "arjay", "rjohn5@stevens.edu", "08/15/1992","Geoffrey92!", ["R&B", "Indie"]);
     console.log(user3)
 
+<<<<<<< HEAD
+    let user4= await users.create("Tanner", "Marshall", "t.marshall", "tmarsha1@stevens.edu", "01/01/2002","WeLoveCS546!", ["Alternative", "Indie, "]);
+    console.log(user4)
+
+    let user5= await users.create("Stephanie", "Martinez", "s.martinez", "smartin7@stevens.edu", "01/01/2002","WeLoveCS546!", ["caribbean", "pop, "]);
+=======
     let user4= await users.create("Tanner", "Marshall", "t.marshall", "tmarsha1@stevens.edu", "01/01/2002","Password123!", ["Alternative", "Indie"]);
     console.log(user4)
 
     let user5= await users.create("Stephanie", "Martinez", "s.martinez", "smartin7@stevens.edu", "01/01/2002","Password123!", ["Caribbean", "R&B", "Pop"]);
+>>>>>>> d1d85b7391272d7360abb9f3bccbd3d2f72a942e
     console.log(user5)
 
     let user6= await users.create("Hao", "Li", "h.li", "hli144@stevens.edu", "01/01/2002","Password123!", ["Caribbean", "Pop", "Throwbacks"]);

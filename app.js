@@ -8,6 +8,7 @@ import exphbs from 'express-handlebars';
 import { closeConnection, dbConnection } from './config/mongoConnection.js';
 
 const apiKey = process.env.API_KEY
+let loggedIn = false;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -41,8 +42,10 @@ app.use(
 
 //Middleware to make sure the user can only access their own account settings
 app.use('/account/settings', (req, res, next) => {
-  if(!req.session.user)
+  if(!req.session.user){
+    loggedIn = false;
     return res.redirect('/account/login');
+  }
   next();
 });
 
@@ -51,6 +54,7 @@ app.use('/account/settings', (req, res, next) => {
 app.use('/account/login', (req, res, next) => {
   // Check if the user is already authenticated
   if (req.session.user) {
+    loggedIn = true;
     return res.redirect('/');
   }
   // If the user is not authenticated, allow them to get through to the GET /login route
@@ -60,13 +64,17 @@ app.use('/account/login', (req, res, next) => {
 
 app.use('/postaparty', (req, res, next) => {
   if(!req.session.user)
+  {
+    loggedIn = false;
     return res.redirect('/account/login');
+  }
   next();
 });
 
 
 app.use('/registered-events', (req, res, next) => {
   if(!req.session.user){
+    loggedIn = false;
     return res.redirect('/account/login');
   }
   next();  
@@ -74,6 +82,7 @@ app.use('/registered-events', (req, res, next) => {
 
 app.use('/favorited-events', (req, res, next) => {
   if(!req.session.user){
+    loggedIn = false;
     return res.redirect('/account/login');
   }
   next();  
@@ -81,6 +90,7 @@ app.use('/favorited-events', (req, res, next) => {
 
 app.use('/account/settings', (req, res, next) => {
   if(!req.session.user){
+    loggedIn = false;
     return res.redirect('/account/login');
   }
   next();  
@@ -88,19 +98,28 @@ app.use('/account/settings', (req, res, next) => {
 
 app.use('/account/create', (req, res, next) => {
   if (req.session.user) {
+    loggedIn = true;
     return res.redirect('/');
   }
   // If the user is not authenticated, allow them to get through to the GET /login route
   next();
 });
 
-// app.use('/searchresults', (req, res, next) => {
-//   if(!req.session.user){
-//     let loggedIn = false;
-//     return res.redirect('/account/login');
-//   }
-//   next(); 
-// });
+app.use('/searchresults', (req, res, next) => {
+  if(!req.session.user){
+    loggedIn = false;
+    return res.redirect('/account/login');
+  }
+  next();  
+});
+
+app.use('/', (req, res, next) => {
+  if (req.session.user)
+    loggedIn = true;
+  else
+    loggedIn = false;
+  next();
+})
 
 
 app.use(express.urlencoded({extended: true}));
@@ -108,7 +127,7 @@ app.use(rewriteUnsupportedBrowserMethods);
 
 app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
-app.get('/', (req, res) => { res.render('homepage', {apiRoute : `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`})});
+app.get('/', (req, res) => { res.render('homepage', {apiRoute : `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`, hasUser: loggedIn})});
 
 const db = await dbConnection();
 
