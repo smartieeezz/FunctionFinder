@@ -418,26 +418,42 @@ const exportedMethods = {
         const functionCollection = await events()
         
         const functionsHosted = await functionCollection.find({ partyHost: id }).toArray();
-        if (functionsHosted.length===0) {
-            return ["Not hosting any parties :("]
-        }
+        // if (functionsHosted.length===0) {
+        //     return ["Not hosting any parties :("]
+        // }
         return functionsHosted;
       },
 
       async findPartiesUserAttending(id) {
-        //get functionCollection
+        //get functionCollection and find today's date
+        const today = new Date();
         const functionCollection = await events()
         
         //get all the functions we are attending in the form of an array
         const functionsAttending = await functionCollection.find({ partyHost: id }).toArray();
-        
+        const previouslyAttended = functionsAttending.filter(func => new Date(func.date) < today)
+
         //return these functions
-        if (functionsAttending.length===0) {
-            return ["Not attending any parties :("]
-        }
+        // if (functionsAttending.length===0) {
+        //     return ["Not attending any parties :("]
+        // }
         return functionsAttending;
-      }
-      
+      },
+      async findPartiesPreviouslyAttended(id) {
+        //get functionCollection and find today's date
+        const today = new Date();
+        const functionCollection = await events()
+        
+        //get all the functions we are attending in the form of an array
+        const functionsAttending = await functionCollection.find({ partyHost: id }).toArray();
+        const previouslyAttended = functionsAttending.filter(func => new Date(func.date) < today)
+
+        //return these functions
+        // if (functionsAttending.length===0) {
+        //     return ["Not attending any parties :("]
+        // }
+        return previouslyAttended;
+      },
       
     
 

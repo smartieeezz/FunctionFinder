@@ -18,6 +18,17 @@ const exportedMethods = {
         const allEvents = await eventsCollection.find({}).toArray();
         return allEvents;
     },
+    async delete(id) {
+        if (!id){
+            throw "Error: Must provide an ID"
+        }
+        const eventsCollection = await events();
+        const deletionInfo = await eventsCollection.deleteOne({ _id: new ObjectId(id) });
+        if (deletionInfo.deletedCount === 0) {
+            throw `Error: Could not delete event with id ${id}`;
+        }
+        return deletionInfo.deletedCount;
+    },
 
     // async getHostUsername(id) {
     //     const eventsCollection = await events();
