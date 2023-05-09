@@ -425,7 +425,7 @@ router.post('/account/settings', async (req, res) => {
             return;
         }
     });
-
+/*
 router.get('/account/parties', async (req, res) => {
 
     console.log("in the user party stats")
@@ -468,6 +468,7 @@ router.get('/account/parties', async (req, res) => {
 }
 console.log("Leaving account party stats get route")
 });  
+*/
 
 router.get('/signout', async (req, res) => {
     req.session.destroy();
