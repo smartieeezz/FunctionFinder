@@ -1,6 +1,7 @@
     <head>
         <title>Event Info</title>
         <link rel="stylesheet" href="/public/css/eventInfo.css">
+        <link rel="stylesheet" href="/public/css/main-styles.css">
         <meta name="viewport" content="width=device-width">
         <meta charset="utf-8">
     </head>
@@ -18,8 +19,8 @@
                     <li><strong>Minimum Age:</strong> {{event.minimumAge}}</li>
                     <li><strong>Price:</strong> {{event.price}}</li>
                     <li><strong>Max Capacity:</strong> {{event.maximumCapacity}}</li>
-                    <a href="/events/{{event._id}}/comments">View Comments</a>
                 </ul>
+                <a href="/events/{{event._id}}/comments">View Comments</a>
             </div>
             <div class="button-container">
                 <button id="register-button" reg-event-id="{{event._id}}" reg-user-id="{{userId}}" reg-action="register">Register</button>

@@ -1,16 +1,13 @@
   <head>
     <title>Search Results</title>
-    <script src="../public/js/renderMap.js">
-
-    let location = '{{location}}'
-    
-    </script>
+    <script src="../public/js/renderMap.js"></script>
     <link rel="stylesheet" href="../public/css/resultsCards.css">
 
   </head>
   <body class="background">
     {{!-- https://www.w3schools.com/graphics/google_maps_intro.asp  --}}
     <div id="googleMap" class="map"></div>
+    <p id="location-var" hidden>{{location}}</p>
     <script>
     
     function myMap() {
