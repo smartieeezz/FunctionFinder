@@ -21,7 +21,6 @@ router.route('/').get(async (req, res) => {
 
 
 router.route('/getfunctions').post(async (req,res) => {
-  
   let realFunctions = []
   realFunctions = await findNearbyFunctions()
   let filtered = filterParties(realFunctions, req.body.ages, req.body.genres, req.body.types, req.body.prices)
@@ -36,10 +35,12 @@ router.route('/getfunctions').post(async (req,res) => {
   res.send(filtered)
 })
   router.route('/resultsjson').post(async (req, res) => {
+    req.session.searching = false;
     res.render("searchresults", {searchResults:req.body.results} )
   })
 
 router.route('/').post(async (req, res) => {
+  req.session.searching = true;
   const {location, distance, startDate, endDate} = req.body
   let nearby
   let formattedSrc = location.replace(/ /g, '+');
