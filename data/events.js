@@ -29,6 +29,38 @@ const exportedMethods = {
         }
         return deletionInfo.deletedCount;
     },
+    async deleteAll(id) {
+        if (!id) {
+            throw "Error: Must provide an ID"
+        }
+        //get the function with the get method
+        const party = await this.get(id);
+        // Check if the event has occurred yet
+        const eventDate = new Date(party.date);
+        const today = new Date();
+        if (eventDate <= today) {
+            throw "Error: You cannot delete a party that has already happened.";
+        }
+
+        //get the events in the database
+        const functionCollections = await events();
+        //delete the events in the collection that have this database
+        const deletionInfo = await functionCollections.deleteMany({_id: new ObjectId(id)});
+        if (deletionInfo.deletedCount == 0) {
+            throw `Error: Could not delete event with id ${id}`;
+        }
+        // Delete the event from all users' registeredEvents
+        const usersCollection = await users();
+
+        const updateResult = await usersCollection.updateMany(
+            { registeredEvents: id },
+            { $pull: { registeredEvents: id } }
+        );
+        if (updateResult.modifiedCount == 0) {
+            throw `Error: Could not delete event ${id} from users' registeredEvents`;
+        }
+        return deletionInfo.deletedCount;
+        },
 
     // async getHostUsername(id) {
     //     const eventsCollection = await events();
