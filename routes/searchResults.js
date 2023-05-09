@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import xss from 'xss';
 
 //imported the router from express
 import {Router} from 'express';
@@ -21,23 +21,19 @@ router.route('/').get(async (req, res) => {
 
 
 router.route('/getfunctions').post(async (req,res) => {
-  
   let realFunctions = []
-  realFunctions = await findNearbyFunctions()
-  let filtered = filterParties(realFunctions, req.body.ages, req.body.genres, req.body.types, req.body.prices)
-  // console.log("real functions")
-  // console.log(realFunctions)
-  // console.log(req.body.ages)
-  // console.log(req.body.genres)
-  // console.log(req.body.types)
-  // console.log(req.body.prices)
-  // console.log("filtered")
-  // console.log(filtered)
+  let filtered = xss(filterParties(realFunctions, req.body.ages, req.body.genres, req.body.types, req.body.prices))
   res.send(filtered)
 })
-  router.route('/resultsjson').post(async (req, res) => {
+router.route('/getfunctions').get(async (req,res) => {
+  res.redirect('/');
+})
+router.route('/resultsjson').post(async (req, res) => {
     res.render("searchresults", {searchResults:req.body.results} )
   })
+router.route('/resultsjson').get(async (req, res) => {
+  res.redirect('/');
+})
 
 router.route('/').post(async (req, res) => {
   const {location, distance, startDate, endDate} = req.body

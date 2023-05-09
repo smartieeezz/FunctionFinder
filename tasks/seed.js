@@ -52,7 +52,8 @@ try {
         "123 Keanu Drive, Los Angeles California, 90210", // location
         69, // price
         ["Rock", "Pop"], // musicType
-        [] // functionComments
+        [], // functionComments
+        "Keanu's House" //venue
     );
     console.log(event1);
 
@@ -70,7 +71,8 @@ try {
         "123 Jennifer Drive, Los Angeles California, 90210", // location
         420, // price
         ["Rock", "Pop", "Hip Hop"], // musicType
-        [] // functionComments
+        [], // functionComments
+        "Jlo's crib" //venue
     );
     console.log(event2);
 
