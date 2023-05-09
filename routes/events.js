@@ -27,8 +27,13 @@ router.put('/events/:id', async (req, res) => {
       }
       const updatedEvent = await eventData.update(eventId, updatedFields);
       const updatedUser = await userData.updateRegisteredEvents(userId, eventId, req.query.action);
+    
+      const user = await userData.get(userId);
+      const pastEventsAttended = user.pastEventsAttended ? user.pastEventsAttended : [];
+      const updatedPastEventsAttended = [...pastEventsAttended, eventId];
+      await userData.update(userId, { pastEventsAttended: updatedPastEventsAttended });
       res.json({ event: updatedEvent, user: updatedUser });
-    } 
+    }     
     else if (req.query.action === 'unregister') {
       const updatedFields = {
         guestsAttending: previousGuestsAttending.filter(guestId => guestId !== userId)
