@@ -49,7 +49,7 @@ try {
         ["Live Show", "Concert"], // category
         "This is going to be a super cool concert!!", // description
         21, // minimumAge
-        "123 Keanu Drive, Los Angeles California, 90210", // location
+        "3467 VIRGINIA RD LOS ANGELES CA 90016-4231 USA", // location
         69, // price
         ["Rock", "Pop"], // musicType
         [], // functionComments
@@ -68,7 +68,7 @@ try {
         ["Live Show", "Concert", "Costume"], // category
         "FREE MERCH!!", // description
         21, // minimumAge
-        "123 Jennifer Drive, Los Angeles California, 90210", // location
+        "1301 W 27TH ST LOS ANGELES CA 90007-2261 USA", // location
         420, // price
         ["Rock", "Pop", "Hip Hop"], // musicType
         [], // functionComments
