@@ -439,12 +439,13 @@ const exportedMethods = {
         // }
         return functionsAttending;
       },
+      
       async find(query) {
         const usersCollection = await users();
         const users = await usersCollection.find(query).toArray();
         return users;
       },
-      
+
       async findPartiesPreviouslyAttended(id) {
         //get functionCollection and find today's date
         const today = new Date();
