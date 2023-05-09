@@ -71,6 +71,13 @@ app.use('/postaparty', (req, res, next) => {
   next();
 });
 
+app.use('/cancelanevent', (req, res, next) => {
+  if(!req.session.user){
+    loggedIn = false;
+    return res.redirect('/account/login');
+  }
+  next();  
+});
 
 app.use('/registered-events', (req, res, next) => {
   if(!req.session.user){

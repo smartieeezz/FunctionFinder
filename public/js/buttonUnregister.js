@@ -18,7 +18,7 @@ unregisterButton.addEventListener("click", function() {
     .then(response => response.json())
     .then(event => {
       if (event.partyHost === userId) {
-        alert("The host cannot unregister for their own event here.");
+        alert("The host cannot unregister their own event here.");
         return;
       }
       if (!event.guestsAttending.includes(userId)) {

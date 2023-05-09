@@ -16,7 +16,7 @@ const result = dotenv.config();
 
 
 let apiKey = process.env.API_KEY
-console.log("Api keyh")
+console.log("Api key")
 console.log(apiKey)
 // gets the user info
 router.get('/users/:id', async (req, res) => {
@@ -28,8 +28,41 @@ router.get('/users/:id', async (req, res) => {
     }
 });
 
+router.get('/cancelanevent', async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+        const user = await userData.get(userId);
+        const hostedEventIds = user.currentlyHostingEvents;
+        const currentlyHostingEvents = [];
+  
+        for (const eventId of hostedEventIds) {
+            const event = await eventData.get(eventId);
+            currentlyHostingEvents.push({ ...event, userId });
+        }
 
-
+        res.render('cancelAnEvent', { events: currentlyHostingEvents, userId });
+    } catch (error) {
+        console.error(error);
+        res.status(404).json({ message: error });
+    }
+});
+router.post('/cancelanevent', async (req, res) => {
+    const eventId = req.body.eventId;
+  
+    try {
+      const event = await eventData.get(eventId);
+      if (!event) {
+        res.status(404).json({ message: 'Event not found' });
+      } else {
+        await eventData.cancelEvent(eventId);
+        res.json({ message: 'Event cancelled successfully' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Something broke.' });
+    }
+});
+  
 router.get('/account/login', async (req, res) => {
     try {
     //make the response const equal to all the venues

@@ -436,11 +436,14 @@ const exportedMethods = {
             return ["Not attending any parties :("]
         }
         return functionsAttending;
+      },
+      async find(query) {
+        const usersCollection = await users();
+        const users = await usersCollection.find(query).toArray();
+        return users;
       }
       
       
-    
-
 }      
 
 export default exportedMethods;
