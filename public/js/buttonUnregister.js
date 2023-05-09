@@ -1,9 +1,9 @@
 const unregisterButton = document.getElementById("unregister-button");
 
 unregisterButton.addEventListener("click", function() {
-  const eventId = this.getAttribute("unreg-event-id");
-  const userId = this.getAttribute("unreg-user-id");
-  const action = this.getAttribute("unreg-action");
+  const eventId = document.getElementById("unreg-event-id").textContent;
+  const userId = document.getElementById("unreg-user-id").textContent;
+  const action = document.getElementById("unreg-action").textContent;
 
   if (!userId) {
     window.location.href = "/account/login";

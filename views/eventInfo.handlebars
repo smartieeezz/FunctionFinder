@@ -1,5 +1,6 @@
     <head>
         <title>Event Info</title>
+        <link rel="stylesheet" href="/public/css/main-styles.css">
         <link rel="stylesheet" href="/public/css/eventInfo.css">
         <meta name="viewport" content="width=device-width">
         <meta charset="utf-8">
@@ -18,18 +19,30 @@
                     <li><strong>Minimum Age:</strong> {{event.minimumAge}}</li>
                     <li><strong>Price:</strong> {{event.price}}</li>
                     <li><strong>Max Capacity:</strong> {{event.maximumCapacity}}</li>
-                    <a href="/events/{{event._id}}/comments">View Comments</a>
                 </ul>
+                <a href="/events/{{event._id}}/comments">View Comments</a>
             </div>
             <div class="button-container">
-                <button id="register-button" reg-event-id="{{event._id}}" reg-user-id="{{userId}}" reg-action="register">Register</button>
+                <p id="reg-event-id" hidden>{{event._id}}</p>
+                <p id="reg-user-id" hidden>{{userId}}</p>
+                <p id="reg-action" hidden>register</p>
+                <button id="register-button">Register</button>
                 <script src="/public/js/buttonRegister.js"></script>
-                <button id="unregister-button" unreg-event-id="{{event._id}}" unreg-user-id="{{userId}}" unreg-action="unregister">Unregister</button>
+                <p id="unreg-event-id" hidden>{{event._id}}</p>
+                <p id="unreg-user-id" hidden>{{userId}}</p>
+                <p id="unreg-action" hidden>unregister</p>
+                <button id="unregister-button">Unregister</button>
                 <script src="/public/js/buttonUnregister.js"></script>
                 <p></p>
-                <button id="favorite-button" fav-event-id="{{event._id}}" fav-user-id="{{userId}}" fav-action="favorite">Favorite</button>
+                <p id="fav-event-id" hidden>{{event._id}}</p>
+                <p id="fav-user-id" hidden>{{userId}}</p>
+                <p id="fav-action" hidden>favorite</p>
+                <button id="favorite-button">Favorite</button>
                 <script src="/public/js/buttonFavorite.js"></script>
-                <button id="unfavorite-button" unfav-event-id="{{event._id}}" unfav-user-id="{{userId}}" unfav-action="unfavorite">Unfavorite</button>
+                <p id="unfav-event-id" hidden>{{event._id}}</p>
+                <p id="unfav-user-id" hidden>{{userId}}</p>
+                <p id="unfav-action" hidden>unfavorite</p>
+                <button id="unfavorite-button">Unfavorite</button>
                 <script src="/public/js/buttonUnFavorite.js"></script>
 
             </div>

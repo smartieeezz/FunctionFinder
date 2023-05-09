@@ -1,9 +1,9 @@
 const favoriteButton = document.getElementById("favorite-button");
 
 favoriteButton.addEventListener("click", function() {
-  const eventId = this.getAttribute("fav-event-id");
-  const userId = this.getAttribute("fav-user-id");
-  const action = this.getAttribute("fav-action");
+  const eventId = document.getElementById("fav-event-id").textContent;
+  const userId = document.getElementById("fav-user-id").textContent;
+  const action = document.getElementById("fav-action").textContent;
 
   if (!userId) {
       window.location.href = "/account/login";

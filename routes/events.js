@@ -3,6 +3,7 @@ import {Router} from 'express';
 import userData  from '../data/users.js';
 import eventData  from '../data/events.js';
 import { compareSync } from 'bcrypt';
+import xss from 'xss';
 
 const router = Router();
 
@@ -98,7 +99,8 @@ router.get('/events/:id/comments', async (req, res) => {
 router.post('/events/:id/comments', async (req, res) => {
   const eventId = req.params.id;
   const userId = req.session.user.id;
-  const comment = req.body.comment;
+  // const comment = req.body.comment;
+  const comment = xss(req.body.comment); // Sanitize user input with xss
 
   try {
     const newEventComment = await eventData.createComment(eventId, userId, comment);
