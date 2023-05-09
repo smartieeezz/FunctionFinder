@@ -6,6 +6,10 @@ import {fileURLToPath} from 'url';
 import {dirname} from 'path';
 import exphbs from 'express-handlebars';
 import { closeConnection, dbConnection } from './config/mongoConnection.js';
+import bodyParser from 'body-parser';
+
+
+
 
 const apiKey = process.env.API_KEY
 let loggedIn = false;
@@ -29,7 +33,9 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
 };
 
 app.use('/public', staticDir);
-app.use(express.json());
+
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 
 app.use(
   session({

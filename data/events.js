@@ -72,7 +72,7 @@ const exportedMethods = {
     //     return partyHostUsername;
     // },
 
-    async create(partyHost, name, date, hasOccured, guestsAttending, maximumCapacity, category, description, minimumAge, location, price, musicType, functionComments, partyVenue) {
+    async create(partyHost, name, date, hasOccured, guestsAttending, maximumCapacity, category, description, minimumAge, location, price, musicType, functionComments, partyVenue, partyCoverPhoto) {
         if (!partyHost) {
             throw "Error: partyHost field is required.";
         }
@@ -114,8 +114,11 @@ const exportedMethods = {
         }
 
         const eventsCollection = await events();
+        let newId = new ObjectId()
+        let newIdString = newId.toString()
         const newEvent = {
-            _id: new ObjectId(),
+            _id: newId,
+            newIdString: newIdString,
             partyHost: partyHost,
             name: name,
             date: date,
@@ -129,7 +132,9 @@ const exportedMethods = {
             price: price,
             musicType: musicType,
             functionComments: functionComments,
-            partyVenue: partyVenue
+            partyVenue: partyVenue, 
+            partyCoverPhoto: partyCoverPhoto
+
         };
         const insertInfo = await eventsCollection.insertOne(newEvent);
         if (insertInfo.insertedCount === 0) {

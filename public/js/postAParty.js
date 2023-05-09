@@ -1,141 +1,245 @@
 
-function checkPartyName(partyName){
-    if (!partyName) return false
-    if (partyName.trim() == "") return false 
-    if (typeof partyName != 'string') return false 
-    const cleanStr = partyName.replace(/[^\w]/g, '');
-    return /[a-zA-Z]/.test(cleanStr);
+// import dotenv from 'dotenv';
+
+// dotenv.config({path: '../.env'})
+
+
+function checkPartyName(partyName) {
+  if (!partyName) return false;
+  if (partyName.trim() == "") return false;
+  if (typeof partyName != "string") return false;
+  const cleanStr = partyName.replace(/[^\w]/g, "");
+  return /[a-zA-Z]/.test(cleanStr);
 }
 
-//for check address, perhaps include google maps dropdown api 
+//assume that we pass in types.value 
+function checkSelect(select){
+  let selectedOptions = []
 
-function checkNumberInput(coverPrice){
-    console.log(coverPrice.match(/^\d+$/))
-    if (/^\d+$/.test(coverPrice) == false) {
-        return false 
-      } 
-    coverPrice = parseInt(coverPrice)
-    if (isNaN(coverPrice)) {
-        console.log("here2")
-        return false}
-    if (coverPrice < 0 ) {
-        console.log("here3")
-        return false}
-    return true
+  for (const sel of select.options){
+    if (sel.selected){
+      selectedOptions.push(sel.value)
+    }
+  }
+
+  return selectedOptions
+}
+// needed a little bit of help with base 64 encoding
+// next time im using s3 goodnight 
+// https://codepen.io/bitbug/pen/wvxqWNa
+function convertImageToBase64(imgUrl, callback) {
+  const image = new Image();
+  image.crossOrigin='anonymous';
+  image.onload = () => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.height = image.naturalHeight;
+    canvas.width = image.naturalWidth;
+    ctx.drawImage(image, 0, 0);
+    const dataUrl = canvas.toDataURL();
+    callback && callback(dataUrl)
+  }
+  image.src = imgUrl;
 }
 
+//for check address, perhaps include google maps dropdown api
 
-function checkDate(partyDate){
-    //check if date has passed, throw error if it has 
-    const date = new Date(partyDate);
-    const now = new Date();
-    return date >= now;
+function checkNumberInput(coverPrice) {
+  if (/^\d+$/.test(coverPrice) == false) {
+    return false;
+  }
+  coverPrice = parseInt(coverPrice);
+  if (isNaN(coverPrice)) {
+    return false;
+  }
+  if (coverPrice < 0) {
+    return false;
+  }
+  return true;
 }
 
-function checkPartyVenue(venue){
-    if (!venue) return false
-    if (venue.trim() == '') return false 
-    if (typeof venue != 'string') return false
-    const cleanStr = venue.replace(/[^\w]/g, '');
-    return /[a-zA-Z]/.test(cleanStr);
+function checkDate(partyDate) {
+  //check if date has passed, throw error if it has
+  const date = new Date(partyDate);
+  const now = new Date();
+  return date >= now;
 }
 
-function checkMaxCapacity(cap){
-    if (cap < 1) return false
-    return true 
+function checkPartyVenue(venue) {
+  if (!venue) return false;
+  if (venue.trim() == "") return false;
+  if (typeof venue != "string") return false;
+  const cleanStr = venue.replace(/[^\w]/g, "");
+  return /[a-zA-Z]/.test(cleanStr);
 }
 
-function checkPartyDescription(pd){
-    if (pd.trim() == '') return false 
-    console.log(pd)
-    const cleanStr = pd.replace(/[^\w]/g, '');
-    console.log(cleanStr)
-    return /[a-zA-Z]/.test(cleanStr);
+function checkMaxCapacity(cap) {
+  if (cap < 1) return false;
+  return true;
 }
 
-//how would you check for party photo??? 
+function checkPartyDescription(pd) {
+  if (pd.trim() == "") return false;
+  const cleanStr = pd.replace(/[^\w]/g, "");
+  return /[a-zA-Z]/.test(cleanStr);
+}
 
-let postPartyForm = document.getElementById("postAPartyForm")
+function checkPhoto(pic){
+  if (pic.files[0].size > 2097152){
+    return false
+  }
+}
 
-if (postPartyForm){
-    let partyName = document.getElementById("partyName")
-    let partyAddress = document.getElementById("partyAddress")
-    let musicalGenre = document.getElementById("genres")
-    let coverPrice = document.getElementById("coverPrice")
-    let partyType = document.getElementById("types")
-    let partyDate = document.getElementById("partyDate")
-    let partyVenue = document.getElementById("partyVenue")
-    let minAge = document.getElementById("minimumAge")
-    let maxCap = document.getElementById("maximumCapacity")
-    let partyDescription = document.getElementById("partyDescription")
-    let partyCoverPhoto = document.getElementById("partyCoverPhoto")
+//how would you check for party photo???
+let postPartyForm = document.getElementById("postAPartyForm");
 
-    const partyNameError = document.createElement('div')
-    const partyAddressError = document.createElement('div')
-    const musicalGenreError = document.createElement('div')
-    const coverPriceError = document.createElement('div')
-    const partyTypeError = document.createElement('div')
-    const partyDateError = document.createElement('div')
-    const partyVenueError = document.createElement('div')
-    const minAgeError = document.createElement('div')
-    const maxCapError = document.createElement('div')
-    const partyDepError = document.createElement('div')
-    const partyPhotoError = document.createElement('div')
-
-    let dj2valid = true
+if (postPartyForm) {
+  let partyName = document.getElementById("partyName");
+  let partyAddress = document.getElementById("partyAddress");
+  let musicalGenre = document.getElementById("genres")
+  let coverPrice = document.getElementById("coverPrice");
+  let partyType = document.getElementById("types")
+  let partyDate = document.getElementById("partyDate");
+  let partyVenue = document.getElementById("partyVenue");
+  let minAge = document.getElementById("minimumAge");
+  let maxCap = document.getElementById("maximumCapacity");
+  let partyDescription = document.getElementById("partyDescription");
+  let partyCoverPhoto = document.getElementById(".local");
 
 
-    postPartyForm.addEventListener('submit', (event) =>{
-        event.preventDefault()
-        partyNameError.remove()
-        partyAddressError.remove()
-        musicalGenreError.remove()
-        coverPriceError.remove()
-        partyTypeError.remove()
-        partyDateError.remove()
-        partyVenueError.remove()
-        minAgeError.remove()
-        maxCapError.remove()
-        partyDepError.remove()
-        partyPhotoError.remove()
-        dj2valid = true
-        if (checkPartyName(partyName.value) == false){
-            dj2valid = false
-            partyNameError.textContent = "Error: invalid party name"
-            partyName.parentElement.appendChild(partyNameError)
+  const partyNameError = document.createElement("div");
+  const partyAddressError = document.createElement("div");
+  const musicalGenreError = document.createElement("div");
+  const coverPriceError = document.createElement("div");
+  const partyTypeError = document.createElement("div");
+  const partyDateError = document.createElement("div");
+  const partyVenueError = document.createElement("div");
+  const minAgeError = document.createElement("div");
+  const maxCapError = document.createElement("div");
+  const partyDepError = document.createElement("div");
+  const partyPhotoError = document.createElement("div");
+
+  // again going to use s3 in the future bc bruh 
+  // https://codepen.io/bitbug/pen/wvxqWNa
+  const $file = document.querySelector(".local");
+  let srcData
+  $file.addEventListener("change", (event) => {
+    const selectedfile = event.target.files;
+    if (selectedfile.length > 0) {
+      const [imageFile] = selectedfile;
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        srcData = fileReader.result;
+        //console.log('base64:', srcData)
+      };
+      fileReader.readAsDataURL(imageFile);
+    }
+  });
+
+  let dj2valid = true;
+
+
+  postPartyForm.addEventListener("submit", async (event) => {
+
+
+    console.log("i am in spain ")
+    event.preventDefault();
+    partyNameError.remove();
+    partyAddressError.remove();
+    musicalGenreError.remove();
+    coverPriceError.remove();
+    partyTypeError.remove();
+    partyDateError.remove();
+    partyVenueError.remove();
+    minAgeError.remove();
+    maxCapError.remove();
+    partyDepError.remove();
+    partyPhotoError.remove();
+    // if (checkPhoto(partyCoverPhoto) == false){
+    //   dj2valid = false
+    //   partyPhotoError.textContent = "Error: party cover photo too big. Must be less than 2MB."
+    //   partyCoverPhoto.parentElement.appendChild(partyPhotoError)
+    // }
+    let checkTypes = checkSelect(partyType)
+    if (checkTypes.length == 0){
+      dj2valid = false;
+      partyTypeError.textContent = "Error: please select party types";
+      partyType.parentElement.appendChild(partyTypeError);
+    }
+    let checkGenres = checkSelect(musicalGenre)
+    if (checkGenres.length == 0){
+      dj2valid = false;
+      musicalGenreError.textContent = "Error: please select party genres";
+      musicalGenre.parentElement.appendChild(musicalGenreError);
+    }
+    if (checkPartyName(partyName.value) == false) {
+      dj2valid = false;
+      partyNameError.textContent = "Error: invalid party name";
+      partyName.parentElement.appendChild(partyNameError);
+    }
+    if (checkNumberInput(coverPrice.value) == false) {
+      dj2valid = false;
+      coverPriceError.textContent = "Error: invalid cover price";
+      coverPrice.parentElement.appendChild(coverPriceError);
+    }
+    // checkAddy(partyAddress.value)
+    // if (checkAddy(partyAddress.value) == false){
+    //   dj2valid = false
+    //   partyAddressError.textContent = "Error: invalid party address"
+    //   partyAddress.parentElement.appendChild(partyAddressError)
+    // }
+    if (checkPartyDescription(partyDescription.value) == false) {
+      dj2valid = false;
+      partyDepError.textContent = "Error: invalid party description";
+      partyDescription.parentElement.appendChild(partyDepError);
+    }
+    if (checkDate(partyDate.value) == false) {
+      dj2valid = false;
+      partyDateError.textContent = "Error: invalid party date";
+      partyDate.parentElement.appendChild(partyDateError);
+    }
+    if (checkPartyVenue(partyVenue.value) == false) {
+      dj2valid = false;
+      partyVenueError.textContent = "Error: invalid party venue";
+      partyVenue.parentElement.appendChild(partyVenueError);
+    }
+    if (checkNumberInput(maxCap.value) == false) {
+      dj2valid = false;
+      maxCapError.textContent = "Error: invalid maximum capacity";
+      maxCap.parentElement.appendChild(maxCapError);
+    }
+
+
+    console.log(dj2valid)
+    if (dj2valid == true) {
+
+      let requestConfig = {
+        method: 'POST',
+        url: '/postaparty',
+        data: { 
+          partyName: partyName.value,
+          partyAddress: partyAddress.value, 
+          genres: checkGenres, 
+          coverPrice: coverPrice.value,
+          types: checkTypes, 
+          partyDate: partyDate.value, 
+          partyVenue: partyVenue.value, 
+          minimumAge: minimumAge.value, 
+          maximumCapacity: maximumCapacity.value,
+          partyDescription: partyDescription.value,
+          //partyCoverPhoto: srcData
         } 
-        if (checkNumberInput(coverPrice.value) == false){
-            dj2valid = false
-            coverPriceError.textContent = "Error: invalid cover price"
-            coverPrice.parentElement.appendChild(coverPriceError)
-        }
-        if (checkPartyDescription(partyDescription.value) == false){
-            dj2valid = false
-            partyDepError.textContent = "Error: invalid party description"
-            partyDescription.parentElement.appendChild(partyDepError)
-        }
-        if (checkDate(partyDate.value) == false){
-            dj2valid = false
-            partyDateError.textContent = "Error: invalid party date"
-            partyDate.parentElement.appendChild(partyDateError)
-        }
-        if (checkPartyVenue(partyVenue.value) == false){
-            dj2valid = false
-            partyVenueError.textContent = "Error: invalid party venue"
-            partyVenue.parentElement.appendChild(partyVenueError)
-        }
-        if (checkNumberInput(maxCap.value) == false){
-            dj2valid = false
-            maxCapError.textContent = "Error: invalid maximum capacity"
-            maxCap.parentElement.appendChild(maxCapError)
-        }
+      };      
+      $.ajax(requestConfig)
+      .then(function(response) {
+        window.location.replace('/postaparty/partypostedconfirmation');  
+      })
+      .catch(function(error) {
+        console.log("An error occurred: " + error);
+      });
 
-
-        if (dj2valid == true){
-            postPartyForm.submit()
-        }
-        
-    })    
-  
-    
+    } else{
+      event.preventDefault()
+    }
+  });
 }

@@ -7,6 +7,7 @@ dotenv.config({path: '../.env'})
 
 
 
+
 export async function addParty(partyName, 
                  partyAddress,
                  coverPrice,
@@ -18,7 +19,9 @@ export async function addParty(partyName,
                  categories,
                  musicType,
                  partyHost, 
+                 partyCoverPhoto
     ){
+
         let party = {
             "name":partyName,
             "location": partyAddress,
@@ -33,9 +36,9 @@ export async function addParty(partyName,
             "hasOccured":false,
             "guestsAttending":[], 
             "functionComments":[],
-            "partyHost":partyHost
+            "partyHost":partyHost, 
+            "partyCoverPhoto": partyCoverPhoto
         }
-        console.log(party)
         const pushparty = await create(
           party['partyHost'], 
           party['name'],
@@ -50,7 +53,8 @@ export async function addParty(partyName,
           party['price'],
           party['musicType'],
           party['functionComments'],
-          party['partyVenue']
+          party['partyVenue'],
+          party['partyCoverPhoto']
           )
           party.id = pushparty._id; // Hao Dian added this to get the eventId
           return party

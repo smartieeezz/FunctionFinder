@@ -22,21 +22,172 @@
     }
     </script>
 
+
     <div id="backToSearch">
         <a href="/" class="searchresults">Back to Search</a>
     </div>
-    <div id="menu">
+    
+    <div id="menu" class="menu">
         <h2 class="searchresults">Search Results</h2>
+        <button id="filter-button" class="filter-button">Filter</button>
     </div>
+
+    <div class="popup-menu">
+    <form id="filterForm" action="/searchresults/filter" method="POST">
+      <label for="age">
+        Age
+      </label >
+      <input type="checkbox" name="age" value="18+">
+      <label for="age">18+</label><br>
+      <input type="checkbox" name="age" value="21+">
+      <label for="age">21+</label><br>
+
+  
+      <label for="music-genres">
+        Music Genres
+      </label>
+      <div class="checkbox-group">
+        <input type="checkbox" id="HipHop" name="genres" value="hiphop">
+        <label for="HipHop">Hip Hop</label>
+        <br>
+        <input type="checkbox" id="rock" name="genres" value="rock">
+        <label for="rock">Rock</label>
+        <br>
+        <input type="checkbox" id="edm" name="genres" value="edm">
+        <label for="edm">EDM</label>
+      </div>
+      
+      <div class="checkbox-group">
+        <input type="checkbox" id="latin" name="genres" value="latin">
+        <label for="latin">Latin</label>
+        <br>
+        <input type="checkbox" id="pop" name="genres" value="pop">
+        <label for="pop">Pop</label>
+        <br>
+        <input type="checkbox" id="kpop" name="genres" value="kpop">
+        <label for="kpop">K pop</label>
+      </div>
+
+      <div class="checkbox-group">
+        <br>
+        <input type="checkbox" id="indie" name="genres" value="indie">
+        <label for="indie">Indie</label>
+        <br>
+        <input type="checkbox" id="country" name="genres" value="country">
+        <label for="country">Country</label>
+        <br>
+        <input type="checkbox" id="alternative" name="genres" value="alternative">
+        <label for="alternative">Alternative</label>
+      </div>
+
+      <div class="checkbox-group">
+        <br>
+        <input type="checkbox" id="jazz" name="genres" value="jazz">
+        <label for="jazz">Jazz</label>
+        <br>
+        <input type="checkbox" id="afrobeats" name="genres" value="afrobeats">
+        <label for="afrobeats">AfroBeats</label>
+        <br>
+        <input type="checkbox" id="throwbacks" name="genres" value="throwbacks">
+        <label for="throwbacks">Throwbacks</label>
+      </div>
+      <div class="checkbox-group">
+        <br>
+        <input type="checkbox" id="caribbean" name="genres" value="caribbean">
+        <label for="caribbean">Caribbean</label>
+        <br>
+        <input type="checkbox" id="rb" name="genres" value="rnb">
+        <label for="rb">RnB</label>
+        <br>
+        <input type="checkbox" id="bollywood" name="genres" value="bollywood">
+        <label for="bollywood">Bollywood</label>
+      </div>
+      <div class="checkbox-group">
+        <br>
+        <input type="checkbox" id="asian" name="genres" value="asian">
+        <label for="asian">Asian</label>
+        <br>
+        <input type="checkbox" id="other" name="genres" value="other">
+        <label for="other">Other</label>
+      <br>
+      </div>
+
+       <label for="price">
+          Price
+        </label >
+        <div class="checkbox-group">
+          <input type="checkbox" name="price" value="lessThan25">
+          <label for="lessThan25">Less than $25</label><br>
+          <input type="checkbox" name="price" value="$25-$50">
+          <label for="$25-$50">$25-$50</label><br>
+          <input type="checkbox" name="price" value="$50-$75" checked>
+          <label for="$50-$75">$50-$75</label><br><br>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" name="price" value="$75-$100">
+          <label for="$75-$100">$75-$100</label><br>
+          <input type="checkbox" name="price" value="$100+">
+          <label for="$100+">$100+</label><br>
+        </div>
+
+      <label for="types">
+        Types
+      </label>
+      <div class="checkbox-group">
+        <input type="checkbox" name="types" value="bar">
+        <label for="bar">Bar</label><br>
+        <input type="checkbox" name="types" value="pool">
+        <label for="pool">Pool</label><br>
+        <input type="checkbox" name="types" value="club">
+        <label for="club">Club</label><br>
+        <input type="checkbox" name="types" value="concert">
+        <label for="concert">Concert</label><br>
+        <input type="checkbox" name="types" value="rooftop">
+        <label for="rooftop">Rooftop</label><br>
+        <input type="checkbox" name="types" value="house">
+        <label for="house">House</label><br>
+        <input type="checkbox" name="types" value="birthday">
+        <label for="birthday">Birthday</label><br>
+        <input type="checkbox" name="types" value="costume">
+        <label for="costume">Costume</label><br>
+        <input type="checkbox" name="types" value="other">
+        <label for="other">Other</label><br>
+      </div>
+
+      <input type="submit" value="Submit">
+    </form>
+    <script src="../public/js/filter.js"></script>
+  </div>
+
+   <script>
+    const button = document.querySelector('#filter-button');
+    const popupMenu = document.querySelector('.popup-menu');
+
+    button.addEventListener('click', () => {
+    if (popupMenu.style.display === 'block') {
+      popupMenu.style.display = 'none';
+    } else {
+      popupMenu.style.display = 'block';
+    }
+  });
+  
+  window.addEventListener('click', (event) => {
+    if (event.target === popupMenu) {
+      popupMenu.style.display = 'none';
+    }
+  });
+  </script>
     
     <script src="https://maps.googleapis.com/maps/api/js?key={{apiKey}}&callback=myMap"></script>
     <div id="card-container">
       {{#each searchResults}}
-        <div class="card" onclick="window.location.href='/events/{{this._id}}/info'">
+        <div id="{{this.newIdString}}" class="card" onclick="window.location.href='/events/{{this._id}}/info'">
+        <img id="cover" src="{{this.partyCoverPhoto}}" class="coverPic" />
           <h3>{{this.name}}</h3>
           <p>{{this.partyVenue}}</p>
         </div>
       {{/each}}
     </div>
 
+  
   </body>
