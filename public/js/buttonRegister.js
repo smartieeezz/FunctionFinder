@@ -1,9 +1,9 @@
 const registerButton = document.getElementById('register-button');
 
 registerButton.addEventListener("click", function() {
-  const eventId = this.getAttribute("reg-event-id");
-  const userId = this.getAttribute("reg-user-id");
-  const action = this.getAttribute("reg-action");
+  const eventId = document.getElementById("reg-event-id").textContent;
+  const userId = document.getElementById("reg-user-id").textContent;
+  const action = document.getElementById("reg-action").textContent;
 
   if (!userId) {
       window.location.href = "/account/login";
