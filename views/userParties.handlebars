@@ -6,11 +6,11 @@
   </head>
   <body>
     <a href="/">Homepage</a>
-    <h1>Party Stats for {{user.username}}:</h1>
+    <h1>Party Stats for {{this.user}}:</h1>
     <p class="hosting-events">Hosting Events:</p>
-    {{#if eventsHosted.length}}
+    {{#if hosted.length}}
       <ul>
-        {{#each eventsHosted}}
+        {{#each hosted}}
         <li>{{this.name}}</li>
         {{/each}}
       </ul>
@@ -19,24 +19,24 @@
     {{/if}}
 
     <p class="attending-events">Attending Events:</p>
-    {{#if eventsAttending.length}}
+    {{#if attending.length}}
       <ul>
-        {{#each eventsAttending}}
+        {{#each attending}}
         <li>{{this.name}}</li>
         {{/each}}
       </ul>
     {{else}}
-      <p>No parties listed.</p>
+      <p>{{notAttendingMessage}}</p>
     {{/if}}
 
     <p class="attending-events"> Previously Attended Parties:</p>
-    {{#if pastParties.length}}
+    {{#if previouslyAttended.length}}
       <ul>
         {{#each pastParties}}
         <li>{{this.name}}</li>
         {{/each}}
       </ul>
     {{else}}
-      <p> {{this.notAttendedMessage}}</p>
+      <p> {{notAttendedMessage}}</p>
     {{/if}}
   </body>

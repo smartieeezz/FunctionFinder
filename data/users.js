@@ -429,7 +429,6 @@ const exportedMethods = {
       async findPartiesUserHosts(id) {
         //get functionCollection
         const functionCollection = await events()
-        
         const functionsHosted = await functionCollection.find({ partyHost: id }).toArray();
         // if (functionsHosted.length===0) {
         //     return ["Not hosting any parties :("]

@@ -101,9 +101,7 @@ router.get('/account/create', (req, res) => {
 });  
 
 
-router.get('/userParties', (req, res) => {
-    res.render('userParties');
-  });
+
 
 router.post('/account/create', async (req, res) => {
     const { firstName, lastName, username, email, dob, password, confirmPassword, favoriteCategories } = req.body;
@@ -435,7 +433,7 @@ router.post('/account/settings', async (req, res) => {
             return;
         }
     });
-/*
+
 router.get('/account/parties', async (req, res) => {
 
     console.log("in the user party stats")
@@ -446,13 +444,16 @@ router.get('/account/parties', async (req, res) => {
         res.redirect("/account/login");
     //if the user is logged in then let's check
     } else {
-        const user = await userData.get(id)
-        
+        let user = await userData.get(id)
+        user = user.username
+        console.log(user)
+
         //this is the ID we will search for that is attending/hosting the parties
         const searchId = user._id
-        const hosted = await userData.findPartiesUserHosts(searchId)
-        const attending = await userData.findPartiesUserAttending(searchId)
-        const previouslyAttended = await userData.findPartiesPreviouslyAttended(searchId)
+        const hosted = await userData.findPartiesUserHosts(id)
+        console.log(hosted)
+        const attending = await userData.findPartiesUserAttending(id)
+        const previouslyAttended = await userData.findPartiesPreviouslyAttended(id)
         
         let notAttendedMessage
         let notAttendingMessage
@@ -471,14 +472,19 @@ router.get('/account/parties', async (req, res) => {
             console.log("no user found")
             res.redirect("/error");
         } else {
-            res.render('userParties',  {user,
-            eventsHosted:hosted, eventsAttending: attending, pastParties: previouslyAttended,
-                notHostingMessage,notAttendingMessage, notAttendedMessage})
-    }
+            res.render('userParties',  {
+                user,
+                hosted, 
+                attending, 
+                previouslyAttended,
+                notHostingMessage,
+                notAttendingMessage, 
+                notAttendedMessage})
+        }
 }
 console.log("Leaving account party stats get route")
 });  
-*/
+
 
 router.get('/signout', async (req, res) => {
     req.session.destroy();
