@@ -34,7 +34,7 @@
     </div>
 
     <div class="popup-menu">
-    <form id="filterForm" action="/postaparty/test" method="POST">
+    <form id="filterForm" action="/searchresults/filter" method="POST">
       <label for="age">
         Age
       </label >
@@ -42,8 +42,6 @@
       <label for="age">18+</label><br>
       <input type="checkbox" name="age" value="21+">
       <label for="age">21+</label><br>
-      <input type="checkbox" name="age" value="allAges" checked>
-      <label for="age">All ages</label><br><br>
 
   
       <label for="music-genres">
@@ -159,6 +157,7 @@
 
       <input type="submit" value="Submit">
     </form>
+    <script src="../public/js/filter.js"></script>
   </div>
 
    <script>
@@ -182,9 +181,8 @@
     
     <script src="https://maps.googleapis.com/maps/api/js?key={{apiKey}}&callback=myMap"></script>
     <div id="card-container">
-      
       {{#each searchResults}}
-        <div class="card" onclick="window.location.href='/events/{{this._id}}/info'">
+        <div id="{{this.newIdString}}" class="card" onclick="window.location.href='/events/{{this._id}}/info'">
         <img id="cover" src="{{this.partyCoverPhoto}}" class="coverPic" />
           <h3>{{this.name}}</h3>
           <p>{{this.partyVenue}}</p>
@@ -192,5 +190,6 @@
       {{/each}}
     </div>
 
+  
   </body>
 </html>

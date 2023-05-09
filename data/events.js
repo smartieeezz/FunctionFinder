@@ -71,8 +71,11 @@ const exportedMethods = {
         }
 
         const eventsCollection = await events();
+        let newId = new ObjectId()
+        let newIdString = newId.toString()
         const newEvent = {
-            _id: new ObjectId(),
+            _id: newId,
+            newIdString: newIdString,
             partyHost: partyHost,
             name: name,
             date: date,

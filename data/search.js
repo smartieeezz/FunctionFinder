@@ -1,6 +1,34 @@
 import {ObjectId} from 'mongodb';
 import { calcDistances } from './pushParty.js';
 import { events } from "../config/mongoCollections.js";
+const priceRanges = {
+    "lessThan25": {
+      withinRange: function(price) {
+        return price < 25;
+      }
+    },
+    "$25-$50": {
+      withinRange: function(price) {
+        return price >= 25 && price <= 50;
+      }
+    },
+    "$50-$75": {
+      withinRange: function(price) {
+        return price >= 50 && price <= 75;
+      }
+    },
+    "$75-$100": {
+      withinRange: function(price) {
+        return price >= 75 && price <= 100;
+      }
+    },
+    "$100+": {
+      withinRange: function(price) {
+        return price >= 100;
+      }
+    }
+  };
+  
 export async function findNearbyFunctions(src, distance, startDate, endDate){
     if (!src) throw "Error: src missing"
     if (!distance) throw "Error: distance missing"
@@ -40,15 +68,49 @@ export async function findNearbyFunctions(src, distance, startDate, endDate){
     return final
 }
 
-export async function filterFunctions(ages, genres, price, types, functions){
-    final = []
-    for (const f of functions){
-        let dj2valid 
-        for (const a of ages){
-            if (!a.age.includes(f.minimumAge)){
-                dj2valid = false
-            }
-        }   
-        
+function findCommonElements(arr1, arr2) {
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr2.indexOf(arr1[i]) !== -1) {
+        return true;
+      }
     }
-}
+    return false;
+  }
+
+  export function filterParties(functions, ages, genres, types, price) {
+    const final = [];
+
+    let meetsAgeCriteria = true
+    let meetsGenreCriteria = true
+    let meetsTypeCriteria = true
+    let meetsPriceCriteria = true
+    for (const f of functions) {
+        if (ages){
+            meetsAgeCriteria = ages.includes(f.minimumAge);
+        }
+        if (genres){
+            meetsGenreCriteria = findCommonElements(f.genres, genres);
+        }
+      
+        if (types){
+            meetsTypeCriteria = findCommonElements(f.types, types);
+        }
+      
+        if (price){
+            for (const p of price) {
+              if (priceRanges[p].withinRange(f.price)){
+                meetsPriceCriteria = true
+                break
+              }
+              else{
+                meetsPriceCriteria = false
+              }
+            }
+        }
+
+      if (meetsAgeCriteria && meetsGenreCriteria && meetsTypeCriteria && meetsPriceCriteria) {
+        final.push(f);
+      }
+    }
+    return final;
+  }

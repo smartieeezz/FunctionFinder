@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import exportedMethods from "./events.js";
 const {create} = exportedMethods
 dotenv.config({path: '../.env'})
-import fs from 'fs';
+
 
 
 

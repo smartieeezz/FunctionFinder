@@ -1,3 +1,9 @@
+
+// import dotenv from 'dotenv';
+
+// dotenv.config({path: '../.env'})
+
+
 function checkPartyName(partyName) {
   if (!partyName) return false;
   if (partyName.trim() == "") return false;
@@ -6,6 +12,18 @@ function checkPartyName(partyName) {
   return /[a-zA-Z]/.test(cleanStr);
 }
 
+//assume that we pass in types.value 
+function checkSelect(select){
+  let selectedOptions = []
+
+  for (const sel of select.options){
+    if (sel.selected){
+      selectedOptions.push(sel.value)
+    }
+  }
+
+  return selectedOptions
+}
 // needed a little bit of help with base 64 encoding
 // next time im using s3 goodnight 
 // https://codepen.io/bitbug/pen/wvxqWNa
@@ -120,9 +138,11 @@ if (postPartyForm) {
 
   let dj2valid = true;
 
-  console.log("i lobe stephanie")
-  async function submitForm(event) {
-    console.log("this is running")
+
+  postPartyForm.addEventListener("submit", async (event) => {
+
+
+    console.log("i am in spain ")
     event.preventDefault();
     partyNameError.remove();
     partyAddressError.remove();
@@ -140,6 +160,18 @@ if (postPartyForm) {
     //   partyPhotoError.textContent = "Error: party cover photo too big. Must be less than 2MB."
     //   partyCoverPhoto.parentElement.appendChild(partyPhotoError)
     // }
+    let checkTypes = checkSelect(partyType)
+    if (checkTypes.length == 0){
+      dj2valid = false;
+      partyTypeError.textContent = "Error: please select party types";
+      partyType.parentElement.appendChild(partyTypeError);
+    }
+    let checkGenres = checkSelect(musicalGenre)
+    if (checkGenres.length == 0){
+      dj2valid = false;
+      musicalGenreError.textContent = "Error: please select party genres";
+      musicalGenre.parentElement.appendChild(musicalGenreError);
+    }
     if (checkPartyName(partyName.value) == false) {
       dj2valid = false;
       partyNameError.textContent = "Error: invalid party name";
@@ -150,6 +182,12 @@ if (postPartyForm) {
       coverPriceError.textContent = "Error: invalid cover price";
       coverPrice.parentElement.appendChild(coverPriceError);
     }
+    // checkAddy(partyAddress.value)
+    // if (checkAddy(partyAddress.value) == false){
+    //   dj2valid = false
+    //   partyAddressError.textContent = "Error: invalid party address"
+    //   partyAddress.parentElement.appendChild(partyAddressError)
+    // }
     if (checkPartyDescription(partyDescription.value) == false) {
       dj2valid = false;
       partyDepError.textContent = "Error: invalid party description";
@@ -171,35 +209,37 @@ if (postPartyForm) {
       maxCap.parentElement.appendChild(maxCapError);
     }
 
-    console.log(musicalGenre,
-      partyType);
-      console.log("This should be showing up")
-      console.log(partyDate.value)
+
+    console.log(dj2valid)
     if (dj2valid == true) {
+
       let requestConfig = {
         method: 'POST',
         url: '/postaparty',
         data: { 
           partyName: partyName.value,
           partyAddress: partyAddress.value, 
-          genres: musicalGenre.value, 
+          genres: checkGenres, 
           coverPrice: coverPrice.value,
-          types: partyType.value, 
+          types: checkTypes, 
           partyDate: partyDate.value, 
           partyVenue: partyVenue.value, 
           minimumAge: minimumAge.value, 
           maximumCapacity: maximumCapacity.value,
           partyDescription: partyDescription.value,
-          partyCoverPhoto: srcData
+          //partyCoverPhoto: srcData
         } 
       };      
-      await $.ajax(requestConfig)
+      $.ajax(requestConfig)
       .then(function(response) {
         window.location.replace('/postaparty/partypostedconfirmation');  
       })
       .catch(function(error) {
         console.log("An error occurred: " + error);
       });
+
+    } else{
+      event.preventDefault()
     }
-  };
+  });
 }

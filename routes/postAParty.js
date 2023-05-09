@@ -34,7 +34,6 @@ router.route('/partypostedconfirmation').get(async (req, res) => {
 
 router.route('/').post(async (req,res) => {
     let insertParty
-
     let content = req.body
     let partyNameInput = req.body.partyName
     let partyAddressInput = req.body.partyAddress
@@ -47,7 +46,6 @@ router.route('/').post(async (req,res) => {
     let maximumCapacityInput = req.body.maximumCapacity
     let partyDescriptionInput = req.body.partyDescription
     let partyCoverPhotoInput = req.body.partyCoverPhoto
-    console.log(req.body)
     try{
       insertParty = await addParty(
         partyNameInput, 
