@@ -163,6 +163,21 @@ router.post('/account/create', async (req, res) => {
         return
     }
     try {
+        const user = await userData.getByEmail(email);
+        if (user) {
+            error.push("Email already exists. Please choose another email address.")
+            console.log(error)
+            res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+            
+            return
+        }
+    } catch (e) {
+        // handle database error
+        error.push(e);
+        res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+        return
+    }
+    try {
         //create the user
         const result = await userData.create(firstName, lastName, username, email, dob, password, favoriteCategories);
         const uid = result._id;
@@ -302,8 +317,13 @@ router.post('/account/settings', async (req, res) => {
     console.log("here after username in routes")
     //check to validate email
     try {
-        const validateEmail = checkEmail(email)
-        console.log(validateEmail)
+        let userByEmail = checkEmail(email)
+        console.log(userByEmail)
+        const existingUser = await userData.getByEmailUpdate(email);
+        
+        if (existingUser && existingUser._id.toString() !== id) {
+            throw `Error: A user with the email ${email} already exists.`;
+        }
     } catch (e) {
         error.push(e)
         console.log("Error at email")
@@ -396,13 +416,13 @@ router.get('/account/parties', async (req, res) => {
         let notHostingMessage
         if (hosted.length == 0) {
             notHostingMessage = ["Not hosting any functions."]
-          }
-          if (attending.length == 0) {
+        }
+        if (attending.length == 0) {
             notAttendingMessage = ["Not attending any functions."]
-          }
-          if (previouslyAttended.length == 0) {
+        }
+        if (previouslyAttended.length == 0) {
             notAttendedMessage = ["You haven't attended any functions."]
-          }
+        }
         console.log(hosted)
         if (!user) {
             console.log("no user found")
@@ -410,7 +430,7 @@ router.get('/account/parties', async (req, res) => {
         } else {
             res.render('userParties',  {user,
             eventsHosted:hosted, eventsAttending: attending, pastParties: previouslyAttended,
-                notHostingMessage,notHostingMessage, notAttendedMessage})
+                notHostingMessage,notAttendingMessage, notAttendedMessage})
     }
 }
 console.log("Leaving account party stats get route")
