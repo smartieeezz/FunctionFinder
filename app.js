@@ -142,6 +142,13 @@ app.use('/events/:id/info', (req, res, next) => {
   }
   next();  
 });
+app.use('/events/:id/guests', (req, res, next) => {
+  if(!req.session.user){
+    loggedIn = false;
+    return res.redirect('/account/login');
+  }
+  next();  
+});
 
 app.use('/events/:id/comments', (req, res, next) => {
   if(!req.session.user){
