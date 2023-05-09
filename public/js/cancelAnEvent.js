@@ -3,7 +3,7 @@ const cancelButtons = document.querySelectorAll('#cancel-button');
 cancelButtons.forEach((button) => {
   button.addEventListener('click', async (event) => {
     event.preventDefault();
-    const eventId = button.getAttribute('cancel-event-id');
+    const eventId = document.getElementById('cancel-event-id').textContent;
 
     try {
       const response = await fetch('/cancelanevent', {
