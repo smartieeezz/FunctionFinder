@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-<html>
   <head>
     <title>Registered Events List</title>
-    {{!-- <link rel="stylesheet" href="/public/css/main-styles.css"> --}}
     <link rel="stylesheet" href="/public/css/eventsListing.css">
+    <meta name="viewport" content="width=device-width">
+    <meta charset="utf-8">
   </head>
   <body>
     <h1>Registered Events:</h1>
+    <a href="/" id="home-link">Go Back to Home</a>
     <ul>
         {{#each events}}
         <li>
-            🎉 <a href="/events/{{this._id}}/info?userId={{userId}}">{{this.name}}</a>
+            🎉 <a href="/events/{{this._id}}/info">{{this.name}}</a>
         </li>
         {{/each}}
     </ul>
     <script src="../public/js/buttonFavorite.js"></script>
   </body>
-</html>

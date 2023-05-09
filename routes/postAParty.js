@@ -7,6 +7,7 @@ import {Router} from 'express';
 import { functions } from "../config/mongoCollections.js"
 import { addParty, calcDistances } from '../data/pushParty.js';
 import userData  from '../data/users.js';
+import eventData  from '../data/events.js';
 
 //create an instance of the Router() named router
 const router = Router();
@@ -21,7 +22,6 @@ let apiKey = process.env.API_KEY
 
 
 router.route('/test').post(async(req,res) => {
-  console.log(req.body)
   res.render('error')
 })
 router.route('/').get(async (req, res) => {
@@ -64,7 +64,26 @@ router.route('/').post(async (req,res) => {
       console.log(e)
       return res.status(500).render('error', { error: "500. Internal Server Error"})
     }
-    res.render('partyPostedConfirmation')
+    // Hao Dian added this to update the user's attributes ==================
+    try {
+      const eventId = insertParty.id;
+      const userId = req.session.user.id;
+      const previousGuestsAttending = (await eventData.get(eventId)).guestsAttending;
+      const updatedFields = {
+        guestsAttending: [...previousGuestsAttending, userId]
+      }
+      const updatedEvent = await eventData.update(eventId, updatedFields);
+      const updatedRegisteredEvents = await userData.updateRegisteredEvents(userId, eventId.toString(), 'register');
+      const updatedCurrentlyHostingEvents = await userData.updateCurrentlyHostingEvents(userId, eventId.toString(), 'add');
+      const updatedPreviouslyHostedEvents = await userData.updatePreviouslyHostedEvents(userId, eventId.toString(), 'add');
+      const updatedPastEventsAttended = await userData.updatePastEventsAttended(userId, eventId.toString(), 'add');
+      // res.json({ event: updatedEvent, user: updatedUser });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).render('error', { error: "500. Internal Server Error" });
+    }
+    // =======================
+        res.render("partyPostedConfirmation")
 })
 
 export default router;

@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/public/css/main-styles.css">
   <title>Post a Party</title>
   <!--<link href="style.css" rel="stylesheet" type="text/css" />-->
 
@@ -27,11 +25,11 @@
 
   <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="#">Home</a>
-    <a href="#">Favorites</a>
-    <a href="#">Post a Party</a>
-    <a href="#">Registered Parties</a>
-    <a href="#">Settings</a>
+    <a href="/">Home</a>
+    <a href="/favorited-events">Favorites</a>
+    {{!-- <a href="#">Post a Party</a> --}}
+    <a href="/registered-events">Registered</a>
+    <a href="/account/settings">Settings</a>
   </div>
   
 
@@ -81,7 +79,7 @@
         <option value="other">Other</option>
     </select><br>
 
-    <label for="Date">Date:</label><br>
+    <label for="partyDate">Date:</label><br>
     <input type="datetime-local" id="partyDate" name="partyDate" required><br>
 
     <label for="partyVenue">Party Venue:</label><br>
@@ -89,7 +87,7 @@
 
    
    <label for="minimumAge">Minimum Age:</label>
-      <select name="minimumAge" id="minimumAge" required>
+      <select name="minimumAge" id="minimumAge" size="3" required>
           <option value="18+">18+</option>
           <option value="21+">21+</option>
           <option value="anyAge">Any age</option>

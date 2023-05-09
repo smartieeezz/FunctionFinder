@@ -33,12 +33,11 @@ const checkName = (name) => {
 
 const checkAge = (DOB) => {
     const today = new Date();
-    const givenDOB = new Date(DOB)
+    const givenDOB = new Date(DOB.replace(/-/g, '/'));
+    // const givenDOB = new Date(DOB)
     givenDOB.setHours(0, 0, 0, 0); // Set time to midnight to compare dates only
     today.setHours(0, 0, 0, 0);
-    if (givenDOB> today) {
-        throw `Error: You can't be born after today's date. That makes no sense.`;
-    }
+    
     let day = String(today.getDate());
     if (day.length < 2) {
         day = "0" + day;
@@ -66,24 +65,22 @@ const checkAge = (DOB) => {
     
     //check the age just to see if it's working correctly
     console.log(`User age: ${age} years`);
+    
+    if (givenDOB>today) {
+        throw `Error: You can't have a birthyear after today's date. That makes no sense.`;
+    }
+    if (age<18) {
+        throw `Error: You must be 18 or older to use this app`
+    }
+    if (age>115) {
+        throw `Error: You must enter a legitimate date of birth.`
+    
 
-    
-    
-    // const yearDifference = today.getFullYear() - dobYear;
-    // if (age < 18) {
-    //     throw `Error: You must be 18 or older to use this site.`;
-    // }
-    // //if you're born in a month that is before the current date's month then you're too young
-    // if (yearDifference == 18 && dobMonth > month) {
-    //     throw `Error: You must be 18 or older to use this site.`;
-    // }
-
-    // //if you're born in the same month and the current day is after your birthday then you're too young
-    // if (yearDifference == 18 && dobMonth == month && dobDay > day) {
-    //     throw `Error: You must be 18 or older to use this site.`;
- 
-        return DOB;
-    
+    } else {
+        const formattedDOB = givenDOB.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+        return formattedDOB;
+        // return givenDOB.toLocaleDateString('en-US');
+    }
 };
 
 
@@ -121,29 +118,30 @@ const checkPassword = (password) => {
 
 
 const loginForm = document.getElementById('loginForm');
-const updateForm = document.getElementById('updateForm');
+const updateSettings = document.getElementById('updateSettings');
 const registrationForm = document.getElementById('registrationForm')
 
-const validateUpdateForm=() =>{
-    if (updateForm) {
+const validateUpdateSettings=() =>{
+    if (updateSettings) {
     // const updateForm = document.getElementById('updateForm');
-    updateForm.addEventListener('submit', (event) => {
+    updateSettings.addEventListener('submit', (event) => {
     event.preventDefault();
     //get all the elements in the updateForm and change them to form
-    const form = document.querySelector("#updateForm");
+    const form = document.querySelector("#updateSettings");
     const firstName = form.elements.firstName.value.trim();
     const lastName = form.elements.lastName.value.trim();
     const email = form.elements.email.value.trim();
-    const dateOfBirth = form.elements.dateOfBirth.value;
-    const username = form.elements.username.value.trim();
+    const dateOfBirth = form.elements.dob.value;
+    // const username = form.elements.username.value.trim();
     const password = form.elements.password.value;
     const confirmPassword = form.elements.confirmPassword.value;
     const favoriteCategories = document.querySelectorAll('input[name="favoriteCategories"]:checked');
+
     const errorsList = form.elements.errors
 
     let errors = [];
     
-    if (!firstName || !lastName || !email ||!dateOfBirth || !username|| !password || !confirmPassword) {
+    if (!firstName || !lastName || !email ||!dateOfBirth || !password || !confirmPassword) {
         errors.push("All fields must be filled out.")
     }
     //let's validate the firstName
@@ -175,11 +173,11 @@ const validateUpdateForm=() =>{
     }
 
     // Validate username
-    try {
-        const validUsername = checkString(username);
-    } catch (error) {
-        errors.push(`Username ${error}`);
-    }
+    // try {
+    //     const validUsername = checkString(username);
+    // } catch (error) {
+    //     errors.push(`Username ${error}`);
+    // }
 
     // Validate password
     try {
@@ -343,7 +341,7 @@ const validateRegistrationForm=()=>{
 
 
 validateLoginForm()
-validateUpdateForm()
+validateUpdateSettings()
 validateRegistrationForm()
 
 

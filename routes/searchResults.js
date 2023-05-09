@@ -19,14 +19,11 @@ router.route('/').get(async (req, res) => {
     res.render('searchResults')
   });
 
+
 router.route('/getfunctions').post(async (req,res) => {
-  console.log("we made it here")
-  console.log(req.body)
+  
   let realFunctions = []
-  for (let i = 0; i < req.body.f.length; i++) {
-    let party = await exportedMethods.get(req.body.f[i])
-    realFunctions.push(party)
-  }
+  realFunctions = await findNearbyFunctions()
   let filtered = filterParties(realFunctions, req.body.ages, req.body.genres, req.body.types, req.body.prices)
   // console.log("real functions")
   // console.log(realFunctions)
@@ -38,7 +35,7 @@ router.route('/getfunctions').post(async (req,res) => {
   // console.log(filtered)
   res.send(filtered)
 })
-  router.route('/filter').post(async (req, res) => {
+  router.route('/resultsjson').post(async (req, res) => {
     res.render("searchresults", {searchResults:req.body.results} )
   })
 
@@ -69,6 +66,7 @@ router.route('/').post(async (req, res) => {
     element._id = element._id.toString()
   }
 
+  console.log(nearby)
   res.render('searchResults',{searchResults:nearby, 'apiKey': apiKey, 'location':location, 'longitude':longitude, "latitude":latitude})
 });
 

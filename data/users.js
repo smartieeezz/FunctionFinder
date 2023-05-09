@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { users } from "../config/mongoCollections.js";
+import { users, events } from "../config/mongoCollections.js";
 import { checkAge, checkName, checkEmail,checkPassword, checkString } from "../helpers/validation.js";
 import bcrypt from 'bcrypt'
 const saltRounds = 12;
@@ -202,14 +202,27 @@ const exportedMethods = {
             throw `Error: The email was not given.`;
         }
         email = email.trim();
+        let thisEmail = checkEmail(email)
         const usersCollection = await users();
-        const thisUser = await usersCollection.find({email});
+        const thisUser = await usersCollection.findOne({email:thisEmail});
 
-        if (typeof thisUser!=='undefined' || thisUser!==null) {
-            throw `Error: The email was used already.`;
+        if (thisUser) {
+            throw `Error: The email ${email} was used already.`;
         }
     },
 
+    async getByEmailUpdate(email) {
+      if (!email) {
+        throw 'Error: The email was not given.';
+      }
+      email = email.trim()
+      email = checkEmail(email)
+      const usersCollection = await users();
+      const user = await usersCollection.findOne({ email });
+    
+      return user;
+    },
+    
     async getUserByUsername(username) {
         const usersCollections = await users();
         const thisUser = await usersCollections.findOne({ username });
@@ -267,6 +280,65 @@ const exportedMethods = {
         return await this.get(id);
     },
 
+    async updateCurrentlyHostingEvents(userId, eventId, action) {
+        const user = await this.get(userId);
+        const currentlyHostingEvents = user.currentlyHostingEvents || [];
+        let updatedCurrentlyHostingEvents;
+        if (action === 'add') {
+          updatedCurrentlyHostingEvents = [...currentlyHostingEvents, eventId];
+        } else if (action === 'remove') {
+          updatedCurrentlyHostingEvents = currentlyHostingEvents.filter(event => event !== eventId);
+        } else {
+          throw "Invalid action provided. Must be 'add' or 'remove'.";
+        }
+        const updatedUser = { ...user, currentlyHostingEvents: updatedCurrentlyHostingEvents };
+        return await this.update(userId, updatedUser);
+      },
+      
+      async updatePastEventsAttended(userId, eventId, action) {
+        const user = await this.get(userId);
+        const pastEventsAttended = user.pastEventsAttended || [];
+        let updatedPastEventsAttended;
+        if (action === 'add') {
+          updatedPastEventsAttended = [...pastEventsAttended, eventId];
+        } else if (action === 'remove') {
+          updatedPastEventsAttended = pastEventsAttended.filter(event => event !== eventId);
+        } else {
+          throw "Invalid action provided. Must be 'add' or 'remove'.";
+        }
+        const updatedUser = { ...user, pastEventsAttended: updatedPastEventsAttended };
+        return await this.update(userId, updatedUser);
+      },
+
+    async updatePreviouslyHostedEvents(id, eventId, action) {
+        if (!id) throw "You must provide an ID";
+        if (!eventId) throw "You must provide an event ID";
+        if (!action) throw "You must provide an action (add or remove)";
+        const usersCollection = await users();
+        const updateObj = {};
+        const user = await this.get(id);
+        const events = user.previouslyHostedEvents || [];
+        if (action === 'add') {
+          events.push(eventId);
+        } else if (action === 'remove') {
+          const index = events.indexOf(eventId);
+          if (index > -1) {
+            events.splice(index, 1);
+          }
+        } else {
+          throw "Invalid action. Must be add or remove.";
+        }
+        updateObj.previouslyHostedEvents = events;
+        const updateInfo = await usersCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: updateObj }
+        );
+        if (updateInfo.modifiedCount === 0) {
+          throw `Could not update user with ID of ${id}`;
+        }
+        return await this.get(id);
+      },
+      
     //we will use this function to update the user details in the settings field
     async updateUser(id, updatedUser) {
         const user = await this.get(id);
@@ -283,16 +355,20 @@ const exportedMethods = {
             updatedUserInfo.lastName = checkName(updatedUser.lastName)
             updatedUserInfo.lastName = updatedUser.lastName;
         }
-        if (updatedUser.username) {
-            updatedUserInfo.username = checkString(updatedUser.username)
-            const existingUser = await this.getUserByUsername(updatedUser.username);
-            if (existingUser && existingUser._id.toString() !== id) {
-                throw "Username already exists. Please choose another username.";
-            }
+        // if (updatedUser.username) {
+        //     updatedUserInfo.username = checkString(updatedUser.username)
+        //     const existingUser = await this.getUserByUsername(updatedUser.username);
+        //     if (existingUser && existingUser._id.toString() !== id) {
+        //         throw "Username already exists. Please choose another username.";
+        //     }
         
-        }
+        // }
         if (updatedUser.email) {
             updatedUserInfo.email = checkEmail(updatedUser.email)
+            const existingUser = await this.getByEmailUpdate(updatedUser.email)
+            if (existingUser && existingUser._id.toString()!==id) {
+                throw `Email:${updatedUser.email} already exists. Please choose another email.`
+            }
             updatedUserInfo.email = updatedUser.email;
         }
         if (updatedUser.dateOfBirth) {
@@ -347,10 +423,60 @@ const exportedMethods = {
         if (updatedInfo.modifiedCount === 0) throw "Could not add comment";
 
         return newComment;
-      }
-      
-      
+      },
 
+
+      async findPartiesUserHosts(id) {
+        //get functionCollection
+        const functionCollection = await events()
+        
+        const functionsHosted = await functionCollection.find({ partyHost: id }).toArray();
+        // if (functionsHosted.length===0) {
+        //     return ["Not hosting any parties :("]
+        // }
+        return functionsHosted;
+      },
+
+      async findPartiesUserAttending(id) {
+        //get functionCollection and find today's date
+        const today = new Date();
+        const functionCollection = await events()
+        
+        //get all the functions we are attending in the form of an array
+        const functionsAttending = await functionCollection.find({ partyHost: id }).toArray();
+        const previouslyAttended = functionsAttending.filter(func => new Date(func.date) < today)
+
+        //return these functions
+        // if (functionsAttending.length===0) {
+        //     return ["Not attending any parties :("]
+        // }
+        return functionsAttending;
+      },
+      
+      async find(query) {
+        const usersCollection = await users();
+        const users = await usersCollection.find(query).toArray();
+        return users;
+      },
+
+      async findPartiesPreviouslyAttended(id) {
+        //get functionCollection and find today's date
+        const today = new Date();
+        const functionCollection = await events()
+        
+        //get all the functions we are attending in the form of an array
+        const functionsAttending = await functionCollection.find({ partyHost: id }).toArray();
+        const previouslyAttended = functionsAttending.filter(func => new Date(func.date) < today)
+
+        //return these functions
+        // if (functionsAttending.length===0) {
+        //     return ["Not attending any parties :("]
+        // }
+        return previouslyAttended;
+      }
+
+      
+      
 }      
 
 export default exportedMethods;

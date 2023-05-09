@@ -60,7 +60,7 @@ export async function findNearbyFunctions(src, distance, startDate, endDate){
         }
 
         // Check if party date is the same as start date or end date
-        if (lolpartyDate.getTime() === lolstartDate.getTime() || lolpartyDate.getTime() === lolendDate.getTime()) {
+        else if (lolpartyDate.getTime() === lolstartDate.getTime() || lolpartyDate.getTime() === lolendDate.getTime()) {
             final.push(element);
         }
 

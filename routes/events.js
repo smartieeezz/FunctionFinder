@@ -3,6 +3,7 @@ import {Router} from 'express';
 import userData  from '../data/users.js';
 import eventData  from '../data/events.js';
 import { compareSync } from 'bcrypt';
+import xss from 'xss';
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.get('/events/:id', async (req, res) => {
 router.put('/events/:id', async (req, res) => {
   try {
     const eventId = req.params.id;
-    const userId = req.query.userId;
+    const userId = req.session.user.id;
     const previousGuestsAttending = (await eventData.get(eventId)).guestsAttending;
 
     if (req.query.action === 'register') {
@@ -27,15 +28,28 @@ router.put('/events/:id', async (req, res) => {
       }
       const updatedEvent = await eventData.update(eventId, updatedFields);
       const updatedUser = await userData.updateRegisteredEvents(userId, eventId, req.query.action);
+    
+      const user = await userData.get(userId);
+      const pastEventsAttended = user.pastEventsAttended ? user.pastEventsAttended : [];
+      const updatedPastEventsAttended = [...pastEventsAttended, eventId];
+      await userData.update(userId, { pastEventsAttended: updatedPastEventsAttended });
       res.json({ event: updatedEvent, user: updatedUser });
-    } 
+    }     
     else if (req.query.action === 'unregister') {
       const updatedFields = {
         guestsAttending: previousGuestsAttending.filter(guestId => guestId !== userId)
       }
-      const updatedEvent = await eventData.update(eventId, updatedFields);
-      const updatedUser = await userData.updateRegisteredEvents(userId, eventId, req.query.action);
-      res.json({ event: updatedEvent, user: updatedUser });
+      
+      const event = await eventData.get(eventId);
+      const partyHostId = event.partyHost;
+      
+      if (userId === partyHostId) {
+        res.status(403).json({ message: 'Host cannot unregister from their own event.' });
+      } else {
+        const updatedEvent = await eventData.update(eventId, updatedFields);
+        const updatedUser = await userData.updateRegisteredEvents(userId, eventId, req.query.action);
+        res.json({ event: updatedEvent, user: updatedUser });
+      }
     }
     else if (req.query.action === 'favorite') {
       const user = await userData.get(userId);
@@ -64,12 +78,12 @@ router.put('/events/:id', async (req, res) => {
 router.get('/events/:id/comments', async (req, res) => {
   try {
     const eventId = req.params.id;
-    const userId = req.query.userId;
+    const userId = req.session.user.id;
 
-    if (!userId) {
-      return res.redirect('/account/login');
-    }
-  
+  if (!userId) {
+    return res.redirect('/account/login');
+  }
+
     const [event, userComment] = await Promise.all([
       eventData.get(eventId),
       eventData.getUserComment(eventId, userId)
@@ -84,8 +98,9 @@ router.get('/events/:id/comments', async (req, res) => {
 });
 router.post('/events/:id/comments', async (req, res) => {
   const eventId = req.params.id;
-  const userId = req.query.userId;
-  const comment = req.body.comment;
+  const userId = req.session.user.id;
+  // const comment = req.body.comment;
+  const comment = xss(req.body.comment); // Sanitize user input with xss
 
   try {
     const newEventComment = await eventData.createComment(eventId, userId, comment);
@@ -98,9 +113,10 @@ router.post('/events/:id/comments', async (req, res) => {
 });
 router.delete('/events/:id/comments', async (req, res) => {
   const eventId = req.params.id;
-  const userId = req.query.userId;
+  const userId = req.session.user.id;
+    
   try {
-    const deletedComment = await eventData.deleteComment(eventId, userId);
+    const deletedComment = await eventData.deleteRecentComment(eventId, userId);
     res.status(200).send(deletedComment);
   } catch (error) {
     console.error(error);
@@ -108,28 +124,25 @@ router.delete('/events/:id/comments', async (req, res) => {
   }
 });
 
-
-
-router.get('/events', async (req, res) => {
-    try {
-        const allEvents = await eventData.getAll();
-        res.render('eventsList', { events: allEvents });
-      } catch (error) {
-        res.status(500).json({ message: 'Something broke.' });
-      }
-});
+// router.get('/events', async (req, res) => {
+//     try {
+//         const allEvents = await eventData.getAll();
+//         res.render('eventsList', { events: allEvents });
+//       } catch (error) {
+//         res.status(500).json({ message: 'Something broke.' });
+//       }
+// });
 
 // expand the event info
 router.get('/events/:id/info', async (req, res) => {
   try {
     const eventId = req.params.id;
     const event = await eventData.get(eventId);
-    const userId = req.query.userId;
+    const userId = req.session.user.id;
     
-    // res.render('eventInfo', { event });
     res.render('eventInfo', { event, userId });
   } catch (error) {
-    res.status(404).json({ message: error });
+    res.redirect('/error');
   }
 });
 

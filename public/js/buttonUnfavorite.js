@@ -1,9 +1,9 @@
 const unfavoriteButton = document.getElementById("unfavorite-button");
 
 unfavoriteButton.addEventListener("click", function() {
-  const eventId = this.getAttribute("unfav-event-id");
-  const userId = this.getAttribute("unfav-user-id");
-  const action = this.getAttribute("unfav-action");
+  const eventId = document.getElementById("unfav-event-id").textContent;
+  const userId = document.getElementById("unfav-user-id").textContent;
+  const action = document.getElementById("unfav-action").textContent;
 
   if (!userId) {
       window.location.href = "/account/login";

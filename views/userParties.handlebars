@@ -1,0 +1,42 @@
+  <head>
+    <title>Events List</title>
+    <link rel="stylesheet" href="/public/css/userParties.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+  </head>
+  <body>
+    <a href="/">Homepage</a>
+    <h1>Party Stats for {{user.username}}:</h1>
+    <p class="hosting-events">Hosting Events:</p>
+    {{#if eventsHosted.length}}
+      <ul>
+        {{#each eventsHosted}}
+        <li>{{this.name}}</li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p>{{notHostingMessage}}</p>
+    {{/if}}
+
+    <p class="attending-events">Attending Events:</p>
+    {{#if eventsAttending.length}}
+      <ul>
+        {{#each eventsAttending}}
+        <li>{{this.name}}</li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p>No parties listed.</p>
+    {{/if}}
+
+    <p class="attending-events"> Previously Attended Parties:</p>
+    {{#if pastParties.length}}
+      <ul>
+        {{#each pastParties}}
+        <li>{{this.name}}</li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p> {{this.notAttendedMessage}}</p>
+    {{/if}}
+  </body>

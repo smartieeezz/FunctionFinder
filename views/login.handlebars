@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<html>
 <head>
   <title>Login</title>
-  {{!-- <link rel="stylesheet" href="main-styles.css"> --}}
+  <link rel="stylesheet" href="../public/css/main-styles.css">
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
 </head>
 <body>
     {{!-- <div class="left-column">
@@ -18,25 +18,22 @@
           <label for="passwordInput">Password:</label>
           <input type="password" id="passwordInput" name="passwordInput" placeholder="*********" value="{{data.passwordInput}}"><br>
 
-        <a href="forgot-password.html">Forgot Password?</a><br>
         <button type="submit">Login</button><br>
 
           <p>Don't have an account? <a href="/account/create">Sign up now</a></p>
           <a href="/">Homepage</a>
           
+        {{#if hasErrors}}
+        <div class="error-list">
+        <ul>
+        {{#each errors}}
+          <li>
+            {{this}}
+          </li>
+        {{/each}}
+        </ul>
         </div>
+        {{/if}}
       </form>
-      {{#if hasErrors}}
-      <ul class="error-list">
-      {{#each errors}}
-        <li>
-          {{this}}
-        </li>
-      {{/each}}
-      </ul>
-      {{/if}}
-    </div>
-  </div>
-  <script type="module" src="/public/js/client-side.js"></script>
-</body>
-</html>
+      <script type="module" src="/public/js/client-side.js"></script>
+  </body>

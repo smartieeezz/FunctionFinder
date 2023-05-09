@@ -56,6 +56,31 @@ if(searchForm){
             searchForm.appendChild(endDateError);
         }
 
+        const start = new Date(startDate.value);
+        start.setHours(start.getHours() + 4);
+        const end = new Date(endDate.value); 
+        end.setHours(end.getHours() + 4);
+        const tempdate = new Date();
+        const date = new Date(tempdate.getFullYear(), tempdate.getMonth(), tempdate.getDate());
+          
+        if(date > start){
+            valid = false;
+            startDateError.textContent = 'Error: startDate must be either today or in the future';
+            startDateError.textContent = `${date}    ${start}     ${end}`;
+            searchForm.appendChild(startDateError);
+        }
+            
+        if(date > end){
+            valid = false;
+            endDateError.textContent = 'Error: endDate must be either today or in the future';
+            searchForm.appendChild(endDateError);
+        }
+
+        if(end < start){
+            valid = false;
+            endDateError.textContent = 'Error: endDate must be after startDate';
+            searchForm.appendChild(endDateError);
+        }
           
         if(valid){
             searchForm.submit();

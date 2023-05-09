@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html>
 <head>
     <title>Homepage</title>
 	<meta name="viewport" content="width=device-width">
+	<meta charset="utf-8">
+  	<link rel="stylesheet" href="/public/css/main-styles.css">
 	<!-- https://developers.google.com/maps/documentation/javascript/place-autocomplete -->
-	<script src="../public/js/buttonSignIn.js"></script>
   	<script async
     	src={{apiRoute}}>
 	</script>
@@ -26,11 +25,16 @@
         	<p id="currentPage">Home</p>
             <a class="navLink" href="/favorited-events">Favorites</a>
             <a class="navLink" href="/postaparty">Post a Party</a>
+            <a class="navLink" href="/cancelanevent">Cancel an Event</a>
             <a class="navLink" href="/registered-events">Registered Events</a>
             {{!-- <a href="http://localhost:3000/users/{{user._id}}">Account</a> --}}
 			<a class="navLink" href="/account/settings/">Update User Settings</a>
-			<a href="/account/login" class="login">Log In</a>
-			<a hidden href="/signout" class="signOut" id="signOut" onclick="return confirm('Are you sure?')">Sign Out</a>			
+			{{!-- <a class="navLink" href="/account/parties">My Parties</a> --}}
+			{{#if hasUser}}
+				<a href="/signout" class="signOut" id="signOut" onclick="return confirm('Are you sure?')">Sign Out</a>	
+			{{else}}
+				<a href="/account/login" class="login">Log In</a>
+			{{/if}}
         </div>
 
 		
@@ -70,4 +74,3 @@
 	
   <!-- Add links to other pages here -->
 </body>
-</html>
