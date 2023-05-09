@@ -136,13 +136,12 @@ if (postPartyForm) {
     }
   });
 
-  let dj2valid = true;
-
+  
 
   postPartyForm.addEventListener("submit", async (event) => {
 
+    let dj2valid = true;
 
-    console.log("i am in spain ")
     event.preventDefault();
     partyNameError.remove();
     partyAddressError.remove();
@@ -209,9 +208,8 @@ if (postPartyForm) {
       maxCap.parentElement.appendChild(maxCapError);
     }
 
-
-    console.log(dj2valid)
     if (dj2valid == true) {
+      console.log("form does not has error")
 
       let requestConfig = {
         method: 'POST',
@@ -235,10 +233,12 @@ if (postPartyForm) {
         window.location.replace('/postaparty/partypostedconfirmation');  
       })
       .catch(function(error) {
-        console.log("An error occurred: " + error);
+        window.location.replace('/postaparty/addressnotfound');  
       });
 
     } else{
+      console.log("form has error")
+      console.log(dj2valid)
       event.preventDefault()
     }
   });
