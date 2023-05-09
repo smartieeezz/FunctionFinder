@@ -2,8 +2,8 @@ const deleteButton = document.getElementById('delete-button');
 
 deleteButton.addEventListener('click', async (event) => {
   event.preventDefault();
-  const eventId = event.target.getAttribute('del-event-id');
-  const userId = event.target.getAttribute('del-user-id');
+  const eventId = document.getElementById('del-event-id').textContent;
+  const userId = document.getElementById('del-user-id').textContent;
 
   try {
     const response = await fetch(`/events/${eventId}/comments?userId=${userId}`, {

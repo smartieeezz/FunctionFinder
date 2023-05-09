@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html>
 <head>
     <title>Update User Settings</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/public/css/main-styles.css">
+    <meta name="viewport" content="width=device-width">
 </head>
-<h1>Update User Settings</h1>
-
-    <div id="errors"></div>
 <body>
+    <h1>Update User Settings</h1>
+    <div id="errors"></div>
 <form id = "updateSettings" action="/account/settings" method="post">
             <label for="firstName">First Name:</label>
             <input type="text" id="firstName" name="firstName" placeholder="FirstName"><br>
@@ -27,7 +27,7 @@
           <label for="confirmPassword">Confirm :</label>
           <input type="password" id="confirmPassword" name="confirmPassword" placeholder="*********" ><br>
 
-        <label for="favoriteCategories">Favorite Genres:</label><br>
+        <p>Favorite Genres:</p>
         <input type="checkbox" id="Hip-Hop" name="favoriteCategories" value="Hip-Hop">
         <label for="Hip-Hop">Hip-Hop</label><br>
 
@@ -97,4 +97,3 @@
     </form>
     <script type="module" src="/public/js/client-side.js"></script>
 </body>
-</html>
