@@ -25,13 +25,17 @@ router.route('/getfunctions').post(async (req,res) => {
   let filtered = xss(filterParties(realFunctions, req.body.ages, req.body.genres, req.body.types, req.body.prices))
   res.send(filtered)
 })
-  router.route('/resultsjson').post(async (req, res) => {
-    req.session.searching = false;
+router.route('/getfunctions').get(async (req,res) => {
+  res.redirect('/');
+})
+router.route('/resultsjson').post(async (req, res) => {
     res.render("searchresults", {searchResults:req.body.results} )
   })
+router.route('/resultsjson').get(async (req, res) => {
+  res.redirect('/');
+})
 
 router.route('/').post(async (req, res) => {
-  req.session.searching = true;
   const {location, distance, startDate, endDate} = req.body
   let nearby
   let formattedSrc = location.replace(/ /g, '+');
