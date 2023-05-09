@@ -66,35 +66,6 @@ router.put('/events/:id', async (req, res) => {
       await userData.update(userId, updatedFields);
       res.json({ message: 'Event unfavorited.' });
     }
-  //   else if (req.query.action === 'delete') {
-  //     try {
-  //     const event = await eventData.get(eventId);
-  //     const partyHostId = event.partyHost;
-
-  //     //let's check if the person trying to delete the event is actually the host
-  //     if (userId !== partyHostId) {
-  //       res.status(403).json({ message: 'Nice try. Only the party host can delete the event.' });
-  //     return;
-  //   }
-  //    // Check if the event has occurred yet
-  //   const eventDate = new Date(event.date);
-  //   const today = new Date();
-  //   if (eventDate <= today) {
-  //       res.status(403).json({ message: 'You cannot delete a party that has already happened.' });
-  //       return;
-  //   }
-  //   // Delete the event and update users
-  //   const deletedCount = await eventData.deleteAll(eventId);
-  //   res.status(200).json({ message: `Successfully deleted event with ID ${eventId}` });
-  // } catch (e) {
-  //   res.status(500).json({ error: e });
-  // }
-  //   if (deletedCount === 0) {
-  //     throw `Error: Could not delete event with id ${eventId}`;
-  //   }
-
-  //   res.json({ message: 'Event deleted.' });
-  //}
     else {
       res.status(400).json({ message: 'Invalid action.' });
     }
@@ -151,14 +122,14 @@ router.delete('/events/:id/comments', async (req, res) => {
   }
 });
 
-router.get('/events', async (req, res) => {
-    try {
-        const allEvents = await eventData.getAll();
-        res.render('eventsList', { events: allEvents });
-      } catch (error) {
-        res.status(500).json({ message: 'Something broke.' });
-      }
-});
+// router.get('/events', async (req, res) => {
+//     try {
+//         const allEvents = await eventData.getAll();
+//         res.render('eventsList', { events: allEvents });
+//       } catch (error) {
+//         res.status(500).json({ message: 'Something broke.' });
+//       }
+// });
 
 // expand the event info
 router.get('/events/:id/info', async (req, res) => {
@@ -169,7 +140,7 @@ router.get('/events/:id/info', async (req, res) => {
     
     res.render('eventInfo', { event, userId });
   } catch (error) {
-    res.status(404).json({ message: error });
+    res.redirect('/error');
   }
 });
 
