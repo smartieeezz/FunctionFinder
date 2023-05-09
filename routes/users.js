@@ -16,7 +16,7 @@ const result = dotenv.config();
 
 
 let apiKey = process.env.API_KEY
-console.log("Api keyh")
+console.log("Api key")
 console.log(apiKey)
 // gets the user info
 router.get('/users/:id', async (req, res) => {
@@ -28,8 +28,41 @@ router.get('/users/:id', async (req, res) => {
     }
 });
 
+router.get('/cancelanevent', async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+        const user = await userData.get(userId);
+        const hostedEventIds = user.currentlyHostingEvents;
+        const currentlyHostingEvents = [];
+  
+        for (const eventId of hostedEventIds) {
+            const event = await eventData.get(eventId);
+            currentlyHostingEvents.push({ ...event, userId });
+        }
 
-
+        res.render('cancelAnEvent', { events: currentlyHostingEvents, userId });
+    } catch (error) {
+        console.error(error);
+        res.status(404).json({ message: error });
+    }
+});
+router.post('/cancelanevent', async (req, res) => {
+    const eventId = req.body.eventId;
+  
+    try {
+      const event = await eventData.get(eventId);
+      if (!event) {
+        res.status(404).json({ message: 'Event not found' });
+      } else {
+        await eventData.cancelEvent(eventId);
+        res.json({ message: 'Event cancelled successfully' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Something broke.' });
+    }
+});
+  
 router.get('/account/login', async (req, res) => {
     try {
     //make the response const equal to all the venues
@@ -151,6 +184,21 @@ router.post('/account/create', async (req, res) => {
         const user = await userData.getUserByUsername(username);
         if (user) {
             error.push("Username already exists. Please choose another username.")
+            console.log(error)
+            res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+            
+            return
+        }
+    } catch (e) {
+        // handle database error
+        error.push(e);
+        res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
+        return
+    }
+    try {
+        const user = await userData.getByEmail(email);
+        if (user) {
+            error.push("Email already exists. Please choose another email address.")
             console.log(error)
             res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
             
@@ -302,8 +350,13 @@ router.post('/account/settings', async (req, res) => {
     console.log("here after username in routes")
     //check to validate email
     try {
-        const validateEmail = checkEmail(email)
-        console.log(validateEmail)
+        let userByEmail = checkEmail(email)
+        console.log(userByEmail)
+        const existingUser = await userData.getByEmailUpdate(email);
+        
+        if (existingUser && existingUser._id.toString() !== id) {
+            throw `Error: A user with the email ${email} already exists.`;
+        }
     } catch (e) {
         error.push(e)
         console.log("Error at email")
@@ -396,13 +449,13 @@ router.get('/account/parties', async (req, res) => {
         let notHostingMessage
         if (hosted.length == 0) {
             notHostingMessage = ["Not hosting any functions."]
-          }
-          if (attending.length == 0) {
+        }
+        if (attending.length == 0) {
             notAttendingMessage = ["Not attending any functions."]
-          }
-          if (previouslyAttended.length == 0) {
+        }
+        if (previouslyAttended.length == 0) {
             notAttendedMessage = ["You haven't attended any functions."]
-          }
+        }
         console.log(hosted)
         if (!user) {
             console.log("no user found")
@@ -410,7 +463,7 @@ router.get('/account/parties', async (req, res) => {
         } else {
             res.render('userParties',  {user,
             eventsHosted:hosted, eventsAttending: attending, pastParties: previouslyAttended,
-                notHostingMessage,notHostingMessage, notAttendedMessage})
+                notHostingMessage,notAttendingMessage, notAttendedMessage})
     }
 }
 console.log("Leaving account party stats get route")

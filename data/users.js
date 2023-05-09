@@ -210,6 +210,18 @@ const exportedMethods = {
         }
     },
 
+    async getByEmailUpdate(email) {
+      if (!email) {
+        throw 'Error: The email was not given.';
+      }
+      email = email.trim()
+      email = checkEmail(email)
+      const usersCollection = await users();
+      const user = await usersCollection.findOne({ email });
+    
+      return user;
+    },
+    
     async getUserByUsername(username) {
         const usersCollections = await users();
         const thisUser = await usersCollections.findOne({ username });
@@ -352,7 +364,7 @@ const exportedMethods = {
         // }
         if (updatedUser.email) {
             updatedUserInfo.email = checkEmail(updatedUser.email)
-            const existingUser = await this.getByEmail(updatedUser.email)
+            const existingUser = await this.getByEmailUpdate(updatedUser.email)
             if (existingUser && existingUser._id.toString()!==id) {
                 throw `Email:${updatedUser.email} already exists. Please choose another email.`
             }
@@ -439,6 +451,13 @@ const exportedMethods = {
         // }
         return functionsAttending;
       },
+      
+      async find(query) {
+        const usersCollection = await users();
+        const users = await usersCollection.find(query).toArray();
+        return users;
+      },
+
       async findPartiesPreviouslyAttended(id) {
         //get functionCollection and find today's date
         const today = new Date();
@@ -453,10 +472,10 @@ const exportedMethods = {
         //     return ["Not attending any parties :("]
         // }
         return previouslyAttended;
-      },
-      
-    
+      }
 
+      
+      
 }      
 
 export default exportedMethods;

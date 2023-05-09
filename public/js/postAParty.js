@@ -98,6 +98,7 @@ if (postPartyForm){
         maxCapError.remove()
         partyDepError.remove()
         partyPhotoError.remove()
+        dj2valid = true
         if (checkPartyName(partyName.value) == false){
             dj2valid = false
             partyNameError.textContent = "Error: invalid party name"
@@ -134,7 +135,7 @@ if (postPartyForm){
             postPartyForm.submit()
         }
         
-    })
+    })    
   
     
 }
