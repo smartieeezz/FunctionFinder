@@ -3,6 +3,7 @@
 import axios from 'axios';
 //imported the router from express
 import {Router} from 'express';
+import xss from 'xss';
 import userData  from '../data/users.js';
 import eventData  from '../data/events.js';
 import { checkAge, checkEmail, checkName, checkPassword, checkString } from '../helpers/validation.js';
@@ -79,7 +80,7 @@ router.post('/account/login', async (req, res) => {
     let error = [];
     let userCheck;
     try {
-        userCheck = await userData.checkUser(emailInput, passwordInput);
+        userCheck = await userData.checkUser(xss(emailInput), xss(passwordInput));
         console.log(req.session.id)
     } catch (e) {
         error.push(e);
@@ -97,7 +98,6 @@ router.post('/account/login', async (req, res) => {
 });
 
 router.get('/account/create', (req, res) => {
-    // Render the EJS template for the create account page
     res.render('accountCreation');
 });  
 
@@ -108,13 +108,18 @@ router.get('/userParties', (req, res) => {
 
 router.post('/account/create', async (req, res) => {
     const { firstName, lastName, username, email, dob, password, confirmPassword, favoriteCategories } = req.body;
+    const sanitizedFirstName = xss(firstName);
+    const sanitizedLastName = xss(lastName);
+    const sanitizedUsername = xss(username);
+    const sanitizedEmail = xss(email);
+    const sanitizedDOB = xss(dob)
+    const sanitizedPassword = xss(password);
+    const sanitizedFavoriteCategories = xss(favoriteCategories);
     let error = [];
     //check to see if we have all the fields
     if (!firstName || !lastName || !username || !email || !dob || !password, !confirmPassword, !favoriteCategories) {
-        console.log(confirmPassword)
         error.push("You have to fill in all the fields")
         res.render('accountCreation',{errors: error, hasErrors: true, accountInfo: req.body});
-        console.log(error)
         return
     } 
     //check to see if we have a valid age
@@ -302,6 +307,12 @@ router.post('/account/settings', async (req, res) => {
         console.log(password)
         console.log(confirmPassword)
         console.log(favoriteCategories)
+        const sanitizedFirstName = xss(firstName);
+        const sanitizedLastName = xss(lastName);
+        const sanitizedEmail = xss(email);
+        const sanitizedDOB = xss(dob)
+        const sanitizedPassword = xss(password);
+        const sanitizedFavoriteCategories = xss(favoriteCategories);
     
     //check to see if we have all the fields
     if (!firstName || !lastName  || !email || !dob || !password, !confirmPassword, !favoriteCategories) {

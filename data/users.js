@@ -202,10 +202,11 @@ const exportedMethods = {
             throw `Error: The email was not given.`;
         }
         email = email.trim();
+        let thisEmail = checkEmail(email)
         const usersCollection = await users();
-        const thisUser = await usersCollection.find({email});
+        const thisUser = await usersCollection.findOne({email:thisEmail});
 
-        if (typeof thisUser!=='undefined' || thisUser!==null) {
+        if (thisUser) {
             throw `Error: The email ${email} was used already.`;
         }
     },
