@@ -2,7 +2,7 @@ body {
     background-image: url("../images/homepageBackground.png");
     background-repeat: no-repeat;
     background-size: cover;
-    background-color: #99dba4 ;
+    background-color: #000000;
   }
   
   h1 {
@@ -25,11 +25,12 @@ body {
   li {
     font-size: 25px;
     margin-bottom: 20px;
+    color: #595959;
   }
   
   a {
     text-decoration: none;
-    color: red;
+    color: #ffffff;
   }
   
   a:hover {
@@ -39,5 +40,5 @@ body {
   #home-link {
     text-decoration: underline;
     margin-left: 40px;
-    color: red;
+    color: #ffffff;
   }
