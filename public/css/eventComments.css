@@ -141,7 +141,7 @@ a {
   text-decoration: none;
 }
 
-#home-link {
+.home-link {
   margin-bottom: 10px;
   display: inline-block;
   background-color: #3F51B5;
@@ -150,7 +150,7 @@ a {
   border-radius: 5px;
 }
 
-#home-link:hover {
+.home-link:hover {
   background-color: #283593;
 }
 
