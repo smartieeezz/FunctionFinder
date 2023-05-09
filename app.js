@@ -129,6 +129,14 @@ app.use('/searchresults', (req, res, next) => {
   next();  
 });
 
+app.use('/events/:id/info', (req, res, next) => {
+  if(!req.session.user){
+    loggedIn = false;
+    return res.redirect('/account/login');
+  }
+  next();  
+});
+
 app.use('/', (req, res, next) => {
   if (req.session.user)
     loggedIn = true;

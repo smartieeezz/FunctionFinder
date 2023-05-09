@@ -57,12 +57,16 @@ if(searchForm){
         }
         
         const start = new Date(startDate.value);
+        start.setHours(start.getHours() + 4);
         const end = new Date(endDate.value); 
-        const date = new Date();
+        end.setHours(end.getHours() + 4);
+        const tempdate = new Date();
+        const date = new Date(tempdate.getFullYear(), tempdate.getMonth(), tempdate.getDate());
 
         if(date > start){
             valid = false;
             startDateError.textContent = 'Error: startDate must be either today or in the future';
+            startDateError.textContent = `${date}    ${start}     ${end}`;
             searchForm.appendChild(startDateError);
         }
 

@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html>
   <head>
-    <a href="/">Homepage</a>
     <title>Events List</title>
     <link rel="stylesheet" href="/public/css/userParties.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
   </head>
   <body>
+    <a href="/">Homepage</a>
     <h1>Party Stats for {{user.username}}:</h1>
     <p class="hosting-events">Hosting Events:</p>
     {{#if eventsHosted.length}}
@@ -40,4 +40,3 @@
       <p> {{this.notAttendedMessage}}</p>
     {{/if}}
   </body>
-</html>
