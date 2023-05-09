@@ -101,6 +101,11 @@ router.get('/account/create', (req, res) => {
     res.render('accountCreation');
 });  
 
+
+router.get('/userParties', (req, res) => {
+    res.render('userParties');
+  });
+
 router.post('/account/create', async (req, res) => {
     const { firstName, lastName, username, email, dob, password, confirmPassword, favoriteCategories } = req.body;
     let error = [];
@@ -412,16 +417,33 @@ router.get('/account/parties', async (req, res) => {
     //if the user is logged in then let's check
     } else {
         const user = await userData.get(id)
+        
         //this is the ID we will search for that is attending/hosting the parties
         const searchId = user._id
         const hosted = await userData.findPartiesUserHosts(searchId)
         const attending = await userData.findPartiesUserAttending(searchId)
+        const previouslyAttended = await userData.findPartiesPreviouslyAttended(searchId)
+        
+        let notAttendedMessage
+        let notAttendingMessage
+        let notHostingMessage
+        if (hosted.length == 0) {
+            notHostingMessage = ["Not hosting any functions."]
+          }
+          if (attending.length == 0) {
+            notAttendingMessage = ["Not attending any functions."]
+          }
+          if (previouslyAttended.length == 0) {
+            notAttendedMessage = ["You haven't attended any functions."]
+          }
         console.log(hosted)
         if (!user) {
             console.log("no user found")
             res.redirect("/error");
         } else {
-            res.render('userParties', {eventsHosted:hosted, eventsAttending: attending})
+            res.render('userParties',  {user,
+            eventsHosted:hosted, eventsAttending: attending, pastParties: previouslyAttended,
+                notHostingMessage,notHostingMessage, notAttendedMessage})
     }
 }
 console.log("Leaving account party stats get route")
