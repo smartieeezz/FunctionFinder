@@ -98,7 +98,7 @@ router.route('/').post(async (req,res) => {
       const updatedEvent = await eventData.update(eventId, updatedFields);
       const updatedRegisteredEvents = await userData.updateRegisteredEvents(userId, eventId.toString(), 'register');
       const updatedCurrentlyHostingEvents = await userData.updateCurrentlyHostingEvents(userId, eventId.toString(), 'add');
-      const updatedPreviouslyHostedEvents = await userData.updatePreviouslyHostedEvents(userId, eventId.toString(), 'add');
+      //const updatedPreviouslyHostedEvents = await userData.updatePreviouslyHostedEvents(userId, eventId.toString(), 'add');
       const updatedPastEventsAttended = await userData.updatePastEventsAttended(userId, eventId.toString(), 'add');
       // res.json({ event: updatedEvent, user: updatedUser });
     } catch (e) {

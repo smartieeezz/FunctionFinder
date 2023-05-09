@@ -296,9 +296,9 @@ const exportedMethods = {
         hostUser.currentlyHostingEvents = hostUser.currentlyHostingEvents.filter(
           (id) => id.toString() !== eventId.toString()
         );
-        hostUser.previouslyHostedEvents = hostUser.previouslyHostedEvents.filter(
-          (id) => id.toString() !== eventId.toString()
-        );
+        // hostUser.previouslyHostedEvents = hostUser.previouslyHostedEvents.filter(
+        //   (id) => id.toString() !== eventId.toString()
+        // );
         await usersCollection.updateOne({ _id: new ObjectId(event.partyHost) }, { $set: hostUser });
       
         // registeredEvents and pastEventsAttended
