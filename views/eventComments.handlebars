@@ -1,5 +1,6 @@
   <head>
     <title>Event Comments</title>
+    <link rel="stylesheet" href="/public/css/main-styles.css">
     <link rel="stylesheet" href="/public/css/eventComments.css">
     <meta name="viewport" content="width=device-width">
     <meta charset="utf-8">
@@ -7,8 +8,8 @@
   <body>
     <h1>{{event.name}}</h1>
 
-    <a href="/" id="home-link">Go Back to Home</a><br>
-    <a href="/events/{{event._id}}/info?userId={{userId}}" id="home-link">Back to Event Page</a>
+    <a href="/" class="home-link">Go Back to Home</a><br>
+    <a href="/events/{{event._id}}/info?userId={{userId}}" class="home-link">Back to Event Page</a>
     
     <form action="/events/{{event._id}}/comments" method="POST">
         <input type="hidden" name="comm-event-id" value="{{event._id}}">
@@ -22,7 +23,11 @@
     <script src="/public/js/buttonSubmitComment.js"></script>
 
     <div class="button-container">
-        <button id="delete-button" del-event-id="{{event._id}}" del-user-id="{{userId}}" del-comment="{{comment}}" del-action="delete">Delete Recent Comment</button>
+        <p id="del-event-id" hidden>{{event._id}}</p>
+        <p id="del-user-id" hidden>{{userId}}</p>
+        <p id="del-comment" hidden>{{comment}}</p>
+        <p id="del-action" hidden>delete</p>
+        <button id="delete-button">Delete Recent Comment</button>
         <script src="/public/js/buttonDeleteComment.js"></script>
     </div>
     <ul>
