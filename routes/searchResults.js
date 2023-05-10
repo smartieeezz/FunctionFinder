@@ -36,7 +36,10 @@ router.route('/resultsjson').get(async (req, res) => {
 })
 
 router.route('/').post(async (req, res) => {
-  const {location, distance, startDate, endDate} = req.body
+  const location = xss(req.body.location)
+  const distance = xss(req.body.distance)
+  const startDate = xss(req.body.startDate)
+  const endDate = xss(req.body.endDate)
   let nearby
   let formattedSrc = location.replace(/ /g, '+');
   let geocodeLocation
