@@ -40,7 +40,7 @@ try {
 
     // create event1
     let event1 = await eventData.create(
-        user1._id.toString(), // partyHost
+        user5._id.toString(), // partyHost
         "Keanu Reeves Live Show!", // name
         "06/01/2023", // date
         false, // hasOccured
@@ -55,11 +55,10 @@ try {
         [], // functionComments
         "Keanu's House" //venue
     );
-    console.log(event1);
 
     // create event2
     let event2 = await eventData.create(
-        user1._id.toString(), // partyHost
+        user6._id.toString(), // partyHost
         "Jennifer Lopez Live Show!", // name
         "07/01/2023", // date
         false, // hasOccured
@@ -70,21 +69,209 @@ try {
         21, // minimumAge
         "1301 W 27TH ST LOS ANGELES CA 90007-2261 USA", // location
         420, // price
-        ["Rock", "Pop", "Hip Hop"], // musicType
+        ["Rock", "Pop", "Hip-Hop"], // musicType
         [], // functionComments
         "Jlo's crib" //venue
     );
     console.log(event2);
 
-    // update event1 to add user2's id to guestsAttending
-    event1.guestsAttending.push(user2._id.toString());
+    let event3 = await eventData.create(
+        user3._id.toString(), // partyHost
+        "Madison Square Garden Show", // name
+        "07/04/2023", // date
+        false, // hasOccured
+        [], // guestsAttending
+        1000, // maximumCapacity
+        ["Live Show", "Concert"], // category
+        "JAY Z Performance", // description
+        21, // minimumAge
+        "4 Pennsylvania Plaza New York NY 10001 USA", // location
+        100, // price
+        ["Rock", "Pop", "Hip-Hop"], // musicType
+        [], // functionComments
+        "MSG" //venue
+    );
+    console.log(event3);
+
+
+    let event4 = await eventData.create(
+        user3._id.toString(), // partyHost
+        "Let's Get Wasted at The Clover", // name
+        "08/15/2023", // date
+        false, // hasOccured
+        [], // guestsAttending
+        50, // maximumCapacity
+        ["Bar", "Concert"], // category
+        "We're just going to drink until we can't see straight. Moscow Mules for days.", // description
+        21, // minimumAge
+        "210 Smith St Brooklyn NY 11201 USA", // location
+        20, // price
+        ["Rock", "Pop", "Hip-Hop", "Indie", "Alternative"], // musicType
+        [], // functionComments
+        "The Clover" //venue
+    );
+    console.log(event4);
+
+
+    //for event5 add user3
+    let event5 = await eventData.create(
+        user3._id.toString(), // partyHost
+        "Hoboken Hobo Activities", // name
+        "09/15/2023", // date
+        false, // hasOccured
+        [], // guestsAttending
+        50, // maximumCapacity
+        ["Bar", "Live Show"], // category
+        "Honestly, I ran out of creativity for events right around this mark.", // description
+        21, // minimumAge
+        "1301 Sinatra Dr Hoboken NJ 07030 USA", // location
+        20, // price
+        ["Rock", "Indie", "Alternative"], // musicType
+        [], // functionComments
+        "The Big Boat on Pier 13" //venue
+    );
+    console.log(event5)
+
+    let event6 = await eventData.create(
+        user5._id.toString(), // partyHost
+        "Cool Soul Concert", // name
+        "06/15/2023", // date
+        false, // hasOccured
+        [], // guestsAttending
+        19000, // maximumCapacity
+        ["Concert", "Live Show"], // category
+        "D'Angelo and Lauryn Hill Live In Concert!!.", // description
+        21, // minimumAge
+        "620 Atlantic Ave Brooklyn NY 11217 USA", // location
+        100, // price
+        ["Throwbacks", "R&B", "Hip-Hop"], // musicType
+        [], // functionComments
+        "Barclays Center" //venue
+    );
+    console.log(event6)
+
+    let event7 = await eventData.create(
+        user5._id.toString(), // partyHost
+        "Kendrick Lamar in Concert!", // name
+        "06/09/2023", // date
+        false, // hasOccured
+        [], // guestsAttending
+        19000, // maximumCapacity
+        ["Concert", "Live Show"], // category
+        "Kendrick Lamar newest Album Mr. Morale and The Big Steppers.", // description
+        18, // minimumAge
+        "2400 Hempstead Turnpike Elmont NY 11003 USA", // location
+        100, // price
+        ["Indie", "R&B", "Hip-Hop"], // musicType
+        [], // functionComments
+        "UBS Arena" //venue
+    );
+    console.log(event7)
+
+    let event8 = await eventData.create(
+        user5._id.toString(), // partyHost
+        "Kendrick Lamar in Concert!", // name
+        "06/09/2023", // date
+        false, // hasOccured
+        [], // guestsAttending
+        19000, // maximumCapacity
+        ["Concert", "Live Show"], // category
+        "Kendrick Lamar newest Album Mr. Morale and The Big Steppers.", // description
+        18, // minimumAge
+        "2400 Hempstead Turnpike Elmont NY 11003 USA", // location
+        100, // price
+        ["Indie", "R&B", "Hip-Hop"], // musicType
+        [], // functionComments
+        "UBS Arena" //venue
+    );
+
+    console.log(event8);
+    
+    // // update event1 to add user5's id to guestsAttending
+
+    event1.guestsAttending.push(user5._id.toString());
     const updatedEvent = await eventData.update(event1._id.toString(), event1);
-    // update user2 to add event1's id to registeredEvents
-    const user2addevent1 = await eventData.get(event1._id.toString());
-    user2.registeredEvents.push(user2addevent1._id.toString());
-    const updatedUser = await userData.update(user2._id.toString(), user2);
+    // update user5 to add event1's id to registeredEvents
+    const user5addevent1 = await eventData.get(event1._id.toString());
+    user5.registeredEvents.push(user5addevent1._id.toString());
+    const updatedUser = await userData.update(user5._id.toString(), user5);
     console.log(updatedEvent);
     console.log(updatedUser);
+
+    // // update event2 to add user6's id to guestsAttending
+
+    event2.guestsAttending.push(user6._id.toString());
+    const updatedEvent2 = await eventData.update(event2._id.toString(), event2);
+    // update user6 to add event1's id to registeredEvents
+    const user6addevent2 = await eventData.get(event2._id.toString());
+    user6.registeredEvents.push(user6addevent2._id.toString());
+    const updatedUser2 = await userData.update(user6._id.toString(), user6);
+    console.log(updatedEvent2);
+    console.log(updatedUser2);
+
+
+    //add user3 to event3 registered events
+    event3.guestsAttending.push(user3._id.toString());
+    const updatedEvent3 = await eventData.update(event3._id.toString(), event3);
+    // update user2 to add event1's id to registeredEvents
+    const user3addevent3 = await eventData.get(event3._id.toString());
+    user3.registeredEvents.push(user3addevent3._id.toString());
+    const updatedUser3 = await userData.update(user3._id.toString(), user3);
+    console.log(updatedEvent3);
+    console.log(updatedUser3);
+
+    //to event4 you have to add user3
+    event4.guestsAttending.push(user3._id.toString());
+    const updatedEvent4 = await eventData.update(event4._id.toString(), event4);
+    // update user2 to add event1's id to registeredEvents
+    const user3addevent4 = await eventData.get(event4._id.toString());
+    user3.registeredEvents.push(user3addevent4._id.toString());
+    const updatedUser32 = await userData.update(user3._id.toString(), user3);
+    console.log(updatedEvent4);
+    console.log(updatedUser32);
+
+    //for event5 add user3
+    event5.guestsAttending.push(user3._id.toString());
+    const updatedEvent5 = await eventData.update(event5._id.toString(), event5);
+    // update user2 to add event1's id to registeredEvents
+    const user3addevent5 = await eventData.get(event5._id.toString());
+    user3.registeredEvents.push(user3addevent5._id.toString());
+    const updatedUser30 = await userData.update(user3._id.toString(), user3);
+    console.log(updatedEvent5);
+    console.log(updatedUser30);
+
+    //add event6 to user5
+    event6.guestsAttending.push(user5._id.toString());
+    const updatedEvent6 = await eventData.update(event6._id.toString(), event6);
+    // update user5 to add event6's id to registeredEvents
+    const user5addevent6 = await eventData.get(event6._id.toString());
+    user5.registeredEvents.push(user5addevent6._id.toString());
+    const updatedUser31 = await userData.update(user5._id.toString(), user5);
+    console.log(updatedEvent6);
+    console.log(updatedUser31);
+
+    //update event7 with user5
+    event7.guestsAttending.push(user5._id.toString());
+    const updatedEvent7 = await eventData.update(event7._id.toString(), event7);
+    // update user5 to add event6's id to registeredEvents
+    const user5addevent7 = await eventData.get(event7._id.toString());
+    user5.registeredEvents.push(user5addevent7._id.toString());
+    const updatedUser52 = await userData.update(user5._id.toString(), user5);
+    console.log(updatedEvent7);
+    console.log(updatedUser52);
+
+    //add event8 to user5
+    event8.guestsAttending.push(user5._id.toString());
+    const updatedEvent8 = await eventData.update(event8._id.toString(), event8);
+    // update user5 to add event6's id to registeredEvents
+    const user5addevent8 = await eventData.get(event8._id.toString());
+    user5.registeredEvents.push(user5addevent8._id.toString());
+    const updatedUser53 = await userData.update(user5._id.toString(), user5);
+    console.log(updatedEvent8);
+    console.log(updatedUser53);
+
+    
+
 
     // get all events
     let getEvents = await eventData.getAll();

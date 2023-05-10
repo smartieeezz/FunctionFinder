@@ -21,11 +21,6 @@ router.route('/').get(async (req, res) => {
 
 
 router.route('/getfunctions').post(async (req,res) => {
-<<<<<<< HEAD
-  console.log("am i here")
-  console.log(req.body)
-=======
->>>>>>> bed68b68c2bfe390fe863331513d18169216a4f1
   let realFunctions = []
   for (const element of req.body.f) {
     let party = await exportedMethods.get(element)
