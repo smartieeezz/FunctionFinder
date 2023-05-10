@@ -7,7 +7,7 @@ import { userData } from '../data/index.js';
 // import { events } from '../config/mongoCollections.js';
 
 //lets drop the database each time this is run
-console.log('Booting up database...!');
+
 
 const db = await dbConnection();
 await db.dropDatabase();

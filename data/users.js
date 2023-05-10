@@ -480,20 +480,5 @@ const exportedMethods = {
 
 export default exportedMethods;
 
-/*
 
-(async () => {
-    try {
-      // Call the update function with valid parameters
-      const eventId = "644deb018157ffaa8920aa33";
-      const userId = "644deb018157ffaa8920aa30";
-      const comment = "ants ants ants ants ants ants ants ants ants ants ants ants ants ants ants ants"
-      const result = await userData.addComment(eventId, userId, comment);
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  })();
-  
-  // */
 

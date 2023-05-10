@@ -15,7 +15,6 @@ cancelButtons.forEach((button) => {
       });
 
       const data = await response.json();
-      console.log(data.message);
       
       // Reload the page
       window.location.reload();

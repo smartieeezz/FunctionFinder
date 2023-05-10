@@ -209,7 +209,6 @@ if (postPartyForm) {
     }
 
     if (dj2valid == true) {
-      console.log("form does not has error")
 
       let requestConfig = {
         method: 'POST',
@@ -237,8 +236,6 @@ if (postPartyForm) {
       });
 
     } else{
-      console.log("form has error")
-      console.log(dj2valid)
       event.preventDefault()
     }
   });

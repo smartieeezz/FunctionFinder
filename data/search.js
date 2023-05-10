@@ -45,6 +45,7 @@ export async function findNearbyFunctions(src, distance, startDate, endDate){
             partiesWithinDistance.push(element)
         }
     }
+    
     for (const element of partiesWithinDistance){
 
         let startDateDay = startDate.slice(0,10)
@@ -69,12 +70,16 @@ export async function findNearbyFunctions(src, distance, startDate, endDate){
 }
 
 function findCommonElements(arr1, arr2) {
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr2.indexOf(arr1[i]) !== -1) {
-        return true;
+    console.log("arr 1")
+    console.log(arr1)
+    console.log("arr 2")
+    console.log(arr2)
+    for (let i = 0; i < arr2.length; i++) {
+      if (arr1.indexOf(arr2[i]) == -1) {
+        return false;
       }
     }
-    return false;
+    return true;
   }
 
   export function filterParties(functions, ages, genres, types, price) {
@@ -89,11 +94,12 @@ function findCommonElements(arr1, arr2) {
             meetsAgeCriteria = ages.includes(f.minimumAge);
         }
         if (genres){
-            meetsGenreCriteria = findCommonElements(f.genres, genres);
+            meetsGenreCriteria = findCommonElements(f.musicType, genres);
+
         }
       
         if (types){
-            meetsTypeCriteria = findCommonElements(f.types, types);
+            meetsTypeCriteria = findCommonElements(f.category, types);
         }
       
         if (price){

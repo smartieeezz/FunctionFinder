@@ -64,8 +64,7 @@ const checkAge = (DOB) => {
     const age = Math.abs(ageDate.getUTCFullYear() - 1970);
     
     //check the age just to see if it's working correctly
-    console.log(`User age: ${age} years`);
-    
+
     if (givenDOB>today) {
         throw `Error: You can't have a birthyear after today's date. That makes no sense.`;
     }
@@ -219,7 +218,6 @@ const validateLoginForm=()=>{
         //get all the elements in the loginForm and change them to form
         const form = document.querySelector("#loginForm");
         const email = form.elements.emailInput.value.trim();
-        console.log(email)
         const password = form.elements.passwordInput.value;
         const errorsList = form.elements.errors
 

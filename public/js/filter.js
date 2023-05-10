@@ -31,22 +31,25 @@ document.addEventListener('DOMContentLoaded', () => {
             data: searchParams}
           
           
+        
         $.ajax(requestConfig)
         .then(function(response) {
+            console.log("resoinse")
+            console.log(response)
             serverResponse = response
         })
         .catch(function(error) {
             console.log("An error occurred: " + error);
         });
 
-
+        console.log("server response")
+        console.log(serverResponse)
         let requestConfig2 = {
             method: 'GET',
             url: '/searchresults'
         };   
         $.ajax(requestConfig2)
         .then(function(response) {
-            console.log(response)
             divContents.innerHTML = ""
             serverResponse.forEach(element => {
                 divContents.innerHTML += `<div id="${element.newIdString}" class="card" onclick="window.location.href='/events/${element.newIdString}/info'">

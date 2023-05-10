@@ -326,19 +326,3 @@ const exportedMethods = {
 
 export default exportedMethods;
 
-/*
-
-(async () => {
-    try {
-      // Call the update function with valid parameters
-      const eventId = "6459a6b5d4293109fbb2c2a6";
-      const userId = "644deb018157ffaa8920aa31";
-      const comment = "down"
-      const result = await eventData.cancelEvent(eventId);
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  })();
-  
-  // */

@@ -123,20 +123,16 @@ router.post('/account/create', async (req, res) => {
     
     try {
         let checkDOB = checkAge(dob)
-        console.log(checkDOB)
     } catch (e) {
         error.push(e)
-        console.log(error)
         res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
         return
     }
     //check to see we have valid names
     try {
         let checkFname  = checkName(firstName)
-        console.log(checkFname)
     } catch (e) {
         error.push(e)
-        console.log(error)
         res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
         return
     }
@@ -144,10 +140,9 @@ router.post('/account/create', async (req, res) => {
     //check to see we have valid names
     try {
         let checkLname  = checkName(lastName)
-        console.log(checkLname)
+
     } catch (e) {
         error.push(e)
-        console.log(error)
         res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
         return
     }
@@ -155,17 +150,17 @@ router.post('/account/create', async (req, res) => {
     //check to see the password is valid
     try {
     let validatePassword = checkPassword(password)
-    console.log(validatePassword)
+
     } catch (e) {
         error.push(e)
-        console.log(error)
+  
         res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
         return 
     }
     //make sure the password and confirmPassword varialbes match
     if (password!==confirmPassword) {
         error.push("The passwords must match.")
-        console.log(error)
+
         res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
         return
     }
@@ -173,10 +168,10 @@ router.post('/account/create', async (req, res) => {
     //check if we have a valid username (without spaces)
     try {
         let validateUsername = checkString(username)
-        console.log(validateUsername)
+  
     } catch (e) {
         error.push('The username must not have spaces.')
-        console.log(error)
+
         res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
         return
     }
@@ -186,7 +181,7 @@ router.post('/account/create', async (req, res) => {
         const user = await userData.getUserByUsername(username);
         if (user) {
             error.push("Username already exists. Please choose another username.")
-            console.log(error)
+    
             res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
             
             return
@@ -201,7 +196,7 @@ router.post('/account/create', async (req, res) => {
         const user = await userData.getByEmail(email);
         if (user) {
             error.push("Email already exists. Please choose another email address.")
-            console.log(error)
+         
             res.render('accountCreation', {errors: error,hasErrors: true, accountInfo: req.body })
             
             return
@@ -268,7 +263,7 @@ router.get('/favorited-events', async (req, res) => {
 
 router.get('/account/settings', async (req, res) => {
     
-    console.log("in the account settings")
+
     const id = req.session.user.id
     // make sure user is logged in and updating their own settings
     if (!id) {
@@ -276,34 +271,24 @@ router.get('/account/settings', async (req, res) => {
     //if the user is logged in then let's check
     } else {
         const user = await userData.get(id)
-        console.log(`User ID: ${user._id}`)
-        console.log(`Params ID: ${id}`)
-        console.log(`Username: ${user.username}`)
+
         if (!user) {
-            console.log("no user found")
+
             res.redirect("/error");
         } else {
-            console.log(user)
+
             res.render('updateSettings', {user: user, id: id})
     }
 }
-console.log("Leaving account setting get route")
+
 });  
 
 router.post('/account/settings', async (req, res) => {
-    console.log("in the account post settings")
+
     const {firstName, lastName, username, email, dob, password, confirmPassword, favoriteCategories } = req.body;
     const id = req.session.user.id
     let error = [];
-        console.log(id)
-        console.log(firstName)
-        console.log(lastName)
-        console.log(username)
-        console.log(email)
-        console.log(dob)
-        console.log(password)
-        console.log(confirmPassword)
-        console.log(favoriteCategories)
+
         const sanitizedFirstName = xss(firstName);
         const sanitizedLastName = xss(lastName);
         const sanitizedEmail = xss(email);
@@ -316,50 +301,37 @@ router.post('/account/settings', async (req, res) => {
         
         error.push("You have to fill in all the fields")
         res.render('updateSettings',{errors: error, hasErrors: true, updateForm: req.body,id: id});
-        console.log(error)
+
         return
     } 
 
     //check to validate firstName
     try {
         const checkFirstName = checkName(firstName)
-        console.log(checkFirstName)
+  
     } catch (e) {
         error.push(e)
-        console.log("Error at first name")
-        console.log(error)
+  
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body,id: id})
         return
     }
     //check to validate lastName
     try {
         const checkLastName = checkName(lastName)
-        console.log(checkLastName)
+      
     } catch (e) {
         error.push(e)
-        console.log("Error at last name")
-        console.log(error)
+     
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
     }
     
-    //check to validate username
-    // try {
-    //     const checkUsername = checkString(username)
-    //     console.log(checkUsername)
-    // } catch (e) {
-    //     error.push(e)
-    //     console.log("Error at username name")
 
-    //     console.log(error)
-    //     res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
-    //     return
-    // }
-    console.log("here after username in routes")
+
     //check to validate email
     try {
         let userByEmail = checkEmail(email)
-        console.log(userByEmail)
+       
         const existingUser = await userData.getByEmailUpdate(email);
         
         if (existingUser && existingUser._id.toString() !== id) {
@@ -367,8 +339,7 @@ router.post('/account/settings', async (req, res) => {
         }
     } catch (e) {
         error.push(e)
-        console.log("Error at email")
-        console.log(error)
+       
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
     }
@@ -376,11 +347,10 @@ router.post('/account/settings', async (req, res) => {
     //check to validate dob
     try {
         checkDOB = checkAge(dob)
-        console.log(checkDOB)
+    
     } catch (e) {
         error.push(e)
-        console.log("Error at age")
-        console.log(error)
+      
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
     }
@@ -388,12 +358,11 @@ router.post('/account/settings', async (req, res) => {
     //check to validate password
     try {
         const validatePassword = checkPassword(password)
-        console.log(validatePassword)
+    
     } catch (e) {
         error.push(e)
-        console.log("Error at age")
+     
 
-        console.log(error)
         res.render('updateSettings', {errors: error, hasErrors: true, updateForm: req.body, id: id})
         return
     }
@@ -401,13 +370,12 @@ router.post('/account/settings', async (req, res) => {
     //make sure the passwords match
     if (password!==confirmPassword) {
         error.push("The passwords must match.")
-        console.log(error)
-        console.log("Error at age")
+     
 
         res.render('updateSettings', {errors: error,hasErrors: true, updateForm: req.body, id: id })
         return
     }
-    console.log("here before updated")
+  
 
     //if we pass all those validations we should be able to update the fields
         try {
@@ -420,7 +388,7 @@ router.post('/account/settings', async (req, res) => {
                 favoriteCategories: favoriteCategories
             });
             // const username = await userData.getUserByUsername(id)
-            console.log(`User ${id} updated successfully: ${updatedUser.username}`);
+         
             res.render('accountUpdated', {username: updatedUser.username})
             req.session.userId = updatedUser._id
             //res.render('updateSettings',{updated: true })
@@ -436,7 +404,7 @@ router.post('/account/settings', async (req, res) => {
 
 router.get('/account/parties', async (req, res) => {
 
-    console.log("in the user party stats")
+    
     //get the user's id that is currently logged in
     const id = req.session.user.id
     // make sure user is logged in and updating their own settings
@@ -446,12 +414,12 @@ router.get('/account/parties', async (req, res) => {
     } else {
         let user = await userData.get(id)
         user = user.username
-        console.log(user)
+   
 
         //this is the ID we will search for that is attending/hosting the parties
         const searchId = user._id
         const hosted = await userData.findPartiesUserHosts(id)
-        console.log(hosted)
+      
         const attending = await userData.findPartiesUserAttending(id)
         const previouslyAttended = await userData.findPartiesPreviouslyAttended(id)
         
@@ -467,9 +435,9 @@ router.get('/account/parties', async (req, res) => {
         if (previouslyAttended.length == 0) {
             notAttendedMessage = ["You haven't attended any functions."]
         }
-        console.log(hosted)
+   
         if (!user) {
-            console.log("no user found")
+          
             res.redirect("/error");
         } else {
             res.render('userParties',  {
@@ -482,7 +450,7 @@ router.get('/account/parties', async (req, res) => {
                 notAttendedMessage})
         }
 }
-console.log("Leaving account party stats get route")
+
 });  
 
 
@@ -491,14 +459,7 @@ router.get('/signout', async (req, res) => {
     res.redirect("/");
     });
 
-// router.get('/:id', async (req, res) => {
-//         try {
-//             const user = await userData.get(req.params.id);
-//             res.render('homepageSignedin', { user: user , apiRoute : `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`});
-//         } catch (error) {
-//             res.status(404).json({ message: error});
-//         }
-        
-//     });
+
+
 
 export default router;

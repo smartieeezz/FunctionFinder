@@ -21,9 +21,22 @@ router.route('/').get(async (req, res) => {
 
 
 router.route('/getfunctions').post(async (req,res) => {
-  
+  console.log("am i here")
+  console.log(req.body)
   let realFunctions = []
-  let filtered = xss(filterParties(realFunctions, req.body.ages, req.body.genres, req.body.types, req.body.prices))
+  for (const element of req.body.f) {
+    let party = await exportedMethods.get(element)
+    console.log("party")
+    console.log(party)
+    realFunctions.push(party)
+  }
+  console.log("function that are real")
+  console.log(realFunctions)
+  console.log("req body genres")
+  console.log(req.body.genres)
+  let filtered = filterParties(realFunctions, req.body.ages, req.body.genres, req.body.types, req.body.prices)
+  console.log("filter")
+  console.log(filtered)
   res.send(filtered)
 })
   router.route('/resultsjson').post(async (req, res) => {
@@ -44,6 +57,7 @@ router.route('/').post(async (req, res) => {
       res.status(500).json('error');
     }
 
+ 
     let latitude = geocodeLocation.data.results[0].geometry.location.lat
     let longitude =geocodeLocation.data.results[0].geometry.location.lng
   try{
@@ -57,7 +71,7 @@ router.route('/').post(async (req, res) => {
     element._id = element._id.toString()
   }
 
-  console.log(nearby)
+
   res.render('searchResults',{searchResults:nearby, 'apiKey': apiKey, 'location':location, 'longitude':longitude, "latitude":latitude})
 });
 
