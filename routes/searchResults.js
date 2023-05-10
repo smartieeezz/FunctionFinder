@@ -21,8 +21,11 @@ router.route('/').get(async (req, res) => {
 
 
 router.route('/getfunctions').post(async (req,res) => {
+<<<<<<< HEAD
   console.log("am i here")
   console.log(req.body)
+=======
+>>>>>>> bed68b68c2bfe390fe863331513d18169216a4f1
   let realFunctions = []
   for (const element of req.body.f) {
     let party = await exportedMethods.get(element)
@@ -39,12 +42,21 @@ router.route('/getfunctions').post(async (req,res) => {
   console.log(filtered)
   res.send(filtered)
 })
-  router.route('/resultsjson').post(async (req, res) => {
+router.route('/getfunctions').get(async (req,res) => {
+  res.redirect('/');
+})
+router.route('/resultsjson').post(async (req, res) => {
     res.render("searchresults", {searchResults:req.body.results} )
   })
+router.route('/resultsjson').get(async (req, res) => {
+  res.redirect('/');
+})
 
 router.route('/').post(async (req, res) => {
-  const {location, distance, startDate, endDate} = req.body
+  const location = xss(req.body.location)
+  const distance = xss(req.body.distance)
+  const startDate = xss(req.body.startDate)
+  const endDate = xss(req.body.endDate)
   let nearby
   let formattedSrc = location.replace(/ /g, '+');
   let geocodeLocation

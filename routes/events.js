@@ -146,6 +146,27 @@ router.get('/events/:id/info', async (req, res) => {
   }
 });
 
+router.get('/events/:id/guests', async (req, res) => {
+    const eventId = req.params.id;
+    const userId = req.session.user.id;
+
+  if (!userId) {
+    return res.redirect('/account/login');
+  }
+
+  console.log(req.params.id)
+  try {
+    console.log("At the guest List")
+    const event = await eventData.get(eventId);
+    const eventName = event.name
+    console.log(eventName)
+    const guests = await eventData.getGuestList(eventId)
+    res.render('guestList', {eventName, guests });
+  } catch (error) {
+    res.redirect('/error');
+  }
+});
+
 // add more routes
 
 export default router;

@@ -1,0 +1,24 @@
+  <head>
+    <title>Events List</title>
+    {{!-- <link rel="stylesheet" href="/public/css/userParties.css"> --}}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+  </head>
+  <body>
+    <a href="/">Homepage</a>
+    <h1>Guest List for {{eventName}}:</h1>
+  {{#if guests.length}}
+    <ul>
+      {{#each guests}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p>No guests have RSVP'd yet. Sorry.</p>
+  {{/if}}
+</body>
+
+
+
+
+

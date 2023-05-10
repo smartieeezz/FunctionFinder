@@ -318,7 +318,30 @@ const exportedMethods = {
         if (deleteInfo.deletedCount === 0) {
           throw `Could not delete event with ID of ${eventId}`;
         }
-    }
+    }, 
+    async getGuestList(id) {
+        //have to get the party first
+        const event = await this.get(id)
+        //then get the list of id's that represent the guests attending
+        const guestList = event.guestsAttending
+        console.log(guestList)
+        //lets get the users to query against
+        // const usersCollections = await users()
+        let attendees  = []
+        guestList.forEach(async guestId => {
+            const guest = await userData.get(guestId)
+            const guestName = `${guest.firstName} ${guest.lastName}`
+            attendees.push(guestName)
+        });
+        
+
+        
+
+
+        return attendees
+        console.log("wow")
+        console.log(event.guestsAttending)
+      }
       
     // add more functions
     

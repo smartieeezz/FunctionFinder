@@ -20,7 +20,9 @@
                     <li><strong>Price:</strong> {{event.price}}</li>
                     <li><strong>Max Capacity:</strong> {{event.maximumCapacity}}</li>
                 </ul>
-                <a href="/events/{{event._id}}/comments">View Comments</a>
+                <a href="/events/{{event._id}}/guests">Guest List</a> <br>
+                <a href="/events/{{event._id}}/comments">View Comments</a> 
+               
             </div>
             <div class="button-container">
                 <p id="reg-event-id" hidden>{{event._id}}</p>
@@ -50,6 +52,7 @@
                 <script src="/public/js/buttonUnFavorite.js"></script>
 
                 <p></p>
+                <!--https://publish.twitter.com/?buttonType=TweetButton&widget=Button-->
                 <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Check out this cool party!!!" data-url="http://localhost:3000" data-hashtags="FunctionFinder" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                
                 <a href="mailto:?subject=Check out this website&amp;body=Hey!%0D%0A%0D%0ACheck out this website:%0D%0A%0D%0Alocalhost300" target="_blank">Share via Gmail</a>
