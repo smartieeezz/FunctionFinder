@@ -50,7 +50,4 @@ Favorite Genres: You must select a genre of music you enjoy.
 
 
 Team Members:
-Stephanie Martinez
-Tanner Marshall
-Hao Dian Li
-Roland John
+Stephanie Martinez;Tanner Marshall;Hao Dian Li;Roland John
