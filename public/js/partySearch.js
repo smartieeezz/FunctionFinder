@@ -66,7 +66,6 @@ if(searchForm){
         if(date > start){
             valid = false;
             startDateError.textContent = 'Error: startDate must be either today or in the future';
-            startDateError.textContent = `${date}    ${start}     ${end}`;
             searchForm.appendChild(startDateError);
         }
             
