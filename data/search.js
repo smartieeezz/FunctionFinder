@@ -70,10 +70,6 @@ export async function findNearbyFunctions(src, distance, startDate, endDate){
 }
 
 function findCommonElements(arr1, arr2) {
-    console.log("arr 1")
-    console.log(arr1)
-    console.log("arr 2")
-    console.log(arr2)
     for (let i = 0; i < arr2.length; i++) {
       if (arr1.indexOf(arr2[i]) == -1) {
         return false;

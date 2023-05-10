@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < individual.length; i++) {
         functions.push(individual[i].getAttribute('id'))
     }
+    console.log(functions)
     filterForm.addEventListener("submit", async (event) => {
         event.preventDefault()
         const age = Array.from(document.querySelectorAll('input[name="age"]:checked')).map(el => el.value);
@@ -24,43 +25,44 @@ document.addEventListener('DOMContentLoaded', () => {
             prices: price,
             types: types
           };
-
+          console.log("here1")
         let requestConfig = {
             url: "/searchresults/getfunctions",
             type: "POST",
             data: searchParams}
           
           
+            console.log("here2")
+            $.ajax(requestConfig)
+            .then(async function(response) {
+                serverResponse = response;
+                console.log(serverResponse);
         
-        $.ajax(requestConfig)
-        .then(function(response) {
-            console.log("resoinse")
-            console.log(response)
-            serverResponse = response
-        })
-        .catch(function(error) {
-            console.log("An error occurred: " + error);
-        });
-
-        console.log("server response")
-        console.log(serverResponse)
-        let requestConfig2 = {
-            method: 'GET',
-            url: '/searchresults'
-        };   
-        $.ajax(requestConfig2)
-        .then(function(response) {
-            divContents.innerHTML = ""
-            serverResponse.forEach(element => {
-                divContents.innerHTML += `<div id="${element.newIdString}" class="card" onclick="window.location.href='/events/${element.newIdString}/info'">
-                                      <h2>${element.name}</h2>
-                                      <p>${element.partyVenue}</p>
-                                  </div>`
+                // Wait for the second Ajax request to finish before continuing
+                let requestConfig2 = {
+                    method: 'GET',
+                    url: '/searchresults'
+                };   
+                await $.ajax(requestConfig2);
+        
+                divContents.innerHTML = "";
+                for (const element of serverResponse){
+                    divContents.innerHTML += `
+                        <script>
+                            window.everything.push({position: { lat: parseFloat('${element.latitude}'), lng: parseFloat('${element.longitude}')}, map: window.map, title: '${element.name}'})
+                        </script>
+                        <div id="${element.newIdString}" class="card" onclick="window.location.href='/events/${element.newIdString}/info'">
+                            <h2>${element.name}</h2>
+                            <p>${element.partyVenue}</p>
+                            <img id="cover" src="${element.partyCoverPhoto}" class="coverPic" />
+                        </div>
+                    `;
+                }
+            })
+            .catch(function(error) {
+                console.log("An error occurred: " + error);
             });
-        })
-        .catch(function(error) {
-            console.log("An error occurred: " + error);
-        });
+        
 
     })
 

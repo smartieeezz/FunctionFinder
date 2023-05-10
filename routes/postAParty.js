@@ -8,6 +8,7 @@ import { functions } from "../config/mongoCollections.js"
 import { addParty, calcDistances } from '../data/pushParty.js';
 import userData  from '../data/users.js';
 import eventData  from '../data/events.js';
+import xss from 'xss';
 
 //create an instance of the Router() named router
 const router = Router();
@@ -34,18 +35,18 @@ router.route('/partypostedconfirmation').get(async (req, res) => {
 
 router.route('/').post(async (req,res) => {
     let insertParty
-    let content = req.body
-    let partyNameInput = req.body.partyName
-    let partyAddressInput = req.body.partyAddress
-    let genresInput = req.body.genres
-    let coverPriceInput = req.body.coverPrice
-    let typesInput = req.body.types
-    let partyDateInput = req.body.partyDate
-    let partyVenueInput = req.body.partyVenue
-    let minimumAgeInput = req.body.minimumAge
-    let maximumCapacityInput = req.body.maximumCapacity
-    let partyDescriptionInput = req.body.partyDescription
-    let partyCoverPhotoInput = req.body.partyCoverPhoto
+    let content = xss(req.body)
+    let partyNameInput = xss(req.body.partyName)
+    let partyAddressInput = xss(req.body.partyAddress)
+    let genresInput = xss(req.body.genres)
+    let coverPriceInput = xss(req.body.coverPrice)
+    let typesInput = xss(req.body.types)
+    let partyDateInput = xss(req.body.partyDate)
+    let partyVenueInput = xss(req.body.partyVenue)
+    let minimumAgeInput = xss(req.body.minimumAge)
+    let maximumCapacityInput = xss(req.body.maximumCapacity)
+    let partyDescriptionInput = xss(req.body.partyDescription)
+    let partyCoverPhotoInput = xss(req.body.partyCoverPhoto)
     //validate party address here, 
 
     try{

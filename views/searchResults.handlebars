@@ -11,14 +11,14 @@
     <script>
     
     function myMap() {
-
         let longitude = '{{longitude}}'
         let latitude = '{{latitude}}'
         let mapProp= {
             center:new google.maps.LatLng(latitude, longitude),
             zoom:13,
             };
-        var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+        window.map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+        return map
     }
     </script>
 
@@ -179,15 +179,27 @@
   </script>
     
     <script src="https://maps.googleapis.com/maps/api/js?key={{apiKey}}&callback=myMap"></script>
+    <script>
+      window.everything = []
+    </script>
     <div id="card-container">
       {{#each searchResults}}
+        <script>
+          window.everything.push({position: { lat: parseFloat('{{this.latitude}}'), lng: parseFloat('{{this.longitude}}')}, map: window.map, title: this.name})
+        </script>
         <div id="{{this.newIdString}}" class="card" onclick="window.location.href='/events/{{this._id}}/info'">
         <img id="cover" src="{{this.partyCoverPhoto}}" class="coverPic" />
           <h3>{{this.name}}</h3>
           <p>{{this.partyVenue}}</p>
         </div>
+        
+         
       {{/each}}
     </div>
-
+    <script>
+      for (const element of window.everything){
+        new google.maps.Marker(element)
+      }
+    </script>
   
   </body>

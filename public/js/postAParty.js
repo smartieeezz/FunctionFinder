@@ -224,7 +224,7 @@ if (postPartyForm) {
           minimumAge: minimumAge.value, 
           maximumCapacity: maximumCapacity.value,
           partyDescription: partyDescription.value,
-          //partyCoverPhoto: srcData
+          partyCoverPhoto: srcData
         } 
       };      
       $.ajax(requestConfig)
