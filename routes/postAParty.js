@@ -48,6 +48,8 @@ router.route('/').post(async (req,res) => {
     let partyDescriptionInput = xss(req.body.partyDescription)
     let partyCoverPhotoInput = xss(req.body.partyCoverPhoto)
     //validate party address here, 
+    genresInput = genresInput.split(',')
+    typesInput = typesInput.split(',')
 
     try{
 

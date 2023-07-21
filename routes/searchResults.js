@@ -60,7 +60,7 @@ router.route('/getfunctions').post(async (req,res) => {
   }
 
   let filtered = filterParties(realFunctions, req.body.ages, req.body.genres, req.body.types, req.body.prices)
-  console.log(filtered)
+  
   res.send(filtered)
 })
 router.route('/getfunctions').get(async (req,res) => {
